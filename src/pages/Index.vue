@@ -4,7 +4,7 @@
       alt="Quasar logo"
       src="~assets/quasar-logo-full.svg"
     >
-    <p> hola Marta</p>
+    <p> hola jose</p>
   </q-page>
 </template>
 
