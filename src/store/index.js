@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
+// todos los stores que queramos usar en la app deben importarse aqui y listarlos abajo en modules
+import login from './store-login'
+import tabs from './store-tabs'
+import tablasAux from './store-tablasAux'
+import mensajeLog from './store-log'
 
 Vue.use(Vuex)
 
@@ -17,7 +21,10 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      login,
+      tabs,
+      tablasAux,
+      mensajeLog
     },
 
     // enable strict mode (adds overhead!)
