@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="text-h6">Seleccione opción del menú</div>
-    <q-btn  flat label="prueba" color="primary" @click="prueba"/>
   </div>
 </template>
 
