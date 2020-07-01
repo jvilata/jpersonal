@@ -80,10 +80,9 @@ export default {
   },
   mounted () {
     // if (this.listaEntidades.length <= 0) this.loadEntidades() // carga store listaEntidades
-    if (this.value.registrosSeleccionados && Object.keys(this.value.registrosSeleccionados).length > 0) { // si ya hemos cargado previamente los recargo al volver a este tab
+    if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
-      // this.registrosSeleccionados = Object.values(this.value.registrosSeleccionados) // v-model: en 'value' podemos leer el valor del v-model
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
       this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1' }
@@ -91,7 +90,7 @@ export default {
     }
   },
   destroyed () {
-    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: Object.assign({}, this.filterRecord), registrosSeleccionados: Object.assign({}, this.registrosSeleccionados) })
+    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
   },
   components: {
     personalFilter: personalFilter,
