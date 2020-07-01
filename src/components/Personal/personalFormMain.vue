@@ -29,8 +29,15 @@
               </q-tab-panel>
           </q-tab-panels>
           <!-- podemos poner tabs en el pie para dispositivos moviles pero quita pantalla y no me gusta bg-primary text-white -->
-          <q-tabs v-model="ltab" dense
-            class="absolute-bottom bg-primary text-white">
+          <q-tabs 
+            v-model="ltab" 
+            dense
+            class="absolute-bottom bg-primary text-blue-grey-2"
+            active-color="white"
+            indicator-color="white"
+            narrow-indicator
+            align="justify"
+            >
             <q-route-tab v-for="(tab,index) in menuItems"
               no-caps
               :key="index"
@@ -57,9 +64,30 @@ export default {
       numAcciones: 0,
       menuItems: [
         {
-          title: 'General',
+          title: 'Datos Empleado',
           link: { name: 'personalForm' }
+        },
+        {
+          title: 'Datos Contractuales',
+          link: { name: 'personalContract' }
+        },
+        {
+          title: 'Datos Contacto',
+          link: { name: 'personalContact' }
+        },
+        {
+          title: 'Horario',
+          link: { name: 'personalSchedule' }
+        },
+        {
+          title: 'Teletrabajo',
+          link: { name: 'personalTeletrabajo' }
+        },
+        {
+          title: 'Competencias adquiridas',
+          link: { name: 'personalCompetences' }
         }
+
       ]
     }
   },
@@ -69,7 +97,9 @@ export default {
   methods: {
   },
   mounted () {
+    //console.log("Estoy en personalFormMain", this.value);
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.value } })
+    
   }
 }
 </script>

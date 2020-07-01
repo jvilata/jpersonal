@@ -51,20 +51,64 @@
         :width="220">
       <q-scroll-area style="height: calc(100vh - 170px); margin-top: 100px; border-right: 1px solid #ddd">
         <q-list>
-          <q-item v-for="link in menuItems" :key="link.title"
-            clickable
-            @click.native="openForm(link.link)"
-            exact
-            class="text-grey-8"  >
-            <q-item-section v-if="link.icon" avatar>
-              <q-icon :name="link.icon" />
-            </q-item-section>
+          <div v-for="link in menuItems" :key="link.title">
+            <q-item 
+              v-if="link.link.name !== 'cambiosDatos'"
+              clickable
+              @click.native="openForm(link.link)"
+              exact
+              class="text-grey-8"  >
+              <q-item-section v-if="link.icon" avatar>
+                <q-icon :name="link.icon" />
+              </q-item-section>
 
-            <q-item-section>
-              <q-item-label>{{ link.title }}</q-item-label>
-              <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                <q-item-label>{{ link.title }}</q-item-label>
+                <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-expansion-item 
+              v-else 
+              class="text-grey-8"
+              icon="group_add"
+              label="Solicitar Cambios Personales"
+              switch-toggle-right-side dense-toggle 
+            >
+              <q-item
+                clickable 
+                @click.native="openFormCambiosPersonales(1)" 
+                exact 
+                :header-inset-level="1"
+                class="text-grey-8">
+                  <q-item-section>
+                    <q-icon name="schedule" />
+                  </q-item-section>
+                  Cambio Horario
+              </q-item>
+              <q-item
+                clickable 
+                @click.native="openFormCambiosPersonales(2)" 
+                exact 
+                :header-inset-level="1"
+                class="text-grey-8">
+                <q-item-section>
+                    <q-icon name="headset_mic" />
+                  </q-item-section>
+                  Teletrabajo
+              </q-item>
+              <q-item
+                clickable 
+                @click.native="openFormCambiosPersonales(3)" 
+                exact 
+                :header-inset-level="2"
+                class="text-grey-8">
+                <q-item-section>
+                    <q-icon name="edit" />
+                  </q-item-section>
+                  Otros Cambios
+              </q-item>
+            </q-expansion-item>
+          </div>
         </q-list>
       </q-scroll-area>
       <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" />
@@ -101,11 +145,27 @@ export default {
       miniState: false,
       menuItems: [
         {
-          title: 'Personal',
+          title: 'Consultar Datos',
           icon: 'group',
           link: {
             name: 'personalMain',
-            label: 'Personal'
+            label: 'Consultar Datos'
+          }
+        },
+        {
+          title: 'Solicitar Cambios Datos',
+          icon: 'group',
+          link: {
+            name: 'cambiosDatos',
+            label: 'Solicitar Cambios Datos'
+          }
+        },
+        {
+          title: 'Consultar Cambios Personales',
+          icon: 'group',
+          link: {
+            name: 'consultarCambios',
+            label: 'Consultar Cambios Personales'
           }
         },
         {
@@ -123,6 +183,30 @@ export default {
             name: 'dashboardMain',
             label: 'Dashboard'
           }
+        },
+        {
+          title: 'Solicitud de Permisos',
+          icon: 'assignment',
+          link: {
+            name: 'solicitudPermisos',
+            label: 'Solicitud de Permisos'
+          }
+        },
+        {
+          title: 'Permisos Concedidos',
+          icon: 'assignment_turned_in',
+          link: {
+            name: 'permisosConcedidos',
+            label: 'Permisos Concedidos'
+          }
+        },
+        {
+          title: 'Solicitudes de Cambio',
+          icon: 'date_range',
+          link: {
+            name: 'solicitudCambios',
+            label: 'Solicitudes de Cambio'
+          }
         }
       ]
     }
@@ -135,6 +219,27 @@ export default {
     ...mapActions('login', ['desconectarLogin']),
     openForm (link) {
       this.addTab([link.name, link.label, {}, 1])
+    },
+    openFormCambiosPersonales (id) {
+      if(id === 1) {
+        var link = {
+          name: 'cambioHorario',
+          label: 'Cambio Horario'
+        }
+        this.addTab([link.name, link.label, {}, 1])
+      } else if(id === 2) {
+        var link = {
+          name: 'teletrabajo',
+          label: 'Teletrabajo'
+        }
+        this.addTab([link.name, link.label, {}, 1])
+      } else if(id === 3) {
+        var link = {
+          name: 'otrosCambios',
+          label: 'Otros Cambios'
+        }
+        this.addTab([link.name, link.label, {}, 1])
+      }
     },
     desconectar () {
       this.desconectarLogin()

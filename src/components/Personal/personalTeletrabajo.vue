@@ -1,0 +1,105 @@
+<template>
+  <q-item class="row q-ma-xs q-pa-xs">
+    <!-- GRID. en row-key ponemos la columna del json que sea la id unica de la fila -->
+    <q-table
+      class="personalGrid-header-table"
+      virtual-scroll
+      :virtual-scroll-sticky-size-start="48"
+      row-key="name"
+      :data="data"
+      :columns="columns"
+      table-style="max-height: 60vh; max-width: 96vw"
+    >
+
+    </q-table>
+    
+  </q-item>
+</template>
+
+<script>
+import { mapState, mapActions } from 'vuex'
+import { urlFotos } from 'boot/axios.js'
+
+export default {
+  props: ['value'], // en 'value' tenemos la tabla de datos del grid
+  data () {
+    return {
+      expanded: false,
+      regper: {},
+      urlF: urlFotos,
+      rowId: '',
+      columns: [
+        {
+          name: 'name',
+          required: true,
+          label: 'Ejercicio',
+          align: 'left',
+          field: row => row.name,
+          format: val => `${val}`,
+          sortable: true
+        },
+        { name: 'fechaDesde', align: 'center', label: 'Fecha Desde', field: 'fechaDesde', sortable: true },
+        { name: 'fechaHasta', label: 'Fecha Hasta', field: 'fechaHasta', sortable: true },
+        { name: 'observaciones', label: 'Observaciones', field: 'observaciones' }
+       ],
+      data: [
+        {
+          name: 2020,
+          fechaDesde: '19/2/2020',
+          fechaHasta: '19/9/2020'
+        },
+        {
+          name: 2019,
+          fechaDesde: '21/5/2019',
+          fechaHasta: '21/12/2019'
+        },
+        {
+          name: 2018,
+          fechaDesde: '1/1/2018',
+          fechaHasta: '31/12/2018',
+          observaciones: 'Condiciones muy buenas'
+        }
+      ]
+     
+    }
+  },
+  computed: {
+    ...mapState('tablasAux', ['listaSINO']),
+    ...mapState('login', ['user'])
+  },
+  methods: {
+    ...mapActions('tabs', ['addTab']),
+    editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
+    //rowChanges contiene toda la info de cada persona 
+      this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
+      //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
+    },
+    ampliarImagen (record) {
+      this.regper = record
+      this.expanded = true
+    },
+    mostrarDatosPieTabla () {
+      return this.value.length + ' Filas'
+    }
+  }
+}
+</script>
+<style lang="sass">
+  .personalGrid-header-table
+    .q-table__top,
+    .q-table__bottom,
+    thead tr:first-child th
+      /* bg color is important for th; just specify one */
+      background-color: $indigo-1
+
+    thead tr th
+      position: sticky
+      z-index: 1
+    thead tr:first-child th
+      top: 0
+
+    /* this is when the loading indicator appears */
+    &.q-table--loading thead tr:last-child th
+      /* height of all previous header rows */
+      top: 48px
+</style>
