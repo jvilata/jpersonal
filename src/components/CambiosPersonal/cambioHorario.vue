@@ -1,6 +1,25 @@
 <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y Grid -->
   <template>
     <div>
+        <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
+              <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
+              <q-item-section avatar>
+                <q-icon name="schedule" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label class="text-h6">
+                  CAMBIO HORARIO
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
+                @click="$emit('close')"
+                flat
+                round
+                dense
+                icon="close"/>
+              </q-item-section>
+            </q-item>
         <q-card>
             <q-form @submit="updateRecord" @keyup.esc="$emit('close')">   
                 <div class="q-pa-md">
@@ -158,50 +177,34 @@
             </q-form>
         </q-card>
      <q-card>
-        <div class="q-pt-none q-pl-xs q-pr-xs">
-            <div class="row justify-center" style="max-height: 50px">
+        <div class="q-pa-sm q-pl-xs q-pr-xs">
+            <div class="row justify-center" style="max-height: 70px">
                     <div class="column q-pr-md q-mt-sm" style="max-width: 150px">
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
+                        <!-- <template v-slot:hint>
+                        Field hint
+                        </template> -->
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn push color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
             </div>
-            <div class="row q-mb-sm">
-                <!-- <q-checkbox
-                    @click="openDialog = true"
-                    v-model="customModel"
-                    color="secondary"
-                    label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación."
-                    true-value="yes"
-                    false-value="no"
-                /> -->
-                <q-btn label="Fixed size" color="primary" @click="fixed = true" />
-                <q-dialog v-model="openDialog">
-                    <q-card>
-                        <q-card-section>
-                            <div class="text-h6">Terms of Agreement</div>
-                        </q-card-section>
-
-                        <q-separator />
-
-                        <q-card-section style="max-height: 50vh" class="scroll">
-                        <p v-for="n in 15" :key="n">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.</p>
-                        </q-card-section>
-
-                        <q-separator />
-
-                        <q-card-actions align="right">
-                        <q-btn flat label="Decline" color="primary" v-close-popup />
-                        <q-btn flat label="Accept" color="primary" v-close-popup />
-                        </q-card-actions>
-                    </q-card>
-                </q-dialog>
+            <div class="row items-baseline q-my-md">
+                <div class="col-xs-9">
+                    <q-checkbox
+                        v-model="val"
+                        color="primary"
+                        label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento..."
+                        />
+                </div>
+                <div class="col-xs-3">
+                    <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
+                </div>
+                
             </div>
-            
         </div>
     </q-card>
-    </div>
+</div>
 </template>
 
 <script>
@@ -219,10 +222,33 @@ export default {
       hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
       minuteOptions: [ 0, 30 ],
       secondOptions: [ 0, 10, 20, 30, 40, 50 ],
-      customModel: 'no',
+      val: false,
       sumaHoras: 0,
       openDialog: false
     }
+  },
+  methods: {
+      confirm () {
+      this.$q.dialog({
+        title: 'Aceptación conciliación laboral',
+        message: 'Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        
+       this.val = true
+        console.log(this.val)
+
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+        val = true
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+
   }
 }
 </script>
