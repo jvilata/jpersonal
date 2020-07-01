@@ -6,6 +6,7 @@ import login from './store-login'
 import tabs from './store-tabs'
 import tablasAux from './store-tablasAux'
 import mensajeLog from './store-log'
+import permisos from './store-permisos'
 
 Vue.use(Vuex)
 
@@ -24,7 +25,8 @@ export default function (/* { ssrContext } */) {
       login,
       tabs,
       tablasAux,
-      mensajeLog
+      mensajeLog,
+      permisos
     },
 
     // enable strict mode (adds overhead!)

@@ -123,6 +123,14 @@ export default {
             name: 'dashboardMain',
             label: 'Dashboard'
           }
+        },
+        {
+          title: 'Solicitud de permisos',
+          icon: 'note_add',
+          link: {
+            name: 'permisosMain',
+            label: 'Solicitud de permisos'
+          }
         }
       ]
     }
@@ -143,10 +151,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   @media screen and (min-width: 768px) {
     .q-footer {
       display: none;
+    }
+  }
+
+  .platform-ios {
+    .q-header {
+    padding-top: constant(safe-area-inset-top); // for iOS 11.0
+    padding-top: env(safe-area-inset-top); // for iOS 11.2 +
+    }
+    .q-footer {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
     }
   }
 

@@ -46,12 +46,12 @@ const actions = {
     axiosInstance.post('login.asp', querystring.stringify(loginData), headerFormData)
       .then((response) => {
         // const str = response.data.replace(/'/g, '"') // el JSON que devuelve no es correcto porque es con comillas simples y hay que pasarlo a dobles
-        const user = response.data
+        const user = response.data //Devuelve el nombre de usuario (user.login)
         if (user.failure) {
           throw new Error('Credenciales incorrectas. Inténtelo de nuevo')
         } else {
           // si el usuario existe, busco sus datos personales
-          axiosInstance.get('bd_personal.asp?action=findPersonal', { params: { idPersonal: user.idPersonal } })
+          axiosInstance.get('bd_personal.asp?action=findPersonal', { params: { login: user.login } })
             .then((response) => {
               if (response.data.failure) throw new Error(response.data.failure)
               if (response.data.length === 0) {

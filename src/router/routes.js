@@ -15,7 +15,10 @@ const routes = [
         path: 'mainTabs',
         component: () => import('components/MainTabs/mainTabs.vue'),
         children: [
-          { path: 'personalMain', name: 'personalMain', component: () => import('components/Personal/personalMain.vue'), props: true },
+          { path: 'personalMain', 
+            name: 'personalMain', 
+            component: () => import('components/Personal/personalMain.vue'), 
+            props: true },
           {
             path: 'personalFormMain/:id',
             name: 'personalFormMain',
@@ -23,6 +26,25 @@ const routes = [
             props: true,
             children: [
               { path: 'personalForm', name: 'personalForm', component: () => import('components/Personal/personalForm.vue'), props: true }
+            ]
+          },
+          { path: 'permisosMain',
+            name: 'permisosMain',
+            component: () => import('components/Permisos/permisosMain.vue'),
+            props: true,
+            children: [
+              {
+                path: 'permisosPendientes', 
+                name: 'permisosPendientes', 
+                component: () => import('components/Permisos/permisosPendientes.vue'), 
+                props: true 
+              },
+              {
+                path: 'permisosConcedidos', 
+                name: 'permisosConcedidos', 
+                component: () => import('components/Permisos/permisosConcedidos.vue'), 
+                props: true 
+              }
             ]
           }
         ]

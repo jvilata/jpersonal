@@ -1,0 +1,116 @@
+ <!-- componente que se llama desde accionesMain y que presenta el formulario de filtro y el boton de busqueda -->
+  <template>
+  <q-card style="width: 400px;" class="q-pr-xs q-gutter-xs">
+    <q-card-section class="bg-primary text-white">
+      <div class="text-h6">Solicitar nuevo permiso</div>
+    </q-card-section>
+
+    <q-form @submit="submitPermiso" class="q-gutter-y-xs">
+        <q-input 
+          outlined 
+          clearable 
+          label="Fecha Desde" 
+          stack-label 
+          :value="formatDate(permisoToAdd.fechaDesde)"
+          @input="v => permisoToAdd.fechaDesde = v"
+          :rules="[val => !!val || 'Campo obligatorio']">
+          <template v-slot:append>
+              <q-icon name="event" class="cursos-pointer">
+                <q-popup-proxy ref="qFechaDesde">
+                  <wgDate 
+                    @input="$refs.qFechaDesde.hide()"
+                    v-model="permisoToAdd.fechaDesde" />
+                </q-popup-proxy>
+              </q-icon>
+          </template>
+        </q-input>
+        <q-input 
+          outlined 
+          clearable 
+          label="Fecha Hasta" 
+          stack-label 
+          :value="formatDate(permisoToAdd.fechaHasta)"
+          @input="v => permisoToAdd.fechaHasta = v"
+          :rules="[val => !!val || 'Campo obligatorio']">
+          <template v-slot:append>
+              <q-icon name="event" class="cursos-pointer">
+                <q-popup-proxy ref="qFechaHasta">
+                  <wgDate 
+                    @input="$refs.qFechaHasta.hide()"
+                    v-model="permisoToAdd.fechaHasta"/>
+                </q-popup-proxy>
+              </q-icon>
+          </template>
+        </q-input>
+        <q-select
+          label="N. Jornadas"
+          stack-label
+          outlined
+          clearable
+          v-model="permisoToAdd.numJornadas"
+          :options="numJornadas"
+          option-value="id"
+          option-label="desc"
+          emit-value
+          map-options
+          :rules="[val => !!val || 'Campo obligatorio']"
+        />
+        <q-select
+          label="Tipo Jorn. Libre"
+          stack-label
+          outlined
+          clearable
+          v-model="permisoToAdd.tipoJornadaLibre"
+          :options="tipoJornada"
+          option-value="id"
+          option-label="desc"
+          emit-value
+          map-options
+          :rules="[val => !!val || 'Campo obligatorio']"
+        />
+        <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
+
+      <q-card-actions align="right">
+        <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
+        <q-btn flat type="submit" label="Solicitar" color="primary"/>
+      </q-card-actions>
+    </q-form>
+  </q-card>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+import { date } from 'quasar'
+import wgDate from 'components/General/wgDate.vue'
+
+export default {
+  props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
+  data () {
+    return {
+      permisoToAdd: {},
+      numJornadas: ['1', '0.5', '0.25'],
+      tipoJornada: [
+        'Vacaciones',
+        'Permiso especial retribuido',
+        'Baja por enfermedad',
+        'Per. NO retribuido',
+        'Regularización días u horas trabajadas',
+        'Baja por paternindad, maternidad o adopción'
+      ]
+    }
+  },
+  methods: {
+    ...mapActions('permisos', ['addPermiso']),
+    formatDate (pdate) {
+      return date.formatDate(pdate, 'DD/MM/YYYY')
+    },
+    submitPermiso() {
+      this.addPermiso(this.permisoToAdd)
+      this.$emit('close')
+    },
+  },
+  components: {
+    wgDate: wgDate
+  }
+}
+</script>
