@@ -59,6 +59,13 @@ export default {
         {
           title: 'General',
           link: { name: 'personalForm' }
+        },
+        {
+          title: 'tab2',
+          link: { name: 'personalForm' }
+        },{
+          title: 'tab3',
+          link: { name: 'personalForm' }
         }
       ]
     }

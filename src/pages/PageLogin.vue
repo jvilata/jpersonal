@@ -16,7 +16,7 @@
               emit-value
               map-options
             />
-            <q-input v-model="user.email" label="Usuario" />
+            <q-input name="email" v-model="user.email" label="Usuario" />
             <q-input name="password" autocomplete="password" v-model="user.password" type="password" label="Password" />
             <div class="row justify-center q-pa-md">
               <q-btn type="submit" rounded color="primary" class="full-width" label="Entrar"/>
