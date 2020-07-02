@@ -1,17 +1,30 @@
 <template>
   <div style="height: 75vh">
-      <permisosPendientesGrid
+      <!-- <permisosPendientesGrid
           v-model="permisosPendientes"
-          />
+          /> -->
 
-      <div class="row justify-center q-ma-xs">
+      <q-separator spaced/>
+
+      <div class="text-center q-ma-sm no-pointer-events row justify-center">
         <q-btn 
-          round
-          size="lg"
+          rounded
+          dense
+          size="md"
           color="primary"
+          label="Solicitar nuevo permiso"
           icon="add"
-          @click="nuevoPermiso = !nuevoPermiso"/>
+          @click="nuevoPermiso = !nuevoPermiso"
+          class="col-8 all-pointer-events"/>
       </div>
+
+      <!-- <q-separator spaced/> -->
+
+      <permisosPendientesList
+      v-model="permisosPendientes"
+      class="q-mb-lg"
+      />
+
 
     <q-dialog v-model="nuevoPermiso"  >
         <!-- formulario con campos de filtro -->
@@ -36,8 +49,9 @@ export default {
     ...mapState('permisos', ['permisosPendientes'])
   },
   components: {
-    permisosPendientesGrid: require('components/Permisos/permisosPendientesGrid.vue').default,
-    permisosAdd: require('components/Permisos/permisosAdd.vue').default
+    // permisosPendientesGrid: require('components/Permisos/permisosPendientesGrid.vue').default,
+    permisosAdd: require('components/Permisos/permisosAdd.vue').default,
+    permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   }
 }
 </script>

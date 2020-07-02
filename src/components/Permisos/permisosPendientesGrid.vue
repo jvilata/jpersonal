@@ -52,10 +52,14 @@
 
       <template v-slot:body="props">
         
-        <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
+        <q-tr :props="props" 
+          :key="`m_${props.row.id}`" 
+          @mouseover="rowId=`m_${props.row.id}`" 
+          clickable
+          @click="props.expand = !props.expand">
           <q-td align="center">
             <!-- columna de acciones: editar, borrar, etc -->
-            <div style="max-width: 20px">
+            <div style="max-width: 10px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
             <!-- <q-btn flat v-if="rowId===`m_${props.row.id}`"
               @click.stop="editRecord(props.row, props.row.id)"
@@ -85,10 +89,19 @@
             align="left "
           >
             <div :style="col.style">
-              <div>{{ col.value }}</div>
+              <div>{{ formatDate(props.row.fechaDesde) }} hasta {{ formatDate(props.row.fechaHasta) }}</div>
             </div>
           </q-td>
         </q-tr>
+
+        <q-tr v-show="props.expand" :props="props">
+          <q-td colspan="100%" class="bg-grey-2">
+            <div>
+              <permisoMoreInfo :permiso="props.row"/>
+            </div>
+          </q-td>
+        </q-tr>
+
       </template>
 
       <template v-slot:bottom>
@@ -122,13 +135,13 @@ export default {
     return {
       rowId: '',
       columns: [
-        { name: 'ejercicio', align: 'center', label: 'Ejercicio', field: 'ejercicio', sortable: true , style: 'width: 20px'},
-        { name: 'fechaDesde', align: 'center', label: 'Fecha Desde', field: 'fechaDesde', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DD HH:mm:ss'), 'DD-MM-YYYY')},
-        { name: 'fechaHasta', label: 'Fecha Hasta', align: 'center', field: 'fechaHasta', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DD HH:mm:ss'), 'DD-MM-YYYY')},
-        { name: 'numJornadas', label: 'N. Jornadas', align: 'center', field: 'numJornadas', sortable: true, style: '' },
-        { name: 'tipoJornadaLibre', label: 'Tipo Jorn Libre', align: 'center', field: 'tipoJornadaLibre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'observaciones', align: 'center', label: 'Observaciones', field: 'observaciones', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
+        { name: 'permisosPendientes', align: 'left', label: 'Permisos Pendientes', field: 'fechaDesde', sortable: false , style: 'width: 70vw'},
+        // { name: 'fechaDesde', align: 'center', label: 'Fecha Desde', field: 'fechaDesde', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DD HH:mm:ss'), 'DD-MM-YYYY')},
+        // { name: 'fechaHasta', label: 'Fecha Hasta', align: 'center', field: 'fechaHasta', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DD HH:mm:ss'), 'DD-MM-YYYY')},
+        // { name: 'numJornadas', label: 'N. Jornadas', align: 'center', field: 'numJornadas', sortable: true, style: '' },
+        // { name: 'tipoJornadaLibre', label: 'Tipo Jorn Libre', align: 'center', field: 'tipoJornadaLibre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        // { name: 'observaciones', align: 'center', label: 'Observaciones', field: 'observaciones', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        // { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
       ],
       pagination: { rowsPerPage: 0 },
       eliminarPermiso: false
@@ -136,6 +149,9 @@ export default {
   },
   computed: {
     ...mapState('tablasAux', ['listaSINO']),
+  },
+  components: {
+    permisoMoreInfo: require('components/Permisos/PermisosPendientes/permisoPendienteInfo.vue').default
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
@@ -157,10 +173,10 @@ export default {
       }).onOk(() => {
         this.deletePermiso(id)
       })
+    },
+    formatDate (pdate) {
+      return date.formatDate(pdate, 'DD/MM/YYYY')
     }
-  },
-  mounted() {
-    console.log(this.value); 
   }
 }
 </script>

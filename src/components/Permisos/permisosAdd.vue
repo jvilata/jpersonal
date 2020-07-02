@@ -12,7 +12,6 @@
           label="Fecha Desde" 
           stack-label 
           :value="formatDate(permisoToAdd.fechaDesde)"
-          @input="v => permisoToAdd.fechaDesde = v"
           :rules="[val => !!val || 'Campo obligatorio']">
           <template v-slot:append>
               <q-icon name="event" class="cursos-pointer">
@@ -30,19 +29,20 @@
           label="Fecha Hasta" 
           stack-label 
           :value="formatDate(permisoToAdd.fechaHasta)"
-          @input="v => permisoToAdd.fechaHasta = v"
           :rules="[val => !!val || 'Campo obligatorio']">
           <template v-slot:append>
               <q-icon name="event" class="cursos-pointer">
                 <q-popup-proxy ref="qFechaHasta">
                   <wgDate 
-                    @input="$refs.qFechaHasta.hide()"
+                    @input="{ $refs.qFechaHasta.hide(); calcNumJornadas()}"
                     v-model="permisoToAdd.fechaHasta"/>
                 </q-popup-proxy>
               </q-icon>
           </template>
         </q-input>
         <q-select
+          :disable="disable"
+          ref="numJornadas"
           label="N. Jornadas"
           stack-label
           outlined
@@ -70,6 +70,8 @@
         />
         <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
 
+        <!-- <p>{{permisoToAdd}}</p> -->
+
       <q-card-actions align="right">
         <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
         <q-btn flat type="submit" label="Solicitar" color="primary"/>
@@ -87,7 +89,9 @@ export default {
   props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
   data () {
     return {
-      permisoToAdd: {},
+      permisoToAdd: {
+        numJornadas: ''
+      },
       numJornadas: ['1', '0.5', '0.25'],
       tipoJornada: [
         'Vacaciones',
@@ -96,7 +100,8 @@ export default {
         'Per. NO retribuido',
         'Regularización días u horas trabajadas',
         'Baja por paternindad, maternidad o adopción'
-      ]
+      ],
+      disable: false
     }
   },
   methods: {
@@ -108,6 +113,18 @@ export default {
       this.addPermiso(this.permisoToAdd)
       this.$emit('close')
     },
+    calcNumJornadas() {
+      if (this.permisoToAdd.fechaDesde && this.permisoToAdd.fechaHasta) {
+        let numJornadas = date.getDateDiff(this.permisoToAdd.fechaHasta, this.permisoToAdd.fechaDesde, 'days') + 1
+        if (numJornadas > 1) {
+          this.permisoToAdd.numJornadas = numJornadas
+          this.disable = true
+        } else {
+          this.permisoToAdd.numJornadas = 1
+          this.disable = false
+        }
+      }
+    }
   },
   components: {
     wgDate: wgDate

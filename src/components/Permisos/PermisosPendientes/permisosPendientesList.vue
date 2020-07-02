@@ -1,7 +1,10 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
 
-    <q-list v-if="value.length>0" bordered separator class="rounded-borders col">
+    <q-list v-if="value.length>0" 
+      bordered 
+      separator 
+      class="rounded-borders col">
       <q-separator/>
         <q-item-label header dense class="row bg-indigo-1">
           <q-btn-dropdown class="col-1" dropdown-icon="more_vert" size="md" unelevated dense no-icon-animation>
@@ -26,19 +29,20 @@
             </q-list>
           </q-btn-dropdown>
           <div class="col self-center text-center text-grey-8 text-subtitle1">
-            <b>Permisos concedidos</b>
+            <b>Permisos pendientes</b>
           </div>
         </q-item-label>
+
           <permisoConcedido v-for="(permiso, key) in value"
             :key="key"
             :permiso="permiso"
-            :id="key">
+            :id="key"> Permiso
           </permisoConcedido>
     </q-list>
     
 
     <q-banner v-else class="bg-white text-grey-8 col text-center">
-      No hay permisos concedidos.
+      No hay permisos pendientes.
     </q-banner>
   </q-item>
 </template>
@@ -54,7 +58,7 @@ export default {
     }
   },
   components: {
-    permisoConcedido: require('components/Permisos/PermisosConcedidos/permisoConcedido.vue').default
+    permisoConcedido: require('components/Permisos/PermisosPendientes/permisoPendiente.vue').default
   }
 }
 

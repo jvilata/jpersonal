@@ -1,25 +1,11 @@
-id
-ejercicio
-fechaDesde
-fechaHasta
-numJornadas
-tipoJornadaLibre
-observaciones
-sustituto
-sustFDesde
-sustFHasta
-justValidados
-justNoValid
-autSinDoc
-
 <template>
   <q-expansion-item
         clickable
-        expand-icon="article"
-        icon="check"
+        expand-icon="expand_more"
+        :icon="`${this.permiso.justificante ? 'check' : 'report_problem'}`"
         class="q-pa-xs full-width column"
         group="permisos"
-        :label="`${permiso.id}`"
+        :label="`${formatDate(permiso.fechaDesde)} a ${formatDate(permiso.fechaHasta)}`"
         :caption="permiso.tipoJornadaLibre">
         <q-card>
             <q-card-section>
@@ -30,15 +16,22 @@ autSinDoc
 </template>
 
 <script>
+import { date } from 'quasar'
+
 export default {
   props: ['permiso', 'id'],
   data () {
     return {
-      expanded: false
+      expanded: false,
     }
   },
   components: {
     permisoMoreInfo: require('components/Permisos/PermisosConcedidos/permisoConcedidoInfo.vue').default
+  },
+  methods: {
+    formatDate (pdate) {
+      return date.formatDate(pdate, 'DD/MM/YYYY')
+    }
   }
 }
 </script>
