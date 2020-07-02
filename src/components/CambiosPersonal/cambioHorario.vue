@@ -180,13 +180,13 @@
         <div class="q-pa-sm q-pl-xs q-pr-xs">
             <div class="row justify-center" style="max-height: 70px">
                     <div class="column q-pr-md q-mt-sm" style="max-width: 150px">
-                        <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
+                        <q-input filled v-if="val" v-model="sumaHoras" label="Horas Semanales"></q-input>
                         <!-- <template v-slot:hint>
                         Field hint
                         </template> -->
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn :disabled="!val ? !disabled : disabled" @click="calculoHorasSem" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
             </div>
             <div class="row items-baseline q-my-md">
@@ -248,6 +248,23 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
+    calculoHorasSem() {
+        this.sumaHoras = 0;
+        var horasArray = [this.hEntrada1, this.hSalida1, this.hEntrada2, this.hSalida2, this.hEntrada3, this.hSalida3, this.hEntrada4, this.hSalida4 ];
+        console.log(this.hEntrada1);
+        var horasArrayNumerico = [];
+        var i;
+        var j=1;
+        for( i = 0; j < horasArray.length; i+=2 ) {
+            horasArrayNumerico[i] = parseInt(horasArray[i], 10);
+            horasArrayNumerico[j] = parseInt(horasArray[j], 10);
+            this.sumaHoras += horasArrayNumerico[j] - horasArrayNumerico[i];
+            j += 2
+        }
+        // const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        // this.sumaHoras = horasArrayNumerico.reduce(reducer);
+        console.log(this.sumaHoras);
+    }
 
   }
 }

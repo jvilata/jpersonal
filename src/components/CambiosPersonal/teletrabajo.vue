@@ -23,11 +23,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                 <div class="col-xs-4">Fecha Desde</div>
                 <div class="col-xs-8">
-                    <q-input filled v-model="date" mask="date" :rules="['date']">
+                    <q-input filled :value="formatDate(dateDesde)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="dateDesde" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>  
                     </template>
@@ -40,11 +40,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                  <div class="col-xs-4">Fecha Hasta</div>
                  <div class="col-xs-8">
-                    <q-input filled v-model="date" mask="date" :rules="['date']">
+                    <q-input filled :value="formatDate(dateHasta)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="date" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="dateHasta" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>
                     </template>
@@ -80,7 +80,7 @@
             </div>
             <div class="row q-pb-md justify-center" >
                 <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                    <q-btn color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                    <q-btn :disabled="!val1 || !val2 || !val3 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
                 </div>
             </div>
         </q-card>
@@ -140,6 +140,8 @@ import { date, openURL } from 'quasar'
 export default {
     data () {
         return {
+            dateDesde: '',
+            dateHasta: '',
             model: null,
             options: [
                 'ESPAÑA', 'MEXICO', 'ITALIA', 'ALEMANIA', 'ARGENTINA'
@@ -180,6 +182,9 @@ export default {
         } else { // estamos en un disp movil
           window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
         }     
+    },
+    formatDate (pdate) {
+        return date.formatDate(pdate, 'DD/MM/YYYY')
     }
   }
 }
