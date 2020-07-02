@@ -12,6 +12,7 @@ const state = {
       tipoJornadaLibre: 'Vacaciones',
       observaciones: 'test0',
       estado: 'PENDIENTE',
+      empleado:'Marta Vilata Darder' 
     },
     {
       id: 1,
@@ -22,6 +23,7 @@ const state = {
       tipoJornadaLibre: 'Vacaciones',
       observaciones: 'test1',
       estado: 'PENDIENTE',
+      empleado:'Javier Hernández Cerrillo' 
     },
     {
       id: 2,
@@ -32,6 +34,7 @@ const state = {
       tipoJornadaLibre: 'Vacaciones',
       observaciones: 'test2',
       estado: 'PENDIENTE',
+      empleado:'José Blas Vilata Tamarit' 
     },
     {
       id: 3,
@@ -42,6 +45,7 @@ const state = {
       tipoJornadaLibre: 'Vacaciones',
       observaciones: 'test3',
       estado: 'PENDIENTE',
+      empleado:'Ana Darder Navarro' 
     },
     {
       id: 4,

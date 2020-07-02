@@ -131,6 +131,14 @@ export default {
             name: 'permisosMain',
             label: 'Solicitud de permisos'
           }
+        },
+        {
+          title: 'Aprobación de cambios-permisos',
+          icon: 'how_to_reg',
+          link: {
+            name: 'aprobacionMain',
+            label: 'Aprobación Cambios-Permisos'
+          }
         }
       ]
     }

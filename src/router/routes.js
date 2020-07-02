@@ -46,7 +46,13 @@ const routes = [
                 props: true 
               }
             ]
-          }
+          },
+          {
+            path: 'aprobacionMain',
+            name: 'aprobacionMain',
+            component: () => import('components/Aprobacion/aprobacionMain.vue'),
+            props: true
+          },
         ]
       },
       {

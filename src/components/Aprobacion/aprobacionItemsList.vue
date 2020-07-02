@@ -1,10 +1,7 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
 
-    <q-list v-if="value.length>0" 
-      bordered 
-      separator 
-      class="rounded-borders col">
+    <q-list v-if="value.length>0" bordered separator class="rounded-borders col">
       <q-separator/>
         <q-item-label header dense class="row bg-indigo-1">
           <q-btn-dropdown class="col-1" dropdown-icon="more_vert" size="md" unelevated dense no-icon-animation>
@@ -29,20 +26,19 @@
             </q-list>
           </q-btn-dropdown>
           <div class="col self-center text-center text-grey-8 text-subtitle1">
-            <b>Permisos pendientes</b>
+            <b>Cambios pendientes de aprobación</b>
           </div>
         </q-item-label>
-
-          <permisoPendiente v-for="(permiso, key) in value"
-            :key="key"
-            :permiso="permiso"
-            :id="key"> Permiso
-          </permisoPendiente>
+        <aprobacionItem v-for="(item, key) in value"
+          :key="key"
+          :item="item"
+          :id="key">
+        </aprobacionItem>
     </q-list>
     
 
     <q-banner v-else class="bg-white text-grey-8 col text-center">
-      No hay permisos pendientes.
+      No hay permisos por revisar.
     </q-banner>
   </q-item>
 </template>
@@ -58,7 +54,7 @@ export default {
     }
   },
   components: {
-    permisoPendiente: require('components/Permisos/PermisosPendientes/permisoPendiente.vue').default
+    aprobacionItem: require('components/Aprobacion/aprobacionItem.vue').default
   }
 }
 
