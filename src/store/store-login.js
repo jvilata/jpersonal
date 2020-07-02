@@ -46,7 +46,7 @@ const actions = {
     axiosInstance.post('login.asp', querystring.stringify(loginData), headerFormData)
       .then((response) => {
         // const str = response.data.replace(/'/g, '"') // el JSON que devuelve no es correcto porque es con comillas simples y hay que pasarlo a dobles
-        const user = response.data //login 
+        const user = response.data //Devuelve el nombre de usuario (user.login)
         if (user.failure) {
           throw new Error('Credenciales incorrectas. Inténtelo de nuevo')
         } else {

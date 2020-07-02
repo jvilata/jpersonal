@@ -83,7 +83,32 @@ const routes = [
               }
                
             ]
-          }
+          },
+          { path: 'permisosMain',
+            name: 'permisosMain',
+            component: () => import('components/Permisos/permisosMain.vue'),
+            props: true,
+            children: [
+              {
+                path: 'permisosPendientes', 
+                name: 'permisosPendientes', 
+                component: () => import('components/Permisos/permisosPendientes.vue'), 
+                props: true 
+              },
+              {
+                path: 'permisosConcedidos', 
+                name: 'permisosConcedidos', 
+                component: () => import('components/Permisos/permisosConcedidos.vue'), 
+                props: true 
+              }
+            ]
+          },
+          {
+            path: 'aprobacionMain',
+            name: 'aprobacionMain',
+            component: () => import('components/Aprobacion/aprobacionMain.vue'),
+            props: true
+          },
         ]
       },
       {

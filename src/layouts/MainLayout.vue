@@ -185,27 +185,19 @@ export default {
           }
         },
         {
-          title: 'Solicitud de Permisos',
-          icon: 'assignment',
+          title: 'Solicitud de permisos',
+          icon: 'note_add',
           link: {
-            name: 'solicitudPermisos',
-            label: 'Solicitud de Permisos'
+            name: 'permisosMain',
+            label: 'Solicitud de permisos'
           }
         },
         {
-          title: 'Permisos Concedidos',
-          icon: 'assignment_turned_in',
+          title: 'Aprobación de cambios-permisos',
+          icon: 'how_to_reg',
           link: {
-            name: 'permisosConcedidos',
-            label: 'Permisos Concedidos'
-          }
-        },
-        {
-          title: 'Solicitudes de Cambio',
-          icon: 'date_range',
-          link: {
-            name: 'solicitudCambios',
-            label: 'Solicitudes de Cambio'
+            name: 'aprobacionMain',
+            label: 'Aprobación Cambios-Permisos'
           }
         }
       ]
@@ -248,10 +240,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   @media screen and (min-width: 768px) {
     .q-footer {
       display: none;
+    }
+  }
+
+  .platform-ios {
+    .q-header {
+    padding-top: constant(safe-area-inset-top); // for iOS 11.0
+    padding-top: env(safe-area-inset-top); // for iOS 11.2 +
+    }
+    .q-footer {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
     }
   }
 
