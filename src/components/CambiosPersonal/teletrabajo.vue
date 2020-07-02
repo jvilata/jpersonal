@@ -80,7 +80,7 @@
             </div>
             <div class="row q-pb-md justify-center" >
                 <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                    <q-btn :disabled="!val1 || !val2 || !val3 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                    <q-btn :disabled="!val1 || !val2 || !val ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
                 </div>
             </div>
         </q-card>

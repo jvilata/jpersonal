@@ -180,18 +180,19 @@
         <div class="q-pa-sm q-pl-xs q-pr-xs">
             <div class="row justify-center" style="max-height: 70px">
                     <div class="column q-pr-md q-mt-sm" style="max-width: 150px">
-                        <q-input filled v-if="val" v-model="sumaHoras" label="Horas Semanales"></q-input>
+                        <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
                         <!-- <template v-slot:hint>
                         Field hint
                         </template> -->
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn :disabled="!val ? !disabled : disabled" @click="calculoHorasSem" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn :disabled="!val ? !disabled : disabled" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
             </div>
             <div class="row items-baseline q-my-md">
                 <div class="col-xs-9">
                     <q-checkbox
+                        @input="calculoHorasSem"
                         v-model="val"
                         color="primary"
                         label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento..."
