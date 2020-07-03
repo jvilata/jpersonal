@@ -18,6 +18,7 @@
         <q-card>
             <q-card-section>
                 <itemMoreInfo :item="item"/>
+                <itemCambioHor :item="item"/>
             </q-card-section>
         </q-card>
     </q-expansion-item>
@@ -34,7 +35,12 @@ export default {
     }
   },
   components: {
-    itemMoreInfo: require('components/Aprobacion/aprobacionItemInfo.vue').default
+    itemMoreInfo: require('components/Aprobacion/aprobacionItemInfo.vue').default,
+    itemCambioHor: require('components/Aprobacion/aprobacionCambioHor.vue').default,
+    itemTeletrab: require('components/Aprobacion/aprobacionTeletrab.vue').default,
+    itemOtrosCambios: require('components/Aprobacion/aprobacionOtrosCambios.vue').default,
+
+
   },
   methods: {
     formatDate (pdate) {
