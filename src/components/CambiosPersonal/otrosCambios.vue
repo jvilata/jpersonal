@@ -30,7 +30,7 @@
         </div>
         <div class="row q-pb-md justify-center" >
             <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros   Cambios" style="max-height: 50px"/>
+                <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="max-height: 50px"/>
             </div>
         </div>
         

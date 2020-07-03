@@ -62,7 +62,7 @@ const state = {
           idPersonal: 2,
           nombrePersona: 'Marta Vilata Darder'
         },
-        tipo: 'PERMISO'
+        tipo: 'OTROS CAMBIOS'
       },
       {
         id: 3,

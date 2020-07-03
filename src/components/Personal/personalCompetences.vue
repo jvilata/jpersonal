@@ -2,6 +2,7 @@
   <q-item class="row q-ma-xs q-pa-xs">
     <!-- GRID. en row-key ponemos la columna del json que sea la id unica de la fila -->
     <q-table
+      dense
       class="personalGrid-header-table"
       virtual-scroll
       :virtual-scroll-sticky-size-start="48"

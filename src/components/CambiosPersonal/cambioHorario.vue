@@ -20,20 +20,21 @@
                 icon="close"/>
               </q-item-section>
             </q-item>
-        <q-card>
-            <q-form @submit="updateRecord" @keyup.esc="$emit('close')">   
+        <q-form @submit="submitRecord" @keyup.esc="$emit('close')">   
+        <q-card flat>
                 <div class="q-pa-md">
                     <div class="q-gutter-md">
                         <div class="text-subtitle1 text-bold text-center">Horario de Lunes - Jueves:</div>
                             <div class="row q-mb-sm">
+                                
                                 <div class="col q-mb-sm text-subtitle2">Hora Entrada 1
-                                    <q-input filled v-model="hEntrada1" class="q-pr-xs">
+                                    <q-input filled v-model="recordToSubmit.hEntrada1" class="q-pr-xs">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qEnt1" transition-show="scale" transition-hide="scale">
                                             <q-time 
                                                 @input="$refs.qEnt1.hide()"
-                                                v-model="hEntrada1"
+                                                v-model="recordToSubmit.hEntrada1"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions"
@@ -44,13 +45,13 @@
                                     </q-input>
                                 </div>
                                 <div class="col q-mb-sm text-subtitle2">Hora Salida 1
-                                    <q-input filled v-model="hSalida1">
+                                    <q-input filled v-model="recordToSubmit.hSalida1">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qSal1" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qSal1.hide()"
-                                                v-model="hSalida1"
+                                                v-model="recordToSubmit.hSalida1"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -62,13 +63,13 @@
                             </div>
                             <div class="row q-mb-sm">
                             <div class="col q-mb-sm text-subtitle2">Hora Entrada 2
-                                    <q-input filled v-model="hEntrada2" class="q-pr-xs">
+                                    <q-input filled v-model="recordToSubmit.hEntrada2" class="q-pr-xs">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qEnt2" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qEnt2.hide()"
-                                                v-model="hEntrada2"
+                                                v-model="recordToSubmit.hEntrada2"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -78,13 +79,13 @@
                                     </q-input>
                                 </div>
                                 <div class="col q-mb-sm text-subtitle2">Hora Salida 2
-                                    <q-input filled v-model="hSalida2">
+                                    <q-input filled v-model="recordToSubmit.hSalida2">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qSal2" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qSal2.hide()"
-                                                v-model="hSalida2"
+                                                v-model="recordToSubmit.hSalida2"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -96,22 +97,20 @@
                             </div>
                     </div>
                 </div>
-            </q-form>
         </q-card>
-        <q-card>
-            <q-form @submit="updateRecord" @keyup.esc="$emit('close')">   
+        <q-card flat>
                 <div class="q-pa-md">
                     <div class="q-gutter-md">
                         <div class="text-subtitle1 text-bold text-center">Horario de Viernes:</div>
                             <div class="row q-mb-sm">
                                 <div class="col q-mb-sm text-subtitle2">Hora Entrada 3
-                                    <q-input filled v-model="hEntrada3" class="q-pr-xs">
+                                    <q-input filled v-model="recordToSubmit.hEntrada3" class="q-pr-xs">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qEnt3" transition-show="scale" transition-hide="scale">
                                             <q-time 
                                                 @input="$refs.qEnt3.hide()"
-                                                v-model="hEntrada3"
+                                                v-model="recordToSubmit.hEntrada3"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions"
@@ -122,13 +121,13 @@
                                     </q-input>
                                 </div>
                                 <div class="col q-mb-sm text-subtitle2">Hora Salida 3
-                                    <q-input filled v-model="hSalida3">
+                                    <q-input filled v-model="recordToSubmit.hSalida3">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qSal3" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qSal3.hide()"
-                                                v-model="hSalida3"
+                                                v-model="recordToSubmit.hSalida3"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -140,13 +139,13 @@
                             </div>
                             <div class="row q-mb-sm">
                             <div class="col q-mb-sm text-subtitle2">Hora Entrada 4
-                                    <q-input filled v-model="hEntrada4" class="q-pr-xs">
+                                    <q-input filled v-model="recordToSubmit.hEntrada4" class="q-pr-xs">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qEnt4" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qEnt4.hide()"
-                                                v-model="hEntrada4"
+                                                v-model="recordToSubmit.hEntrada4"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -156,13 +155,13 @@
                                     </q-input>
                                 </div>
                                 <div class="col q-mb-sm text-subtitle2">Hora Salida 4
-                                    <q-input filled v-model="hSalida4">
+                                    <q-input filled v-model="recordToSubmit.hSalida4">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qSal4" transition-show="scale" transition-hide="scale">
                                             <q-time
                                                 @input="$refs.qSal4.hide()"
-                                                v-model="hSalida4"
+                                                v-model="recordToSubmit.hSalida4"
                                                 :hour-options="hourOptions"
                                                 :minute-options="minuteOptions"
                                                 :second-options="secondOptions" />
@@ -174,9 +173,8 @@
                             </div>
                     </div>
                 </div>
-            </q-form>
         </q-card>
-     <q-card>
+     <q-card flat>
         <div class="q-pa-sm q-pl-xs q-pr-xs">
             <div class="row justify-center" style="max-height: 70px">
                     <div class="column q-pr-md q-mt-sm" style="max-width: 150px">
@@ -186,14 +184,14 @@
                         </template> -->
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn :disabled="!val ? !disabled : disabled" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn :disabled="!recordToSubmit.valCheck ? !disabled : disabled" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
             </div>
             <div class="row items-baseline q-my-md">
                 <div class="col-xs-9">
                     <q-checkbox
                         @input="calculoHorasSem"
-                        v-model="val"
+                        v-model="recordToSubmit.valCheck"
                         color="primary"
                         label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento..."
                         />
@@ -205,27 +203,26 @@
             </div>
         </div>
     </q-card>
+    </q-form>
 </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data () {
     return {
-      hEntrada1: '08:30',
-      hSalida1: '13:30',
-      hEntrada2: '15:30',
-      hSalida2: '19:00',
-      hEntrada3: '08:00',
-      hSalida3: '15:30',
-      hEntrada4: '00:00',
-      hSalida4: '00:00',
-      hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
-      minuteOptions: [ 0, 30 ],
-      secondOptions: [ 0, 10, 20, 30, 40, 50 ],
-      val: false,
-      sumaHoras: 0,
-      openDialog: false
+        recordToSubmit: {
+            hEntrada1: '',
+            valCheck: false
+        },
+        hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
+        minuteOptions: [ 0, 30 ],
+        secondOptions: [ 0, 10, 20, 30, 40, 50 ],
+        sumaHoras: 0,
+        openDialog: false,
+        disabled: false
     }
   },
   methods: {
@@ -237,12 +234,12 @@ export default {
         persistent: true
       }).onOk(() => {
         
-       this.val = true
-        console.log(this.val)
+       this.recordToSubmit.valCheck = true
+        //console.log(this.val)
 
       }).onOk(() => {
         // console.log('>>>> second OK catcher')
-        val = true
+        this.recordToSubmit.valCheck = true
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {
@@ -251,8 +248,8 @@ export default {
     },
     calculoHorasSem() {
         this.sumaHoras = 0;
-        var horasArray = [this.hEntrada1, this.hSalida1, this.hEntrada2, this.hSalida2, this.hEntrada3, this.hSalida3, this.hEntrada4, this.hSalida4 ];
-        console.log(this.hEntrada1);
+        var horasArray = [this.recordToSubmit.hEntrada1, this.recordToSubmit.hSalida1, this.recordToSubmit.hEntrada2, this.recordToSubmit.hSalida2, this.recordToSubmit.hEntrada3, this.recordToSubmit.hSalida3, this.recordToSubmit.hEntrada4, this.recordToSubmit.hSalida4 ];
+        //console.log(this.hEntrada1);
         var horasArrayNumerico = [];
         var i;
         var j=1;
@@ -262,11 +259,21 @@ export default {
             this.sumaHoras += horasArrayNumerico[j] - horasArrayNumerico[i];
             j += 2
         }
-        // const reducer = (accumulator, currentValue) => accumulator + currentValue;
-        // this.sumaHoras = horasArrayNumerico.reduce(reducer);
-        console.log(this.sumaHoras);
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        this.sumaHoras = horasArrayNumerico.reduce(reducer);
+        
+    },
+    submitRecord(){
+
     }
 
+  },
+  mounted () {
+   this.recordToSubmit.hEntrada1 = this.user.pers.horaentrada1
+   
+  },
+  computed:{
+    ...mapState('login', ['user'])
   }
 }
 </script>
