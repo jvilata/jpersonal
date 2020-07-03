@@ -27,7 +27,7 @@
 
       <q-dialog v-model="expanded"  >
         <!-- formulario con campos de filtro -->
-        <personalFilter
+        <aprobacionFilter
           :value="filterRecord"
           @input="(value) => Object.assign(filterRecord, value)"
           @close="expanded = !expanded"
@@ -36,7 +36,7 @@
 
       <!-- formulario tabla de resultados de busqueda -->
       <aprobacionItemsList
-        v-model="permisosPendientes"
+        v-model="porAprobar"
         />
     </div>
 </template>
@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     ...mapState('login', ['user']), // importo state.user desde store-login
-    ...mapState('permisos', ['permisosPendientes'])
+    ...mapState('aprobacion', ['porAprobar'])
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
@@ -91,7 +91,7 @@ export default {
   //   this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
   // },
   components: {
-    personalFilter: require('components/Personal/personalFilter.vue').default,
+    aprobacionFilter: require('components/Aprobacion/aprobacionFilter.vue').default,
     aprobacionItemsList: require('components/Aprobacion/aprobacionItemsList.vue').default
   }
 }

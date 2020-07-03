@@ -7,6 +7,8 @@ import tabs from './store-tabs'
 import tablasAux from './store-tablasAux'
 import mensajeLog from './store-log'
 import permisos from './store-permisos'
+import empleados from './store-empleados'
+import aprobacion from './store-aprobacion'
 
 Vue.use(Vuex)
 
@@ -26,7 +28,9 @@ export default function (/* { ssrContext } */) {
       tabs,
       tablasAux,
       mensajeLog,
-      permisos
+      permisos,
+      empleados,
+      aprobacion
     },
 
     // enable strict mode (adds overhead!)
