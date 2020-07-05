@@ -39,12 +39,6 @@ const routes = [
             component: () => import('components/CambiosPersonal/otrosCambios.vue'), 
             props: true 
           },
-          { 
-            path: 'consultarCambios', 
-            name: 'consultarCambios', 
-            component: () => import('components/CambiosPersonal/consultarCambios.vue'), 
-            props: true 
-          },
           {
             path: 'personalFormMain/:id',
             name: 'personalFormMain',
@@ -79,6 +73,24 @@ const routes = [
               { path: 'personalCompetences', 
                 name: 'personalCompetences', 
                 component: () => import('components/Personal/personalCompetences.vue'), 
+                props: true 
+              },
+              { 
+                path: 'cambioHorario', 
+                name: 'cambioHorario', 
+                component: () => import('components/CambiosPersonal/cambioHorario.vue'), 
+                props: true 
+              },
+              { 
+                path: 'teletrabajo', 
+                name: 'teletrabajo', 
+                component: () => import('components/CambiosPersonal/teletrabajo.vue'), 
+                props: true 
+              },
+              { 
+                path: 'otrosCambios', 
+                name: 'otrosCambios', 
+                component: () => import('components/CambiosPersonal/otrosCambios.vue'), 
                 props: true 
               }
                

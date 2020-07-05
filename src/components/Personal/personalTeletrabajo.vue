@@ -1,66 +1,69 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
-    <!-- GRID. en row-key ponemos la columna del json que sea la id unica de la fila -->
-    <q-table
-      class="personalGrid-header-table"
-      virtual-scroll
-      :virtual-scroll-sticky-size-start="48"
-      row-key="name"
-      :data="data"
-      :columns="columns"
-      table-style="max-height: 60vh; max-width: 96vw"
-    >
-
-    </q-table>
+    <q-card flat>
+      <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+          <div class="col-xs-4">Fecha Desde</div>
+          <div class="col-xs-8">
+              <q-input filled :value="formatDate(dateDesde)">
+              <template v-slot:prepend>
+                  <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="dateDesde" @input="() => $refs.qDateProxy.hide()" />
+                  </q-popup-proxy>
+                  </q-icon>  
+              </template>
+              <template v-slot:append>
+                  <q-icon name="close" @click.stop="model = ''" class="cursor-pointer" />
+                  </template>
+              </q-input>
+          </div>
+      </div>
+      <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+            <div class="col-xs-4">Fecha Hasta</div>
+            <div class="col-xs-8">
+              <q-input filled :value="formatDate(dateHasta)">
+              <template v-slot:prepend>
+                  <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="dateHasta" @input="() => $refs.qDateProxy.hide()" />
+                  </q-popup-proxy>
+                  </q-icon>
+              </template>
+              <template v-slot:append>
+                  <q-icon name="close" @click.stop="model = ''" class="cursor-pointer" />
+              </template>
+              
+              </q-input>
+            </div>
+      </div>
+      <div class="col-xs-12">
+        <q-input v-model="observaciones" label="Observaciones" autogrow @keyup.enter.stop />
+      </div>
+      <div class="row justify-center" style="max-width: 150px">
+        <q-btn
+          @click="openForm('teletrabajo')"
+          color="primary" 
+          label="Cambiar Teletrabajo" 
+          style="max-height: 50px"/>
+      </div>
+    </q-card>
+    
     
   </q-item>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { urlFotos } from 'boot/axios.js'
+import { date } from 'quasar'
 
 export default {
   props: ['value'], // en 'value' tenemos la tabla de datos del grid
   data () {
     return {
       expanded: false,
-      regper: {},
-      urlF: urlFotos,
-      rowId: '',
-      columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Ejercicio',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'fechaDesde', align: 'center', label: 'Fecha Desde', field: 'fechaDesde', sortable: true },
-        { name: 'fechaHasta', label: 'Fecha Hasta', field: 'fechaHasta', sortable: true },
-        { name: 'observaciones', label: 'Observaciones', field: 'observaciones' }
-       ],
-      data: [
-        {
-          name: 2020,
-          fechaDesde: '19/2/2020',
-          fechaHasta: '19/9/2020'
-        },
-        {
-          name: 2019,
-          fechaDesde: '21/5/2019',
-          fechaHasta: '21/12/2019'
-        },
-        {
-          name: 2018,
-          fechaDesde: '1/1/2018',
-          fechaHasta: '31/12/2018',
-          observaciones: 'Condiciones muy buenas'
-        }
-      ]
-     
+      dateDesde: '',
+      dateHasta: '',
+      observaciones: ''
     }
   },
   computed: {
@@ -69,37 +72,20 @@ export default {
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
+    openForm (link) {
+      this.addTab(['teletrabajo', 'Teletrabajo', {}, 1])
+    },
     editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
     //rowChanges contiene toda la info de cada persona 
       this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
       //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
     },
-    ampliarImagen (record) {
-      this.regper = record
-      this.expanded = true
-    },
-    mostrarDatosPieTabla () {
-      return this.value.length + ' Filas'
+    formatDate(pdate) {
+      return date.formatDate(pdate, 'DD/MM/YYYY')
     }
   }
 }
 </script>
 <style lang="sass">
-  .personalGrid-header-table
-    .q-table__top,
-    .q-table__bottom,
-    thead tr:first-child th
-      /* bg color is important for th; just specify one */
-      background-color: $indigo-1
-
-    thead tr th
-      position: sticky
-      z-index: 1
-    thead tr:first-child th
-      top: 0
-
-    /* this is when the loading indicator appears */
-    &.q-table--loading thead tr:last-child th
-      /* height of all previous header rows */
-      top: 48px
+  
 </style>

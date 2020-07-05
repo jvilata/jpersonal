@@ -24,6 +24,13 @@
         </div>
       </q-card-section>
     </q-card>
+    <div class="row justify-center" style="max-width: 150px">
+      <q-btn
+        @click="openForm('cambioHorario')"
+        color="primary" 
+        label="Cambiar Horario" 
+        style="max-height: 50px"/>
+    </div>
   </div>
 </template>
 
@@ -39,9 +46,14 @@ export default {
       }
     }
   },
+  methods: {
+    ...mapActions('tabs', ['addTab']),
+    openForm (link) {
+      this.addTab(['cambioHorario', 'Cambio Horario', {}, 1])
+    }
+  },
   mounted () {
     this.recordToSubmit = Object.assign({}, this.value) // v-model: en 'value' podemos leer el valor del v-model
-   
   }
 }
 </script>

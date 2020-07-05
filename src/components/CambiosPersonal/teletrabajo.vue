@@ -19,7 +19,7 @@
                 icon="close"/>
               </q-item-section>
             </q-item>
-        <q-card>
+        <q-card flat>
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                 <div class="col-xs-4">Fecha Desde</div>
                 <div class="col-xs-8">
@@ -78,13 +78,8 @@
                     @keyup.enter.stop />
                 </div>
             </div>
-            <div class="row q-pb-md justify-center" >
-                <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                    <q-btn :disabled="!val1 || !val2 || !val ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
-                </div>
-            </div>
         </q-card>
-     <q-card>
+     <q-card flat>
         <div>
 
             <div class="row items-baseline">
@@ -129,6 +124,11 @@
                         class="text-primary text-align-right q-pl-sm">Leer más</span>
                 </div>
             </div>
+            <div class="row q-pb-md justify-center" >
+                <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
+                    <q-btn :disabled="!val1 || !val2 || !val3 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                </div>
+            </div>
         </div>
     </q-card>
     </div>
@@ -152,7 +152,8 @@ export default {
             dense: false,
             denseOpts: false,
             motivoTeletrab: '',
-            domicilioTeletrabajo: ''
+            domicilioTeletrabajo: '',
+            disabled: false
         }
     },  
     methods: {

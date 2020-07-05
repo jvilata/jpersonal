@@ -22,11 +22,10 @@
             </q-item>
         <q-form @submit="submitRecord" @keyup.esc="$emit('close')">   
         <q-card flat>
-                <div class="q-pa-md">
+                <div class="q-pa-sm q-mt-md">
                     <div class="q-gutter-md">
-                        <div class="text-subtitle1 text-bold text-center">Horario de Lunes - Jueves:</div>
+                        <div class="text-subtitle1 text-bold text-center"> Horario de Lunes - Jueves:</div>
                             <div class="row q-mb-sm">
-                                
                                 <div class="col q-mb-sm text-subtitle2">Hora Entrada 1
                                     <q-input filled v-model="recordToSubmit.hEntrada1" class="q-pr-xs">
                                         <template v-slot:append>
@@ -60,6 +59,7 @@
                                         </template>
                                     </q-input>
                                 </div>
+                                
                             </div>
                             <div class="row q-mb-sm">
                             <div class="col q-mb-sm text-subtitle2">Hora Entrada 2
@@ -97,9 +97,7 @@
                             </div>
                     </div>
                 </div>
-        </q-card>
-        <q-card flat>
-                <div class="q-pa-md">
+                <div class="q-pa-sm">
                     <div class="q-gutter-md">
                         <div class="text-subtitle1 text-bold text-center">Horario de Viernes:</div>
                             <div class="row q-mb-sm">
@@ -173,48 +171,50 @@
                             </div>
                     </div>
                 </div>
-        </q-card>
-     <q-card flat>
-        <div class="q-pa-sm q-pl-xs q-pr-xs">
-            <div class="row justify-center" style="max-height: 70px">
-                    <div class="column q-pr-md q-mt-sm" style="max-width: 150px">
+                <div class="q-pa-sm q-pl-xs q-pr-xs">
+                    <div class="row items-baseline q-my-sm">
+                        <div class="col-xs-9">
+                            <q-checkbox
+                                @input="calculoHorasSem"
+                                v-model="recordToSubmit.valCheck"
+                                color="primary"
+                                label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento..."
+                                />
+                        </div>
+                        <div class="col-xs-3">
+                            <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
+                        </div>
+                    </div>
+                     <div class="row justify-center" style="max-height: 70px">
+                    <div class="column q-pr-sm q-mt-sm" style="max-width: 150px">
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
-                        <!-- <template v-slot:hint>
-                        Field hint
-                        </template> -->
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
                         <q-btn :disabled="!recordToSubmit.valCheck ? !disabled : disabled" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
-            </div>
-            <div class="row items-baseline q-my-md">
-                <div class="col-xs-9">
-                    <q-checkbox
-                        @input="calculoHorasSem"
-                        v-model="recordToSubmit.valCheck"
-                        color="primary"
-                        label="Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento..."
-                        />
                 </div>
-                <div class="col-xs-3">
-                    <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
-                </div>
-                
             </div>
-        </div>
-    </q-card>
+        </q-card>
     </q-form>
 </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { date } from 'quasar'
 
 export default {
   data () {
     return {
         recordToSubmit: {
             hEntrada1: '',
+            hSalida1: '',
+            hEntrada2: '',
+            hSalida2: '',
+            hEntrada3: '',
+            hSalida3: '',
+            hEntrada4: '',
+            hSalida4: '',
             valCheck: false
         },
         hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
@@ -266,11 +266,31 @@ export default {
     submitRecord(){
 
     }
+    // formatDate (qdate) {
+    //     return date.formatDate(qdate, 'HH:mm')              
+    // }
 
   },
-  mounted () {
+  beforeMount () {
    this.recordToSubmit.hEntrada1 = this.user.pers.horaentrada1
+   this.recordToSubmit.hSalida1 = this.user.pers.horasalida1
+   this.recordToSubmit.hEntrada2 = this.user.pers.horaentrada2
+   this.recordToSubmit.hSalida2 = this.user.pers.horasalida2
+   this.recordToSubmit.hEntrada3 = this.user.pers.horaentrada3
+   this.recordToSubmit.hSalida3 = this.user.pers.horasalida3
+   this.recordToSubmit.hEntrada4 = this.user.pers.horaentrada4
+   this.recordToSubmit.hSalida4 = this.user.pers.horasalida4
    
+  },
+  mounted(){
+      console.log(this.recordToSubmit.hEntrada1);
+    //   var auxHoras
+    //   for(let hora in recordToSubmit){
+    //       if(hora !== this.valCheck) {
+    //           auxHoras = hora.split('')
+    //           auxHoras.splice
+    //       }
+    //   }
   },
   computed:{
     ...mapState('login', ['user'])

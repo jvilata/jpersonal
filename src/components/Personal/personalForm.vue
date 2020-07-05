@@ -29,7 +29,14 @@
               <q-input class="col-xs-5 col-sm-5" outlined v-model="recordToSubmit.consentimientoimagen" label="Consent. Uso Imagen"/>
             </div>
             <q-input class="row q-mb-sm" outlined v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop />
-           </q-card-section>
+            <div class="row justify-center" style="max-width: 150px">
+              <q-btn
+                @click="openForm('otrosCambios')"
+                color="primary" 
+                label="Solicitar Otros Cambios" 
+                style="max-height: 50px"/>
+            </div>
+          </q-card-section>
         
        
     </q-card>
@@ -63,6 +70,10 @@ export default {
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
+    ...mapActions('tabs', ['addTab']),
+    openForm (otrosCambios) {
+      this.addTab(['otrosCambios', 'Otros Cambios', {}, 1])
+    },
     updateRecord () {
       this.recordToSubmit.tipoProducto = JSON.stringify(this.recordToSubmit.tipoProducto.split(',')) // convierto a array en JSON
       var formData = new FormData()

@@ -161,14 +161,6 @@ export default {
           }
         },
         {
-          title: 'Consultar Cambios Personales',
-          icon: 'group',
-          link: {
-            name: 'consultarCambios',
-            label: 'Consultar Cambios Personales'
-          }
-        },
-        {
           title: 'Clientes',
           icon: 'list',
           link: {
