@@ -51,20 +51,22 @@
         :width="220">
       <q-scroll-area style="height: calc(100vh - 170px); margin-top: 100px; border-right: 1px solid #ddd">
         <q-list>
-          <q-item v-for="link in menuItems" :key="link.title"
-            clickable
-            @click.native="openForm(link.link)"
-            exact
-            class="text-grey-8"  >
-            <q-item-section v-if="link.icon" avatar>
-              <q-icon :name="link.icon" />
-            </q-item-section>
+          <div v-for="link in menuItems" :key="link.title">
+            <q-item 
+              clickable
+              @click.native="openForm(link.link)"
+              exact
+              class="text-grey-8"  >
+              <q-item-section v-if="link.icon" avatar>
+                <q-icon :name="link.icon" />
+              </q-item-section>
 
-            <q-item-section>
-              <q-item-label>{{ link.title }}</q-item-label>
-              <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                <q-item-label>{{ link.title }}</q-item-label>
+                <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
         </q-list>
       </q-scroll-area>
       <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" />
@@ -101,11 +103,11 @@ export default {
       miniState: false,
       menuItems: [
         {
-          title: 'Personal',
+          title: 'Consultar Datos',
           icon: 'group',
           link: {
             name: 'personalMain',
-            label: 'Personal'
+            label: 'Consultar Datos'
           }
         },
         {
@@ -122,6 +124,22 @@ export default {
           link: {
             name: 'dashboardMain',
             label: 'Dashboard'
+          }
+        },
+        {
+          title: 'Solicitud de permisos',
+          icon: 'note_add',
+          link: {
+            name: 'permisosMain',
+            label: 'Solicitud de permisos'
+          }
+        },
+        {
+          title: 'Aprobación de cambios-permisos',
+          icon: 'how_to_reg',
+          link: {
+            name: 'aprobacionMain',
+            label: 'Aprobación Cambios-Permisos'
           }
         }
       ]
@@ -143,10 +161,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   @media screen and (min-width: 768px) {
     .q-footer {
       display: none;
+    }
+  }
+
+  .platform-ios {
+    .q-header {
+    padding-top: constant(safe-area-inset-top); // for iOS 11.0
+    padding-top: env(safe-area-inset-top); // for iOS 11.2 +
+    }
+    .q-footer {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
     }
   }
 
