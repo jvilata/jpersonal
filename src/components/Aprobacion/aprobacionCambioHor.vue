@@ -79,9 +79,6 @@ export default {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
-  },
-  mounted() {
-    this.justificante = this.item.justificante
   }
 }
 </script>
