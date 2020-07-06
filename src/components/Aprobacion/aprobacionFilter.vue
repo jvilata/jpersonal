@@ -16,6 +16,7 @@
           option-label="desc"
           emit-value
           map-options
+          :disable="disableEmpleado"
         />
         <q-input outlined clearable label="Aprobador" stack-label v-model="filterR.aprobador" />
         <q-select
@@ -25,9 +26,9 @@
           clearable
           multiple
           v-model="filterR.estado"
-          :options="estado"
-          option-value="id"
-          option-label="desc"
+          :options="listaEstadosAprobacion"
+          option-value="codElemento"
+          option-label="valor1"
           emit-value
           map-options
         />
@@ -62,11 +63,13 @@ export default {
       filterR: {},
       estado: ['PENDIENTE', 'CONC. PROVISIONAL', 'DENEGADO', 'CONCEDIDO'],
       tipo: ['PERMISO', 'CAMBIO HORARIO', 'TELETRABAJO', 'PROCESO SELECCIÓN', 'MODIFICACIÓN JORNADA'],
-      empleadosNombre: []
+      empleadosNombre: [],
+      disableEmpleado: true
     }
   },
   computed: {
-    ...mapState('empleados', ['empleados'])
+    ...mapState('empleados', ['empleados']),
+    ...mapState('tablasAux', ['listaEstadosAprobacion'])
   },
   methods: {
     getRecords () {

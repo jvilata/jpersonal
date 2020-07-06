@@ -36,22 +36,29 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   props: ['value', 'id', 'keyValue'],
   data() {
     return {
-      nuevoPermiso: false,
+      nuevoPermiso: false
     }
   },
+  methods: {
+    ...mapActions('permisos', ['getPermisosPendientes'])
+  },
   computed: {
-    ...mapState('permisos', ['permisosPendientes'])
+    ...mapState('permisos', ['permisosPendientes']),
+    ...mapState('login', ['user'])
   },
   components: {
     // permisosPendientesGrid: require('components/Permisos/permisosPendientesGrid.vue').default,
     permisosAdd: require('components/Permisos/permisosAdd.vue').default,
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
+  },
+  mounted() {
+    this.getPermisosPendientes({ solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() })
   }
 }
 </script>
