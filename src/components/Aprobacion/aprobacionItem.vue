@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item left-color="positive" right-color="negative">
+  <q-slide-item left-color="positive" right-color="negative" @left="reset" @right="reset">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -16,7 +16,7 @@
             <q-item-section side top>
               <q-badge outline :color="item.estado == 'APROBADO' ? 'positive' : 
                 item.estado == 'DENEGADO' ? 'negative' : 
-                item.estado == 'CONC. PROVISIONAL' ? 'warning' : 'primary'" 
+                item.estado == 'PROVISIONAL' ? 'warning' : 'primary'" 
                 :label="item.estado" />
             </q-item-section>
           </template>
@@ -28,7 +28,7 @@
           </q-card>
     </q-expansion-item>
     <template v-slot:left>
-      <q-icon name="done" />
+      <q-icon name="done"/>
     </template>
     <template v-slot:right>
       <q-icon name="close"/>
@@ -53,11 +53,8 @@ export default {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
-    colorItem () {
-      if (item.estado == 'APROBADO') return 'positive'
-      else if (item.estado == 'DENEGADO') return 'negative'
-      else if (item.estado == 'CONC. PROVISIONAL') return 'warning'
-      else return 'primary'
+    reset () {
+      
     }
   }
 }
