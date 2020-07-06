@@ -1,45 +1,40 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
+        <q-input class="col-5 q-pr-sm"  v-model="item.fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
         <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
-        <q-input class="col-9"  v-model="item.ejercicio" label="Ejercicio" stack-label dense readonly/>
+        <q-input class="col-4"  v-model="item.grupoEtm" label="ETM" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-6 q-pr-sm"  :value="formatDate(item.fechaDesde)" label="Desde" stack-label dense readonly/>
-        <q-input class="col-6"  :value="formatDate(item.fechaHasta)" label="Hasta" stack-label dense readonly/>
+      <span class="col-4 q-pr-sm text-grey-8" dense>Lunes a Jueves</span>
+      <div class="col-4 q-pr-sm" >
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Desde" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Desde" stack-label dense readonly/>
+      </div>
+      <div class="col-4 q-pr-sm" >
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Hasta" stack-label dense readonly/>
+      </div>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="item.numJornadas" label="Num. Jornadas" stack-label dense readonly/>
-        <q-input class="col-7"  v-model="item.tipoJornadaLibre" label="Tipo Jornada Libre" stack-label dense readonly/>
+      <span class="col-4 q-pr-sm text-grey-8" dense>Viernes</span>
+      <div class="col-4 q-pr-sm" >
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Desde" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Desde" stack-label dense readonly/>
+      </div>
+      <div class="col-4 q-pr-sm" >
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(item.horaentrada1)" label="Hasta" stack-label dense readonly/>
+      </div>
+    </div>
+    
+    <div class="row q-pb-sm">
+        <q-input class="col-12 q-pr-sm"  v-model="item.autorizador1" label="Autorizador 1" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col"  v-model="item.observaciones" label="Observaciones" stack-label dense readonly/>
+        <q-input class="col-12 q-pr-sm"  v-model="item.autorizador2" label="Autorizador 1" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
-        <q-input class="col"  v-model="item.sustituto" label="Sustituto" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-6 q-pr-sm"  :value="formatDate(item.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
-        <q-input class="col-6"  :value="formatDate(item.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-4 q-pr-sm" v-model="item.justValid" label="Just. Valid" stack-label dense readonly/>
-        <q-input class="col-4 q-pr-sm" v-model="item.justNoValid" label="Just. No Valid" stack-label dense readonly/>
-        <q-input class="col-4" v-model="item.autSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-      <q-file stack-label dense bottom-slots v-model="justificante" label="Seleccionar justificante" counter>
-        <template v-slot:prepend>
-          <q-icon flat name="cloud_upload" dense></q-icon>
-        </template>
-        <template v-slot:after>
-          <q-btn flat icon="close" @click.stop="delJust" dense/>
-        </template>
-      </q-file>
-    </div>
-    <div class="row q-pb-sm">
-      <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
-    </div>
+    
   </div>
 </template>
 

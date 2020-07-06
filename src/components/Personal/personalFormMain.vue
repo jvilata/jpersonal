@@ -77,15 +77,24 @@ export default {
       cambios: [
         {
           title: 'Cambiar Horario',
-          link: { name: 'cambioHorario'}
+          link: { 
+            name: 'cambioHorario',
+            label: 'Cambio Horario'
+          }
         },
         {
           title: 'Teletrabajo',
-          link: { name: 'teletrabajo'}
+          link: { 
+            name: 'teletrabajo',
+            label: 'Teletrabajo'
+          }
         },
         {
           title: 'Otros Cambios',
-          link: { name: 'otrosCambios'}
+          link: { 
+            name: 'otrosCambios',
+            label: 'Otros Cambios'
+          }
         },
       ],
       menuItems: [
@@ -123,13 +132,13 @@ export default {
   methods: {
     ...mapActions('tabs', ['addTab']),
     openForm (link) {
-      this.addTab([link.name, link.label, {}, 1])
+      this.addTab([link.name, link.label + this.user.pers.id, {}, this.id])
+
     }
   },
   mounted () {
-    //console.log("Estoy en personalFormMain", this.value);
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.value } })
-    
+    console.log('id', this.user.pers.id)
   }
 }
 </script>

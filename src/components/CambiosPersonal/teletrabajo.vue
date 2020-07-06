@@ -23,11 +23,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                 <div class="col-xs-4">Fecha Desde</div>
                 <div class="col-xs-8">
-                    <q-input filled :value="formatDate(dateDesde)">
+                    <q-input filled :value="formatDate(recordToSubmit.dateDesde)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="dateDesde" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="recordToSubmit.dateDesde" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>  
                     </template>
@@ -40,11 +40,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                  <div class="col-xs-4">Fecha Hasta</div>
                  <div class="col-xs-8">
-                    <q-input filled :value="formatDate(dateHasta)">
+                    <q-input filled :value="formatDate(recordToSubmit.dateHasta)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="dateHasta" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="recordToSubmit.dateHasta" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>
                     </template>
@@ -136,12 +136,16 @@
 
 <script>
 import { date, openURL } from 'quasar'
+import { mapState } from 'vuex'
 
 export default {
+    props: ['value', 'id', 'keyValue'], 
     data () {
         return {
-            dateDesde: '',
-            dateHasta: '',
+            recordToSubmit: {
+                dateDesde: '',
+                dateHasta: ''
+            },
             model: null,
             options: [
                 'ESPAÑA', 'MEXICO', 'ITALIA', 'ALEMANIA', 'ARGENTINA'
@@ -155,7 +159,10 @@ export default {
             domicilioTeletrabajo: '',
             disabled: false
         }
-    },  
+    }, 
+    computed:{
+    ...mapState('login', ['user'])
+    },
     methods: {
       confirm () {
       this.$q.dialog({
@@ -187,6 +194,12 @@ export default {
     formatDate (pdate) {
         return date.formatDate(pdate, 'DD/MM/YYYY')
     }
-  }
+  },
+  mounted(){
+        this.recordToSubmit.dateDesde = this.user.pers.teletrabajofechadesde
+        this.recordToSubmit.dateHasta = this.user.pers.teletrabajofechahasta
+        //this.recordToSubmit.motivoTeletrab = this.user.pers.teletrabajoobservaciones
+
+    } 
 }
 </script>

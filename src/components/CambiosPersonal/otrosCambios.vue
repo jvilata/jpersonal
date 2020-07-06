@@ -33,6 +33,7 @@
                 <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="max-height: 50px"/>
             </div>
         </div>
+        <q-page-sticky position="bottom">
         <span class="text-grey-7">Protección de Datos. </span>
         <div class="row items-end q-my-sm">
           <div class="col-xs-9">
@@ -43,11 +44,13 @@
               <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
           </div>
         </div>
+        </q-page-sticky>
     </div>
 </template>
 
 <script>
 export default {
+  props: ['value', 'id', 'keyValue'], 
   data() {
     return {
       motivoTeletrab: '',

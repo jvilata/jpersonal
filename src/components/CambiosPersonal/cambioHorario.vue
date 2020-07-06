@@ -8,7 +8,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label class="text-h6">
-                  CAMBIO HORARIO
+                  {{ nomFormulario }}
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -200,12 +200,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
+    props: ['value', 'id', 'keyValue'], 
   data () {
     return {
+        nomFormulario: 'CAMBIO HORARIO',
         recordToSubmit: {
             hEntrada1: '',
             hSalida1: '',
@@ -226,25 +228,29 @@ export default {
     }
   },
   methods: {
-      confirm () {
-      this.$q.dialog({
-        title: 'Aceptación conciliación laboral',
-        message: 'Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        
-       this.recordToSubmit.valCheck = true
-        //console.log(this.val)
+      ...mapActions('tabs', ['addTab']),
+    openForm (link) {
+      this.addTab([link.name, link.label, {}, 1])
+    },
+    confirm () {
+    this.$q.dialog({
+    title: 'Aceptación conciliación laboral',
+    message: 'Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.',
+    cancel: true,
+    persistent: true
+    }).onOk(() => {
+    
+    this.recordToSubmit.valCheck = true
+    //console.log(this.val)
 
-      }).onOk(() => {
-        // console.log('>>>> second OK catcher')
-        this.recordToSubmit.valCheck = true
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
+    }).onOk(() => {
+    // console.log('>>>> second OK catcher')
+    this.recordToSubmit.valCheck = true
+    }).onCancel(() => {
+    // console.log('>>>> Cancel')
+    }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+    })
     },
     calculoHorasSem() {
         this.sumaHoras = 0;
@@ -283,7 +289,9 @@ export default {
    
   },
   mounted(){
-      console.log(this.recordToSubmit.hEntrada1);
+      this.$router.replace({ name: 'cambioHorario', params: { id: this.id, value: this.value } })
+      console.log('user.pers', this.user.pers);
+      //console.log(this.recordToSubmit.hEntrada1);
     //   var auxHoras
     //   for(let hora in recordToSubmit){
     //       if(hora !== this.valCheck) {
@@ -291,6 +299,7 @@ export default {
     //           auxHoras.splice
     //       }
     //   }
+    
   },
   computed:{
     ...mapState('login', ['user'])
