@@ -10,23 +10,23 @@
               <q-avatar icon="person" color="primary" text-color="white" />
             </q-item-section>
             <q-item-section>
-                <q-item-label lines="2">{{item.empleado.nombrePersona}}</q-item-label>
-                <q-item-label caption>{{item.tipo}} </q-item-label>
+                <q-item-label lines="2">{{item.empleadoNombre}}</q-item-label>
+                <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
             </q-item-section>
             <q-item-section side top>
-              <q-badge outline :color="item.estado == 'APROBADO' ? 'positive' : 
-                item.estado == 'DENEGADO' ? 'negative' : 
-                item.estado == 'PROVISIONAL' ? 'warning' : 'primary'" 
-                :label="item.estado" />
+              <q-badge outline :color="item.estadoSolicitudDesc == 'APROBADO' ? 'positive' : 
+                item.estadoSolicitudDesc == 'DENEGADO' ? 'negative' : 
+                item.estadoSolicitudDesc == 'PROVISIONAL' ? 'warning' : 'primary'" 
+                :label="item.estadoSolicitudDesc" />
             </q-item-section>
           </template>
 
           <q-card>
               <q-card-section>
                   <!-- <itemMoreInfo :item="item"/> -->
-                  <itemCambioHor v-if="item.tipo == 'CAMBIO HORARIO'" :item="item"/>
-                  <itemTeletrab v-if="item.tipo == 'TELETRABAJO'" :item="item"/>
-                  <itemOtrosCambios v-if="item.tipo == 'OTROS CAMBIOS'" :item="item"/>
+                  <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item"/>
+                  <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item"/>
+                  <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item"/>
 
               </q-card-section>
           </q-card>

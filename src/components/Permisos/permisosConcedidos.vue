@@ -22,14 +22,15 @@ export default {
     ...mapActions('permisos', ['getPermisosConcedidos'])
   },
   computed: {
-    ...mapState('permisos', ['permisosConcedidos'])
+    ...mapState('permisos', ['permisosConcedidos']),
+    ...mapState('login', ['user'])
   },
   components: {
     // permisosConcedidosGrid: require('components/Permisos/permisosConcedidosGrid.vue').default,
     permisosConcedidosList: require('components/Permisos/PermisosConcedidos/permisosConcedidosList.vue').default
   },
   mounted() {
-    this.getPermisosConcedidos()
+    this.getPermisosConcedidos({ solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() })
   }
 }
 </script>

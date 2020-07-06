@@ -63,7 +63,7 @@
           v-model="permisoToAdd.tipoJornadaLibre"
           :options="listaTiposDiasLibres"
           option-value="id"
-          option-label="descripcion_dia_libre"
+          option-label="descripcionDiaLibre"
           emit-value
           map-options
           :rules="[val => !!val || 'Campo obligatorio']"
