@@ -1,6 +1,7 @@
 import { uid, Notify } from "quasar"
 import Vue from 'vue'
 import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
+import login from './store-login'
 
 const state = {
   permisosPendientes: [
@@ -225,10 +226,9 @@ const mutations = {
 }
 
 const actions = {
-  getPermisosPendientes({ commit }) {
+  getPermisosPendientes({ commit }, objFilter) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
-    var objFilter = { solIdEmpleado: 140, solejercicio: 2020 }
-    axiosInstance.get('bd_jpersonal.asp?action=soldias&user=jvilata&password=%26%26Denia2020', { params: objFilter }, { withCredentials: true }) // tipo acciones
+    axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
@@ -240,10 +240,9 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + error, { root: true })
       })
   },
-  getPermisosConcedidos({ commit }) {
+  getPermisosConcedidos({ commit }, objFilter) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
-    var objFilter = { solIdEmpleado: 140, solejercicio: 2020 }
-    axiosInstance.get('bd_jpersonal.asp?action=vacaciones/todas&user=jvilata&password=%26%26Denia2020', { params: objFilter }, { withCredentials: true }) // tipo acciones
+    axiosInstance.get(`bd_jpersonal.asp?action=vacaciones/todas&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + 'No existen datos', { root: true })

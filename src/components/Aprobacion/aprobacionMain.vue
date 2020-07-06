@@ -36,7 +36,7 @@
 
       <!-- formulario tabla de resultados de busqueda -->
       <aprobacionItemsList
-        v-model="porAprobar"
+        v-model="listaCambios"
         />
     </div>
 </template>
@@ -56,10 +56,11 @@ export default {
   },
   computed: {
     ...mapState('login', ['user']), // importo state.user desde store-login
-    ...mapState('aprobacion', ['porAprobar'])
+    ...mapState('aprobacion', ['listaCambios'])
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
+    ...mapActions('aprobacion', ['getListaCambios']),
     // getRecords (filter) {
     //   // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
     //   Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
@@ -93,6 +94,9 @@ export default {
   components: {
     aprobacionFilter: require('components/Aprobacion/aprobacionFilter.vue').default,
     aprobacionItemsList: require('components/Aprobacion/aprobacionItemsList.vue').default
+  },
+  mounted() {
+    this.getListaCambios({ persona: this.user.pers.id, estadoSolicitud: "1,2" })
   }
 }
 </script>

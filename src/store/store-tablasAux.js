@@ -4,17 +4,21 @@
 // en los stores no se ha cargado todavía this.$axios con nuestra configuracion de boot/axios.js, por eso
 // lo importo y uso la variable especifica exportada en ese modulo axiosInstance
 import { axiosInstance } from 'boot/axios.js'
+import login from './store-login'
 
 // state: accesibles en lectura desde componentes a traves de ...mapState('tablasAux', ['listaSINO', 'listaUsers', 'listaTipoAcc'])
 const state = {
-  listaUsers: [], // [{id, codEmpresa, email, username, idPersonal}]
   listaSINO: [{ id: '1', desc: 'SI' }, { id: '0', desc: 'NO' }],
-  listaEmpresas: [{ codElemento: '01', valor1: 'EDICOM CAPITAL SL' }]
+  listaEmpresas: [{ codElemento: '01', valor1: 'EDICOM CAPITAL SL' }],
+  listaTiposDiasLibres: []
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('loadUsers')
 const mutations = {
   loadUsers (state, users) {
     state.listaUsers = users
+  },
+  loadTiposDiasLibres (state, lista) {
+    state.listaTiposDiasLibres = lista
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('tablaAux', ['loadTablasAux'])
@@ -22,19 +26,20 @@ const mutations = {
 const actions = {
   loadTablasAux () {
     // this.dispatch('tablasAux/loadTablaAux', { codTabla: 9, mutation: 'loadTipoAcc' })
-    this.dispatch('tablasAux/loadUsers')
+    this.dispatch('tablasAux/loadTiposDiasLibres')
   },
-  loadUsers ({ commit }) {
-    axiosInstance.get('users/bd_users.php/findUsersFilter/', {}, { withCredentials: true })
+  loadTiposDiasLibres({ commit }, objFilter) {
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state 
+    axiosInstance.get(`bd_jpersonal.asp?action=tipodia&auth=${login.state.user.auth}`, { params: { solEmpleadoPais: 'ES' } }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'loadUsers' + 'No existen datos', { root: true })
+          this.dispatch('mensajeLog/addMensaje', 'loadTiposDiasLibres' + 'No existen datos', { root: true })
         } else {
-          commit('loadUsers', response.data)
+          commit('loadTiposDiasLibres', response.data)
         }
       })
       .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'loadUsers' + error, { root: true })
+        this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + error, { root: true })
       })
   },
   loadTablaAux ({ commit }, tabAux) { // tabAux: { codTabla: x, mutation: 'mutation' }

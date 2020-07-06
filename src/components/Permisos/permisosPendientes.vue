@@ -49,7 +49,8 @@ export default {
     ...mapActions('permisos', ['getPermisosPendientes'])
   },
   computed: {
-    ...mapState('permisos', ['permisosPendientes'])
+    ...mapState('permisos', ['permisosPendientes']),
+    ...mapState('login', ['user'])
   },
   components: {
     // permisosPendientesGrid: require('components/Permisos/permisosPendientesGrid.vue').default,
@@ -57,7 +58,7 @@ export default {
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   },
   mounted() {
-    this.getPermisosPendientes()
+    this.getPermisosPendientes({ solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() })
   }
 }
 </script>
