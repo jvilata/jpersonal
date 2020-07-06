@@ -170,14 +170,7 @@ const state = {
 }
 
 const mutations = {
-  addPermiso (state, payload) {
-    payload.id = uid()
-    payload.ejercicio = '2020'
-    payload.estado = 'PENDIENTE'
-    state.permisosPendientes.push(payload)
-    Notify.create('Permiso añadido')
-  },
-  deletePermiso(state, id) {
+  deletePermisoPendiente(state, id) {
     let index = state.permisosPendientes.findIndex(perm => perm.id == id);
     Vue.delete(state.permisosPendientes, index)
     Notify.create('Permiso borrado')
@@ -191,16 +184,45 @@ const mutations = {
     let index = state.permisosConcedidos.findIndex(perm => perm.id == id);
     state.permisosConcedidos[index].justificante = undefined
     Notify.create('Justificante eliminado')
+  },
+  loadPermisosPendientes(state, lista) {
+    //Lista se devuelve del backend
+    state.permisosPendientes = lista
   }
 }
 
 const actions = {
-  addPermiso ({ commit }, payload) {
-    commit('addPermiso', payload)
+  getPermisosPendientes() {
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
+    axiosInstance.get(`bd_permisos.asp/findTablaAuxFilter?codTabla=${tabAux.codTabla}`, {}, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        if (response.data.length === 0) {
+          this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
+        } else {
+          commit('loadPermisosPendientes', response.data)
+        }
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + error, { root: true })
+      })
   },
-  deletePermiso({ commit }, id){
-    commit('deletePermiso', id)
+
+  addPermisoPendiente ({ commit }, payload) { 
+    //Llamaremos al backend para insertar el permiso en la tabla PRIV_Solicitud_Dias
+    //Si va bien, llamaremos a getPermisosPendientes (.then)
+    axiosInstance.get(`bd_permisos.asp/findTablaAuxFilter?codTabla=${tabAux.codTabla}`, {}, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        this.dispatch('permisos/getPermisosPendientes')
+        Notify.create('Permiso añadido')
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'addPermisoPendiente' + error, { root: true })
+      })
   },
+  deletePermisoPendiente({ commit }, id){
+    commit('deletePermisoPendiente', id)
+  },
+
   addJustificante ({ commit }, [id, justificante]) {
     commit('addJustificante',[id, justificante] )
   },

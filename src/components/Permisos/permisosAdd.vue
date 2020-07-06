@@ -61,9 +61,9 @@
           outlined
           clearable
           v-model="permisoToAdd.tipoJornadaLibre"
-          :options="tipoJornada"
+          :options="listaTiposDiasLibres"
           option-value="id"
-          option-label="desc"
+          option-label="descripcion_dia_libre"
           emit-value
           map-options
           :rules="[val => !!val || 'Campo obligatorio']"
@@ -93,24 +93,23 @@ export default {
         numJornadas: ''
       },
       numJornadas: ['1', '0.5', '0.25'],
-      tipoJornada: [
-        'Vacaciones',
-        'Permiso especial retribuido',
-        'Baja por enfermedad',
-        'Per. NO retribuido',
-        'Regularización días u horas trabajadas',
-        'Baja por paternindad, maternidad o adopción'
-      ],
       disable: false
     }
   },
+  computed: {
+    ...mapState('tablasAux', ['listaTiposDiasLibres']),
+    ...mapState('login', ['user'])
+  },
   methods: {
-    ...mapActions('permisos', ['addPermiso']),
+    ...mapActions('permisos', ['addPermisoPendiente']),
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
     submitPermiso() {
-      this.addPermiso(this.permisoToAdd)
+      permisoToAdd.ejercicio = '2020' //Poner año en curso (Date)
+      permisoToAdd.estado = 1 //PENDIENTE
+      permisoToAdd.idEmpleado = this.user.pers.id
+      this.addPermisoPendiente(this.permisoToAdd)
       this.$emit('close')
     },
     calcNumJornadas() {

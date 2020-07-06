@@ -43,7 +43,7 @@ const state = {
         numJornadas: 1,
         tipoJornadaLibre: 'Vacaciones',
         observaciones: 'test1',
-        estado: 'CONC. PROVISIONAL',
+        estado: 'PROVISIONAL',
         empleado: {
           idEmpleado: 1,
           idPersonal: 1,
