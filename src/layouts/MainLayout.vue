@@ -51,20 +51,22 @@
         :width="220">
       <q-scroll-area style="height: calc(100vh - 170px); margin-top: 100px; border-right: 1px solid #ddd">
         <q-list>
-          <q-item v-for="link in menuItems" :key="link.title"
-            clickable
-            @click.native="openForm(link.link)"
-            exact
-            class="text-grey-8"  >
-            <q-item-section v-if="link.icon" avatar>
-              <q-icon :name="link.icon" />
-            </q-item-section>
+          <div v-for="link in menuItems" :key="link.title">
+            <q-item 
+              clickable
+              @click.native="openForm(link.link)"
+              exact
+              class="text-grey-8"  >
+              <q-item-section v-if="link.icon" avatar>
+                <q-icon :name="link.icon" />
+              </q-item-section>
 
-            <q-item-section>
-              <q-item-label>{{ link.title }}</q-item-label>
-              <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                <q-item-label>{{ link.title }}</q-item-label>
+                <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
         </q-list>
       </q-scroll-area>
       <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" />
@@ -101,11 +103,11 @@ export default {
       miniState: false,
       menuItems: [
         {
-          title: 'Personal',
+          title: 'Consultar Datos',
           icon: 'group',
           link: {
             name: 'personalMain',
-            label: 'Personal'
+            label: 'Consultar Datos'
           }
         },
         {

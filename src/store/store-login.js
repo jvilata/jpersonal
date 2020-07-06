@@ -13,7 +13,7 @@ const state = {
   loggingIn: false,
   loginError: null,
   loginSuccessful: false,
-  user: {}, // { codEmpresa, nomEmpresa, user: { id, codEmpresa, email, username, idPersonal }, pers: { id, codEmpresa, nombre, nombreAbreviado, email }}
+  user: {}, // { codEmpresa, nomEmpresa, user: {email, idPersonal }, pers: { id, codEmpresa, nombre, nombreAbreviado, email }}
   token: {} // access_token, expires_in (en segundos), id_token, refresh_token, scope, token_type: "Bearer"
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('loginStart')

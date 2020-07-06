@@ -131,8 +131,10 @@ export default {
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
-    editRecord (rowChanges, id) { // no lo uso aqui pero lod ejo como demo
+    editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
+    //rowChanges contiene toda la info de cada persona 
       this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
+      //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
     },
     ampliarImagen (record) {
       this.regper = record

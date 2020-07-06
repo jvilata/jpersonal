@@ -85,8 +85,8 @@ export default {
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
-      this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1' }
-      // this.getRecords(this.filterRecord)
+      this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1', id: this.user.pers.id  }
+      this.getRecords(this.filterRecord)
     }
   },
   destroyed () {
