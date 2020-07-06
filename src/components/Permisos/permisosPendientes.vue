@@ -42,8 +42,7 @@ export default {
   props: ['value', 'id', 'keyValue'],
   data() {
     return {
-      nuevoPermiso: false,
-      permisosPendientes: []
+      nuevoPermiso: false
     }
   },
   methods: {

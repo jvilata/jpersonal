@@ -7,7 +7,7 @@
     class="q-pa-xs full-width column"
     group="permisos"
     :label="`${formatDate(permiso.fechaDesde)} a ${formatDate(permiso.fechaHasta)}`"
-    :caption="permiso.tipoJornadaLibre">
+    :caption="permiso.datosTipoDiaLibre.descripcionDiaLibre">
     <q-card>
         <q-card-section>
             <permisoMoreInfo :permiso="permiso"/>
