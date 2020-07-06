@@ -3,6 +3,8 @@
  * the ES6 features that are supported by your Node version. https://node.green/
  */
 
+const { Notify } = require("quasar")
+
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
@@ -93,7 +95,7 @@ cfg.module.rules.push({
       importStrategy: 'auto',
 
       // Quasar plugins
-      plugins: ['Dialog', 'Loading', 'LocalStorage']
+      plugins: ['Dialog', 'Loading', 'LocalStorage', 'Notify']
     },
 
     // animations: 'all', // --- includes all animations
