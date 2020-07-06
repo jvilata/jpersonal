@@ -27,7 +27,21 @@
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item"/>
-
+                  <div class="row justify-center text-center">
+                    <div class="col-xs-6 justify-center">
+                      <q-btn color="red" label="RECHAZAR" />
+                    </div>
+                    <div class="col-xs-6 justify-center">
+                      <q-btn color="green" label="ACEPTAR"  />
+                    </div>
+                  </div>
+                  <div class="row justify-center text-center">
+                    <div class="col-xs-12 justify-center q-pt-md">
+                      <q-btn style="width: 270px" color="indigo-1"> 
+                        <q-icon name="delete" color="grey-9" />
+                      </q-btn>
+                    </div>
+                  </div>
               </q-card-section>
           </q-card>
     </q-expansion-item>

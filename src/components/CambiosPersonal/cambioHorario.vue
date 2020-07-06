@@ -185,7 +185,7 @@
                             <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
                         </div>
                     </div>
-                     <div class="row justify-center" style="max-height: 70px">
+                <div class="row justify-center" style="max-height: 70px">
                     <div class="column q-pr-sm q-mt-sm" style="max-width: 150px">
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
                     </div>

@@ -96,7 +96,7 @@ export default {
     aprobacionItemsList: require('components/Aprobacion/aprobacionItemsList.vue').default
   },
   mounted() {
-    this.getListaCambios({ persona: this.user.pers.id, estadoSolicitud: "1,2" })
+    this.getListaCambios({ persona: 140, estadoSolicitud: "1,2" })
   }
 }
 </script>

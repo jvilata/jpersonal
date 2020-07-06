@@ -73,9 +73,7 @@
             </div>
             <div class="row q-pa-sm" >
                 <div class="col-xs-12">
-                <q-input v-model="motivoTeletrab" label="Motivo Teletrabajo"
-                    type="textarea"
-                    @keyup.enter.stop />
+                <q-input v-model="motivoTeletrab" label="Motivo Teletrabajo" autogrow @keyup.enter.stop />
                 </div>
             </div>
         </q-card>

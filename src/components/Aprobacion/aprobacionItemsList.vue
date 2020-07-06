@@ -26,7 +26,7 @@
             </q-list>
           </q-btn-dropdown>
           <div class="col self-center text-center text-grey-8 text-subtitle1">
-            <b>Cambios pendientes de aprobación</b>
+            <b>({{value.length}}) Cambios pendientes de aprobación</b>
           </div>
         </q-item-label>
         <aprobacionItem v-for="(item, key) in value"
