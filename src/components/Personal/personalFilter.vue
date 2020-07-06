@@ -12,7 +12,8 @@
     <q-form @submit="getRecords" class="q-gutter-y-xs">
     <q-tab-panels v-model="tab">
       <q-tab-panel name="General">
-        <q-input outlined clearable label="Persona" stack-label v-model="filterR.nombre" />
+        <q-input outlined clearable label="ID" stack-label autofocus v-model="filterR.id" />
+        <q-input outlined clearable label="Persona" stack-label autofocus v-model="filterR.nombre" /> 
         <q-input outlined clearable label="Área" stack-label v-model="filterR.area" />
         <q-input outlined clearable label="País Laboral" stack-label v-model="filterR.paisLaboral" />
         <q-input outlined clearable label="País Trabaja" stack-label v-model="filterR.pais" />

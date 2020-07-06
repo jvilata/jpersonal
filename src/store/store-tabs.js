@@ -8,7 +8,8 @@ import Vue from 'vue'
 
 // state: accesibles en lectura desde componentes a traves de ...mapState('tabs', ['tabs'])
 const state = {
-  tabs: {} // {name: 'nombre tab', params:{ id:'idtab', value: { tab data record } }}
+  tabs: {
+  } // {name: 'nombre tab', params:{ id:'idtab', value: { tab data record } }}
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('addTab', tab)
 const mutations = {
