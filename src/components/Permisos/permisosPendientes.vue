@@ -30,6 +30,7 @@
         <!-- formulario con campos de filtro -->
         <permisosAdd
           @close="nuevoPermiso = !nuevoPermiso"
+          :value="value"
         />
       </q-dialog>
   </div>
@@ -58,7 +59,7 @@ export default {
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   },
   mounted() {
-    this.getPermisosPendientes({ solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() })
+    this.getPermisosPendientes({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
   }
 }
 </script>

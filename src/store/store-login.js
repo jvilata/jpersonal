@@ -59,6 +59,7 @@ const actions = {
                 throw new Error('No existe persona asociada al usuario. Inténtelo de nuevo')
               } else {
                 user.email = response.data[0].email
+                response.data[0].id = parseInt(response.data[0].id)
                 commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, user: user, pers: response.data[0] }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
                 LocalStorage.set('email', loginData.email)
                 LocalStorage.set('password', loginData.password)
