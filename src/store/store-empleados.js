@@ -102,49 +102,48 @@ const actions = {
   },
 
   calculaResponsable( { commit }, [empleado, tiposol] ){
-    var idautorizador=0; 
-    idautorizador = empleado.idautorizador; 
-    if (idautorizador == 0) {
-      if (empleado.pais=="MX") {  // en MX se asigna todo a German si es de cons o dir proy
-        if ((empleado.area==1) || (empleado.area==2)) {
-          idautorizador = 114; // german. Mirar cpersonal_ofrepository.java si se cambia esto
-          //empleado.emailAutorizador='gsanchez@edicom.es';
-        }
-      } else if (empleado.pais=="ES") { 
-        if(empleado.area == 2){ // si es de consultoria lo ejecuta todo el RESP TM
-          idautorizador = empleado.directorTMCodEmp;
-          //empleado.emailAutorizador=empleado.directorTMEmail;
-
-          //si es un respTM la aprobacion es de ANA
-          if(idautorizador == empleado.id){
-            idautorizador = empleado.idautArea;
-            //empleado.emailAutorizador = "adarder@edicom.es";
+    return new Promise((resolve, reject) => {
+      var idautorizador=0; 
+      idautorizador = empleado.idautorizador; 
+      emailAutorizador = empleado.emailAutorizador;
+      if (idautorizador === 0) {
+        if (empleado.pais === 'MX') {  // en MX se asigna todo a German si es de cons o dir proy
+          if ((empleado.area === 1) || (empleado.area === 2)) {
+            idautorizador = 114; // german. Mirar cpersonal_ofrepository.java si se cambia esto
+            emailAutorizador='gsanchez@edicom.es';
           }
-            
-        } else if(empleado.area == 1){
-          if(tiposol == 1){ //vacaciones de RESP_PM y PM las aprueba Javi F
-            idautorizador = 48;
-            //empleado.emailAutorizador = "jfernandez@edicom.es";
-          } else {
-            idautorizador = empleado.directorPMCodEmp;
-            //empleado.emailAutorizador=empleado.directorPMEmail;
-              
-            //si es RESP_PM lo aprueba ANA 
-            if(idautorizador == empleado.id){
+        } else if (empleado.pais === 'ES') { 
+          if(empleado.area  === 2){ // si es de consultoria lo ejecuta todo el RESP TM
+            idautorizador = empleado.directorTMCodEmp;
+            emailAutorizador=empleado.directorTMEmail;
+
+            //si es un respTM la aprobacion es de ANA
+            if(idautorizador === empleado.id){
               idautorizador = empleado.idautArea;
-              //empleado.emailAutorizador = "adarder@edicom.es";
+              emailAutorizador = 'adarder@edicom.es';
+            }
+              
+          } else if(empleado.area === 1){
+            if(tiposol === 1){ //vacaciones de RESP_PM y PM las aprueba Javi F
+              idautorizador = 48;
+              emailAutorizador = 'jfernandez@edicom.es';
+            } else {
+              idautorizador = empleado.directorPMCodEmp;
+              emailAutorizador = empleado.directorPMEmail;
+                
+              //si es RESP_PM lo aprueba ANA 
+              if(idautorizador === empleado.id){
+                idautorizador = empleado.idautArea;
+                emailAutorizador = 'adarder@edicom.es';
+              }
             }
           }
         }
+        if (idautorizador === 0 || idautorizador  === '') idautorizador = empleado.idautArea; // si no hemos asignado resp asignamos al resp area
       }
-      if (idautorizador==0 || idautorizador === '') idautorizador = empleado.idautArea; // si no hemos asignado resp asignamos al resp area
-    }
-    commit('setResponsable', idautorizador)
+      resolve({ idautorizador: idautorizador, emailAutorizador: emailAutorizador })
+    })
   },
-
-  setEmpleadoSelec( {commit}, empleado) {
-    commit('setEmpleadoSelec', empleado)
-  }
 }
 
 
