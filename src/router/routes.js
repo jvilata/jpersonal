@@ -47,32 +47,32 @@ const routes = [
             children: [
               { path: 'personalForm', 
                 name: 'personalForm', 
-                component: () => import('components/Personal/personalForm.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalForm.vue'), 
                 props: true 
               },
               { path: 'personalContract', 
                 name: 'personalContract', 
-                component: () => import('components/Personal/personalContract.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalContract.vue'), 
                 props: true 
               },
               { path: 'personalContact', 
                 name: 'personalContact', 
-                component: () => import('components/Personal/personalContact.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalContact.vue'), 
                 props: true 
               },
               { path: 'personalSchedule', 
                 name: 'personalSchedule', 
-                component: () => import('components/Personal/personalSchedule.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalSchedule.vue'), 
                 props: true 
               },
               { path: 'personalTeletrabajo', 
                 name: 'personalTeletrabajo', 
-                component: () => import('components/Personal/personalTeletrabajo.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalTeletrabajo.vue'), 
                 props: true 
               },
               { path: 'personalCompetences', 
                 name: 'personalCompetences', 
-                component: () => import('components/Personal/personalCompetences.vue'), 
+                component: () => import('components/Personal/PersonalTabs/personalCompetences.vue'), 
                 props: true 
               },
               { 

@@ -23,6 +23,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapActions } from "vuex";
 import { date } from 'quasar'

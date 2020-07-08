@@ -7,43 +7,47 @@
     <q-form @submit="getRecords" class="q-gutter-y-xs">
         <q-select
           label="Empleado"
-          stack-label
+          stack-label 
           outlined
           clearable
           v-model="filterR.empleado"
-          :options="empleadosNombre"
+          :options="listaEmpleadosFilter"
+          @filter="filterEmpleados"
           option-value="id"
-          option-label="desc"
+          option-label="name"
           emit-value
           map-options
-          :disable="disableEmpleado"
+          use-input
+          behavior="menu"
         />
-        <q-input outlined clearable label="Aprobador" stack-label v-model="filterR.aprobador" />
-        
+        <q-input outlined clearable label="Aprobador" stack-label v-model="filterR.persona" />
         <q-select
           label="Estado"
           stack-label
           outlined
           clearable
           multiple
-          v-model="filterR.estado"
-          :options="listaEstadosAprobacion"
+          v-model="filterR.estadoSolicitud"
+          :options="listaEstadosSolicitudes"
           option-value="codElemento"
           option-label="valor1"
           emit-value
           map-options
+          use-chips
+          behavior="menu"
         />
         <q-select
           label="Tipo"
           stack-label
           outlined
           clearable
-          v-model="filterR.tipo"
-          :options="tipo"
-          option-value="id"
-          option-label="desc"
+          v-model="filterR.tipoSolicitud"
+          :options="listaTiposSolicitudes"
+          option-value="codElemento"
+          option-label="valor1"
           emit-value
           map-options
+          behavior="menu"
         />
 
       <q-card-actions align="right">
@@ -55,42 +59,44 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
+
 export default {
   props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
   data () {
     return {
-      filterR: {},
-      estado: ['PENDIENTE', 'CONC. PROVISIONAL', 'DENEGADO', 'CONCEDIDO'],
-      tipo: ['PERMISO', 'CAMBIO HORARIO', 'TELETRABAJO', 'PROCESO SELECCIÓN', 'MODIFICACIÓN JORNADA'],
-      empleadosNombre: [],
-      disableEmpleado: false
+      filterR: {
+        idEmpleado: 0
+      },
+      disableEmpleado: true,
+      listaEmpleadosFilter: []
     }
   },
   computed: {
-    ...mapState('empleados', ['empleados']),
-    ...mapState('tablasAux', ['listaEstadosAprobacion'])
+    ...mapState('empleados', ['listaEmpleados', 'search']),
+    ...mapState('login', ['user']),
+    ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
+    
   },
   methods: {
+    ...mapActions('empleados', ['setSearch']),
     getRecords () {
       this.$emit('getRecords', this.filterR) // lo captura accionesMain
     },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD-MM-YYYY')
-    }
-  },
-  beforeMount() {
-    let i = 0
-    for (let empleado of this.empleados) {
-      this.empleadosNombre[i] = empleado.nombrePersona
-      i++
+    },
+    filterEmpleados(val, update, abort){
+      update(() =>{
+        const needle = val.toLowerCase()
+        this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
     }
   },
   mounted () {
-    this.filterR = this.value // asignamos valor del parametro por si viene de otro tab
-    console.log('value PermisosFilter', this.value);
-    
+    this.listaEmpleadosFilter = this.listaEmpleados
+    this.filterR = Object.assign( {} , this.value) // asignamos valor del parametro por si viene de otro tab
   },
   destroyed () {
     // guardamos valor en tabs por si despus queremos recuperarlo
