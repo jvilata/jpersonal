@@ -23,7 +23,7 @@
 
           <q-card>
               <q-card-section>
-                  <!-- <itemMoreInfo :item="item"/> -->
+                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item"/>
@@ -32,12 +32,12 @@
                       <q-btn color="red" label="RECHAZAR" />
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="green" label="ACEPTAR"  />
+                      <q-btn color="primary" label="ACEPTAR"  />
                     </div>
                   </div>
                   <div class="row justify-center text-center">
                     <div class="col-xs-12 justify-center q-pt-md">
-                      <q-btn style="width: 270px" color="indigo-1"> 
+                      <q-btn @click="confirm" style="width: 270px" color="indigo-1"> 
                         <q-icon name="delete" color="grey-9" />
                       </q-btn>
                     </div>
@@ -65,10 +65,10 @@ export default {
     }
   },
   components: {
-    // itemMoreInfo: require('components/Aprobacion/MoreInfoItems/aprobacionItemInfo.vue').default,
-    itemCambioHor: require('components/Aprobacion/aprobacionCambioHor.vue').default,
-    itemTeletrab: require('components/Aprobacion/aprobacionTeletrab.vue').default,
-    itemOtrosCambios: require('components/Aprobacion/aprobacionOtrosCambios.vue').default
+    itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
+    itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
+    itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
+    itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
 
 
   },
@@ -76,8 +76,25 @@ export default {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
-    reset () {
-      
+    reset () { 
+    },
+    confirm(){
+      this.$q.dialog({
+      title: 'ELIMINAR SOLICITUD',
+      message: '¿Está seguro de que desea eliminar la solicitud?',
+      cancel: true,
+      persistent: true
+    }).onOk(() => {
+      this.$q.notify({
+        color: 'primary',
+        message: `Solicitud eliminada.`
+      })
+      this.$emit('deleteCambios', this.item.id)
+    }).onOk(() => {
+    //
+    }).onCancel(() => {
+    }).onDismiss(() => {
+    })
     }
   }
 }

@@ -89,13 +89,11 @@ export default {
     },
   },
   mounted(){
-     //console.log('cambioHorarioItem', this.item);
     if(this.item.fechaSolicitud) {
       this.fechaSolicitud = (new Date(Date.parse(this.item.fechaSolicitud)))
       this.fechaSolicitud = this.fechaSolicitud.toLocaleDateString("en-GB")
     }
     var j = JSON.parse(this.item.datosSolicitud)
-    //console.log(j);
     if (j.horaEntrada1) this.horaEnt1 = j.horaEntrada1.substring(11, 16)
     if (j.horaSalida1 !== null) this.horaSal1 = j.horaSalida1.substring(11, 16)
     if (j.horaEntrada2 !== null) this.horaEnt2 = j.horaEntrada2.substring(11, 16)

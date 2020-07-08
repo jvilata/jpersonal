@@ -28,6 +28,7 @@
       <q-dialog v-model="expanded"  >
         <!-- formulario con campos de filtro -->
         <aprobacionFilter
+          @getRecords="(value) => getRecords(value)"
           :value="filterRecord"
           @input="(value) => Object.assign(filterRecord, value)"
           @close="expanded = !expanded"
@@ -37,12 +38,14 @@
       <!-- formulario tabla de resultados de busqueda -->
       <aprobacionItemsList
         v-model="listaCambios"
+        @deleteCambios="(id) => deleteSolicitud(id)"
         />
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
 export default {
   props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
   data () {
@@ -60,43 +63,32 @@ export default {
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
-    ...mapActions('aprobacion', ['getListaCambios']),
-    // getRecords (filter) {
-    //   // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
-    //   Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-    //   var objFilter = Object.assign({}, filter)
-    //   // objFilter.estadoActivo = (objFilter.estadoActivo !== null ? objFilter.estadoActivo.join() : null) // paso de array a concatenacion de strings (join)
-    //   return this.$axios.get('bd_personal.asp?action=findPersonal', { params: objFilter })
-    //     .then(response => {
-    //       this.registrosSeleccionados = response.data
-    //       this.expanded = false
-    //     })
-    //     .catch(error => {
-    //       this.$q.dialog({ title: 'Error', message: error.response.statusText })
-    //       this.desconectarLogin()
-    //     })
-    // }
+    ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
+    getRecords (filter) {
+      // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
+      Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
+      this.getListaCambios(filter)
+    },
+    deleteSolicitud(id){
+      this.deleteCambios({id: id , filterR: this.filterRecord})
+    }
   },
-  // mounted () {
-  //   // if (this.listaEntidades.length <= 0) this.loadEntidades() // carga store listaEntidades
-  //   if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
-  //     this.expanded = false
-  //     Object.assign(this.filterRecord, this.value.filterRecord)
-  //     this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
-  //   } else { // es la primera vez que entro, cargo valores po defecto
-  //     this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1' }
-  //     // this.getRecords(this.filterRecord)
-  //   }
-  // },
-  // destroyed () {
-  //   this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
-  // },
+  mounted () {
+    if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
+      this.expanded = false
+      Object.assign(this.filterRecord, this.value.filterRecord)
+      this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
+    } else { // es la primera vez que entro, cargo valores po defecto
+      this.filterRecord = {  empleado: this.user.pers.id }
+      this.getRecords(this.filterRecord)
+    }
+  },
+  destroyed () {
+    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
+  },
   components: {
     aprobacionFilter: require('components/Aprobacion/aprobacionFilter.vue').default,
     aprobacionItemsList: require('components/Aprobacion/aprobacionItemsList.vue').default
-  },
-  mounted() {
-    this.getListaCambios({ persona: 140, estadoSolicitud: "1,2" })
   }
 }
 </script>

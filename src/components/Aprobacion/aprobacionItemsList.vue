@@ -32,8 +32,9 @@
         <aprobacionItem v-for="(item, key) in value"
           :key="key"
           :item="item"
-          :id="key">
-        </aprobacionItem>
+          :id="key"
+          @deleteCambios="(id) => $emit('deleteCambios', id)" />
+
     </q-list>
     
 

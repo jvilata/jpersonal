@@ -1,19 +1,19 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm"  :value="formatDate(item.fechaSolicitud)" label="Fecha Solicitud" stack-label dense readonly/>
         <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
         <q-input class="col-4"  v-model="item.grupoEtm" label="ETM" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm q-mt-sm">
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="teletrabajoFechaDesde" label="Fecha Desde" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(datosSolicitud.teletrabajoFechaDesde)" label="Fecha Desde" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="teletrabajoFechaHasta" label="Fecha Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(datosSolicitud.teletrabajoFechaHasta)" label="Fecha Hasta" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="item.datosSolicitud.paisTeletrabajo" label="País Teletrab." stack-label dense readonly/>
+        <q-input class="row" :value="datosSolicitud.paisTeletrabajo" label="País Teletrab." stack-label dense readonly/>
       </div>
     </div>
     <div class="row q-pb-sm">
@@ -35,10 +35,15 @@ export default {
   props: ['item'],
   data () {
     return {
-      fechaSolicitud: '',
-      paisTeletrab: '',
-      teletrabajoFechaDesde: '',
-      teletrabajoFechaHasta: ''
+      
+      datosSolicitud: {
+        paisTeletrabajo: '',
+        teletrabajoFechaDesde: '',
+        teletrabajoFechaHasta: '',
+        aceptaTeletrabajo: true,
+        domicilioTeletrabajo: '',
+        teletrabajoObservaciones:''
+      }
     }
   },
   methods: {
@@ -72,21 +77,10 @@ export default {
     },
   },
   mounted() {
-    console.log('datosSolicitud', this.item.datosSolicitud);
-    console.log('teletrabajoFechaDesde', this.item.datosSolicitud.teletrabajoFechaDesde);
-    if(this.item.fechaSolicitud) {
-      this.fechaSolicitud = (new Date(Date.parse(this.item.fechaSolicitud)))
-      this.fechaSolicitud = this.fechaSolicitud.toLocaleDateString("en-GB")
-    }
-    // if(this.item.datosSolicitud.teletrabajoFechaDesde) {
-      console.log(this.item.datosSolicitud.teletrabajoFechaDesde)
-      this.teletrabajoFechaDesde = (new Date(Date.parse(this.item.datosSolicitud.teletrabajoFechaDesde)))
-      console.log(this.teletrabajoFechaDesde);
-      this.teletrabajoFechaDesde = this.teletrabajoFechaDesde.toLocaleDateString("en-GB")
-      console.log(this.teletrabajoFechaDesde);
-      this.teletrabajoFechaHasta = (new Date(Date.parse(this.item.datosSolicitud.teletrabajoFechaDesde)))
-      this.teletrabajoFechaHasta = this.teletrabajoFechaHasta.toLocaleDateString("en-GB")
-  // }
+    if(this.item.datosSolicitud) {
+      var obj = JSON.parse(this.item.datosSolicitud)
+      Object.assign(this.datosSolicitud, obj)     
+  }
 }
 }
 </script>
