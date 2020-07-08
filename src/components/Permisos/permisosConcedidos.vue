@@ -30,7 +30,7 @@ export default {
     permisosConcedidosList: require('components/Permisos/PermisosConcedidos/permisosConcedidosList.vue').default
   },
   mounted() {
-    this.getPermisosConcedidos({ solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() })
+    this.getPermisosConcedidos({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
   }
 }
 </script>

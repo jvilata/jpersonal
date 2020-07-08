@@ -62,7 +62,7 @@ export default {
   },
   mounted () {
     // inicializar datos de stores
-    // this.loadTablasAux()
+    this.loadTablasAux()
     this.user.email = this.$q.localStorage.getItem('email')
     this.user.password = atob(this.$q.localStorage.getItem('password')) // from base64 to string
   }

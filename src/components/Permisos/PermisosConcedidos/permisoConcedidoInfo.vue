@@ -16,10 +16,10 @@
     <div class="row q-pb-sm">
         <q-input class="col"  v-model="permiso.observaciones" label="Observaciones" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
+    <div class="row q-pb-sm" v-if="permiso.datosSustituto != null">
         <q-input class="col"  v-model="permiso.datosSustituto.nombre" label="Sustituto" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
+    <div class="row q-pb-sm" v-if="permiso.datosSustituto != null">
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
     </div>

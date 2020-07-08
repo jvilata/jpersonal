@@ -1,6 +1,6 @@
 <template>
   <div style="height: 85vh">
-    <q-item class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
+    <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
       <q-item-section avatar class="q-ml-sm">
         <q-icon name="note_add" size="md"/>
@@ -9,9 +9,9 @@
         <q-item-label class="text-h6">
           {{ nomFormulario }}
         </q-item-label>
-        <q-item-label >
-            <small @click="verNormativa"><u>Normativa de permisos y vacaciones</u></small>
-          </q-item-label>
+        <q-item-label>
+          <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
+        </q-item-label>
       </q-item-section>
       <q-item-section side>
         <q-btn
@@ -22,6 +22,16 @@
         icon="close"/>
       </q-item-section>
     </q-item>
+
+    <q-dialog v-model="expanded"  >
+      <!-- formulario con campos de filtro -->
+      <permisosFilter
+        :value="filterRecord"
+        @input="(value) => Object.assign(filterRecord, value)"
+        @getPermisos="getPermisos"
+        @close="expanded = !expanded"
+      />
+    </q-dialog>
 
     <q-tab-panels v-model="ltab" animated >
       <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name"  class="q-pa-none">
@@ -50,7 +60,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { openURL } from "quasar";
 
 export default {
@@ -58,6 +68,8 @@ export default {
   data() {
     return {
       nomFormulario: 'Solicitud de permisos',
+      filterRecord: {},
+      expanded: false,
       nuevoPermiso: false,
       ltab: '',
       menuItems: [
@@ -72,17 +84,40 @@ export default {
       ]
     }
   },
+  components: {
+    permisosFilter: require('components/Permisos/permisosFilter.vue').default
+  },
   computed: {
-    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos'])
+    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos']),
+    ...mapState('login', ['user'])
   },
   methods: {
+    ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
     verNormativa() {
       // Instalar inAppBrowser para ios
       openURL('http://www.edicomgroup.com')
+    },
+    getPermisos() {
+      console.log('filterRecord', this.filterRecord);
+      
+      var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      this.getPermisosPendientes(objFilter)
+      this.getPermisosConcedidos(objFilter)
     }
   },
-    mounted () {
-      this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.value } })
-    } 
+  mounted () {
+    if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
+      this.expanded = false
+      Object.assign(this.filterRecord, this.value.filterRecord)
+      this.getPermisos(this.filterRecord) // refresco la lista por si se han hecho cambios
+    } else { // es la primera vez que entro, cargo valores po defecto
+      this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
+      this.getPermisos(this.filterRecord)
+    }
+    this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.filterRecord } })
+  },
+  destroyed () {
+    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
+  }
 }
 </script>
