@@ -31,6 +31,7 @@
         <permisosAdd
           @close="nuevoPermiso = !nuevoPermiso"
           :value="value"
+          :filialEmpleado="filialEmpleado"
         />
       </q-dialog>
   </div>
@@ -40,15 +41,14 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ['value', 'id', 'keyValue'],
+  props: ['value', 'id', 'keyValue', 'filialEmpleado'],
   data() {
     return {
-      nuevoPermiso: false
+      nuevoPermiso: false,
     }
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes']),
-    ...mapActions('empleados', ['loadFilialEmpleado', 'loadBloquesFilialEmpleado'])
   },
   computed: {
     ...mapState('permisos', ['permisosPendientes']),
@@ -61,7 +61,6 @@ export default {
   },
   mounted() {
     this.getPermisosPendientes({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
-    this.loadFilialEmpleado()
   }
 }
 </script>

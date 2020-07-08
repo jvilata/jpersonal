@@ -19,6 +19,7 @@
         stack-label
         v-model="filterP.empleado"
         :options="listaEmpleados"
+        option-value
         option-label="name"
         emit-value
         map-options>
@@ -67,8 +68,7 @@ export default {
         }
     },
     getPermisos() {
-      this.$emit('empleadoSelec', this.filterP.empleado)
-      this.filterP.empleado = this.filterP.empleado.id
+      this.$emit('empleadoSelec', this.filterP)
       this.$emit('getPermisos', this.filterP)
       this.$emit('close')
     },

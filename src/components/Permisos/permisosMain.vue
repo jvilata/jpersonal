@@ -53,7 +53,7 @@
         :key="index"
         :label="tab.title"
         :name="tab.link.name"
-        :to="{ name: tab.link.name, params: { id: id, value: value } }"
+        :to="{ name: tab.link.name, params: { id: id, value: value, filialEmpleado: empleadoP.filialEmpleado } }"
         exact>
       </q-route-tab>
     </q-tabs>
@@ -82,7 +82,12 @@ export default {
           title: 'Permisos concedidos',
           link: { name: 'permisosConcedidos' }
         }
-      ]
+      ],
+      empleadoP: {
+        filialEmpleado: {},
+        diasPendientes: {},
+        diasConcedidos: {}
+      },
     }
   },
   components: {
@@ -94,7 +99,7 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
-    ...mapActions('empleados', ['setEmpleadoSelec']),
+    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos']),
     verNormativa() {
       // Instalar inAppBrowser para ios
       openURL('http://www.edicomgroup.com')
@@ -107,7 +112,21 @@ export default {
       this.getPermisosConcedidos(objFilter)
     },
     empleadoSelec(value) {
-      this.setEmpleadoSelec(value)
+      this.loadFilialEmpleado(value).then(response => {
+        this.empleadoP.filialEmpleado = response
+      })
+      
+      var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      this.loadDiasPendientes(objFilter).then(response => {
+        this.empleadoP.diasPendientes = response
+      })
+
+      objFilter = { IdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      this.loadDiasConcedidos(objFilter).then(response => {
+        this.empleadoP.diasConcedidos = response
+        console.log('diasConcedidos', this.empleadoP.diasConcedidos);
+        
+      })
     },
   },
   mounted () {
@@ -115,13 +134,14 @@ export default {
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getPermisos(this.filterRecord) // refresco la lista por si se han hecho cambios
+      this.empleadoSelec(this.filterRecord.empleado)
     } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
-      this.setEmpleadoSelec(this.user.pers)
+      this.empleadoSelec(this.user.pers.id)
     }
-    this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.filterRecord } })
-  },
+    this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.filterRecord, empleadoP: this.empleadoP } })
+  }, 
   destroyed () {
     this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
   }
