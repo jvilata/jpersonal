@@ -29,6 +29,7 @@
         :value="filterRecord"
         @input="(value) => Object.assign(filterRecord, value)"
         @getPermisos="getPermisos"
+        @empleadoSelec="(value) => empleadoSelec(value)"
         @close="expanded = !expanded"
       />
     </q-dialog>
@@ -93,6 +94,7 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
+    ...mapActions('empleados', ['setEmpleadoSelec']),
     verNormativa() {
       // Instalar inAppBrowser para ios
       openURL('http://www.edicomgroup.com')
@@ -103,16 +105,20 @@ export default {
       var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
       this.getPermisosPendientes(objFilter)
       this.getPermisosConcedidos(objFilter)
-    }
+    },
+    empleadoSelec(value) {
+      this.setEmpleadoSelec(value)
+    },
   },
   mounted () {
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getPermisos(this.filterRecord) // refresco la lista por si se han hecho cambios
-    } else { // es la primera vez que entro, cargo valores po defecto
+    } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
+      this.setEmpleadoSelec(this.user.pers)
     }
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.filterRecord } })
   },

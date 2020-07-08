@@ -77,7 +77,6 @@ export default {
     ...mapState('empleados', ['listaEmpleados', 'search']),
     ...mapState('login', ['user']),
     ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
-    
   },
   methods: {
     ...mapActions('empleados', ['setSearch']),
