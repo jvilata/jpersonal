@@ -2,44 +2,23 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
-        <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
-        <q-input class="col-9"  v-model="item.ejercicio" label="Ejercicio" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm"  v-model="permiso.id" label="ID" stack-label dense readonly/>
+        <q-input class="col-7"  v-model="permiso.ejercicioAplicacion" label="Ejercicio" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-6 q-pr-sm"  :value="formatDate(item.fechaDesde)" label="Desde" stack-label dense readonly/>
-        <q-input class="col-6"  :value="formatDate(item.fechaHasta)" label="Hasta" stack-label dense readonly/>
+        <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.fechaDesde)" label="Desde" stack-label dense readonly/>
+        <q-input class="col-6"  :value="formatDate(permiso.fechaHasta)" label="Hasta" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="item.numJornadas" label="Num. Jornadas" stack-label dense readonly/>
-        <q-input class="col-7"  v-model="item.tipoJornadaLibre" label="Tipo Jornada Libre" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm"  v-model="permiso.diasEfectivos" label="Num. Jornadas" stack-label dense readonly/>
+        <!-- <q-input class="col-7"  v-model="permiso.datosTipoDiaLibre.descripcionDiaLibre" label="Tipo Jornada Libre" stack-label dense readonly/> -->
     </div>
-    <div class="row q-pb-sm">
-        <q-input class="col"  v-model="item.observaciones" label="Observaciones" stack-label dense readonly/>
+    <div class="row q-pb-md">
+        <q-input class="col"  v-model="permiso.observaciones" label="Observaciones" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
-        <q-input class="col"  v-model="item.sustituto" label="Sustituto" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-6 q-pr-sm"  :value="formatDate(item.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
-        <q-input class="col-6"  :value="formatDate(item.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-4 q-pr-sm" v-model="item.justValid" label="Just. Valid" stack-label dense readonly/>
-        <q-input class="col-4 q-pr-sm" v-model="item.justNoValid" label="Just. No Valid" stack-label dense readonly/>
-        <q-input class="col-4" v-model="item.autSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-      <q-file stack-label dense bottom-slots v-model="justificante" label="Seleccionar justificante" counter>
-        <template v-slot:prepend>
-          <q-icon flat name="cloud_upload" dense></q-icon>
-        </template>
-        <template v-slot:after>
-          <q-btn flat icon="close" @click.stop="delJust" dense/>
-        </template>
-      </q-file>
-    </div>
-    <div class="row q-pb-sm">
-      <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
+
+    <div class="row">
+      <q-btn color="negative" class="col" @click="deleteP(permiso.id)">Eliminar permiso</q-btn>
     </div>
   </div>
 </template>
@@ -48,26 +27,20 @@
 <script>
 import { mapActions } from "vuex";
 import { date } from 'quasar'
-import  { Vue }  from 'vue'
 
 export default {
-  props: ['item'],
+
+  props: ['permiso'],
   data () {
     return {
-      justificante: []
     }
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
-    addJust() {
-      if (this.justificante)
-        this.addJustificante([this.item.id, this.justificante])
-        //this.$forceUpdate()
-    },
-    delJust () {
+    ...mapActions('permisos', ['deletePermiso']),
+    deleteP(id) {
       this.$q.dialog({
-        title: 'Eliminar justificante',
-        message: '¿Desea eliminar el justificante?',
+        title: 'Eliminar permiso',
+        message: '¿Desea eliminar el permiso?',
         cancel: {
           color: 'primary',
           flat: true
@@ -79,16 +52,12 @@ export default {
         },
         persistent: true
       }).onOk(() => {
-        this.deleteJustificante(this.item.id)
-        //this.$forceUpdate()
+        this.deletePermiso(id)
       })
     },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
-    },
-  },
-  mounted() {
-    this.justificante = this.item.justificante
+    }
   }
 }
 </script>

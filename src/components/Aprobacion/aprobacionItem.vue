@@ -61,7 +61,7 @@ export default {
   props: ['item', 'id'],
   data () {
     return {
-      expanded: false,
+      expanded: false
     }
   },
   components: {

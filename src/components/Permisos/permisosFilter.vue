@@ -18,9 +18,8 @@
         label="Empleado" 
         stack-label
         v-model="filterP.empleado"
-        :options="empleados"
-        option-value="id"
-        option-label="nombre"
+        :options="listaEmpleados"
+        option-label="name"
         emit-value
         map-options>
       </q-select>
@@ -44,7 +43,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { openURL } from "quasar";
 
 export default {
@@ -52,31 +51,11 @@ export default {
   data() {
     return {
       filterP: {},
-      disable: false,
-      model: 'JAVIER HERNÁNDEZ CERRILLO',
-      empleados: [
-        {
-          id: 1495,
-          idpersonal: 1,
-          nombre: 'JAVIER HERNÁNDEZ CERRILLO'
-        },
-        {
-          id: 1494,
-          idpersonal: 2,
-          nombre: 'MARTA VILATA DARDER'
-        },
-        {
-          id: 140,
-          idpersonal: 3,
-          nombre: 'JOSÉ BLAS VILATA TAMARIT'
-        },
-        {
-          id: 44,
-          idpersonal: 4,
-          nombre: 'ANA MARÍA DARDER NAVARRO'
-        },
-      ]
+      disable: false
     }
+  },
+  computed: {
+    ...mapState('empleados', ['listaEmpleados'])
   },
   methods: {
     verNormativa() {
@@ -88,9 +67,11 @@ export default {
         }
     },
     getPermisos() {
+      this.$emit('empleadoSelec', this.filterP.empleado)
+      this.filterP.empleado = this.filterP.empleado.id
       this.$emit('getPermisos', this.filterP)
       this.$emit('close')
-    }
+    },
   },
   mounted() {
     this.filterP = Object.assign( {}, this.value)
