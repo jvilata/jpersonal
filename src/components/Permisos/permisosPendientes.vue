@@ -47,7 +47,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['getPermisosPendientes'])
+    ...mapActions('permisos', ['getPermisosPendientes']),
+    ...mapActions('empleados', ['loadFilialEmpleado', 'loadBloquesFilialEmpleado'])
   },
   computed: {
     ...mapState('permisos', ['permisosPendientes']),
@@ -60,6 +61,7 @@ export default {
   },
   mounted() {
     this.getPermisosPendientes({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
+    this.loadFilialEmpleado()
   }
 }
 </script>

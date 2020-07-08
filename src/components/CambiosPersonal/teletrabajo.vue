@@ -73,9 +73,7 @@
             </div>
             <div class="row q-pa-sm" >
                 <div class="col-xs-12">
-                <q-input v-model="motivoTeletrab" label="Motivo Teletrabajo"
-                    type="textarea"
-                    @keyup.enter.stop />
+                <q-input v-model="motivoTeletrab" label="Motivo Teletrabajo" autogrow @keyup.enter.stop />
                 </div>
             </div>
         </q-card>
@@ -126,7 +124,7 @@
             </div>
             <div class="row q-pb-md justify-center" >
                 <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                    <q-btn :disabled="!val1 || !val2 || !val3 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                    <q-btn @click="solicitarTeletrabajo" :disabled="!val1 || !val2 || !val3 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
                 </div>
             </div>
         </div>
@@ -136,7 +134,7 @@
 
 <script>
 import { date, openURL } from 'quasar'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
     props: ['value', 'id', 'keyValue'], 
@@ -164,6 +162,7 @@ export default {
     ...mapState('login', ['user'])
     },
     methods: {
+        ...mapActions('empleados', ['calculaResponsable']),
       confirm () {
       this.$q.dialog({
         title: 'Aceptación conciliación laboral',
@@ -171,10 +170,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        
        this.val3 = true
-        console.log(this.val)
-
       }).onOk(() => {
         // console.log('>>>> second OK catcher')
         val = true
@@ -193,6 +189,37 @@ export default {
     },
     formatDate (pdate) {
         return date.formatDate(pdate, 'DD/MM/YYYY')
+    },
+    solicitarTeletrabajo(){
+        var data = {
+            consentimientos: '',
+            datosSolicitud: JSON.stringify(this.recordToSubmit),
+            denegada: false,
+            diasEfectivos: 0,
+            ejercicioAplicacion: 0,
+            empleado: this.user.pers.id,
+            estadoSolicitud: 1,
+            estadoSolicitudDesc: '',
+            fechaDesde: null,
+            fechaHasta: null,
+            fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
+            idAutorizadorOf: 140,
+            nuevaVersion: true,
+            observaciones: '',
+            sfechaDesde: null,
+            sfechaHasta: null,
+            tipoDiaLibre: 0,
+            tipoSolicitud: 'TELETRABAJO'
+        }
+        this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
+        .then(result => {
+          console.log('resultdata', result.data)
+          /* devuelve esto
+          { msg: "{"emailAut":["jvilata@edicom.es"],"idResp":[140]}"
+            success: true
+           }    */
+        })
+        .catch(error => { console.log(error.message) })
     }
   },
   mounted(){

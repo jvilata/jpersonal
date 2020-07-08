@@ -29,12 +29,14 @@
               <q-input class="col-xs-5 col-sm-5" outlined v-model="recordToSubmit.consentimientoimagen" label="Consent. Uso Imagen"/>
             </div>
             <q-input class="row q-mb-sm" outlined v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop />
-            <div class="row justify-center" style="max-width: 150px">
-              <q-btn
-                @click="openForm('otrosCambios')"
-                color="primary" 
-                label="Solicitar Otros Cambios" 
-                style="max-height: 50px"/>
+            <div class="row justify-center text-center q-pt-lg">
+              <div class="col-xs-12 justify-center">
+                <q-btn
+                  @click="openForm('otrosCambios')"
+                  color="primary" 
+                  label="Solicitar Otros Cambios" 
+                  style="height: 60px"/>
+              </div>
             </div>
           </q-card-section>
         

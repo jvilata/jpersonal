@@ -39,12 +39,12 @@
       <div class="col-xs-12">
         <q-input v-model="observaciones" label="Observaciones" autogrow @keyup.enter.stop />
       </div>
-      <div class="row justify-center" style="max-width: 150px">
+      <div class="row justify-center text-center q-pt-xl">
         <q-btn
           @click="openForm('teletrabajo')"
           color="primary" 
           label="Cambiar Teletrabajo" 
-          style="max-height: 50px"/>
+          style="height: 60px"/>
       </div>
     </q-card>
     

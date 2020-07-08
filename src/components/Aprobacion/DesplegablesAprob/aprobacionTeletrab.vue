@@ -1,27 +1,27 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="item.fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm"  :value="formatDate(item.fechaSolicitud)" label="Fecha Solicitud" stack-label dense readonly/>
         <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
         <q-input class="col-4"  v-model="item.grupoEtm" label="ETM" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
+    <div class="row q-pb-sm q-mt-sm">
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="formatDate(item.teletrabajofechadesde)" label="Fecha Desde" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(datosSolicitud.teletrabajoFechaDesde)" label="Fecha Desde" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="formatDate(item.teletrabajofechahasta)" label="Fecha Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="formatDate(datosSolicitud.teletrabajoFechaHasta)" label="Fecha Hasta" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="item.paisteletrabajo" label="País Teletrab." stack-label dense readonly/>
+        <q-input class="row" :value="datosSolicitud.paisTeletrabajo" label="País Teletrab." stack-label dense readonly/>
       </div>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-12 q-pr-sm"  v-model="item.autorizador1" label="Autorizador 1" stack-label dense readonly/>
+        <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="item.nomAutorizadorOf" label="Autorizador 1" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
+    <!-- <div class="row q-pb-sm">
         <q-input class="col-12 q-pr-sm"  v-model="item.autorizador2" label="Autorizador 1" stack-label dense readonly/>
-    </div>
+    </div> -->
     
   </div>  
 </template>
@@ -35,7 +35,15 @@ export default {
   props: ['item'],
   data () {
     return {
-      justificante: []
+      
+      datosSolicitud: {
+        paisTeletrabajo: '',
+        teletrabajoFechaDesde: '',
+        teletrabajoFechaHasta: '',
+        aceptaTeletrabajo: true,
+        domicilioTeletrabajo: '',
+        teletrabajoObservaciones:''
+      }
     }
   },
   methods: {
@@ -69,7 +77,10 @@ export default {
     },
   },
   mounted() {
-    this.justificante = this.item.justificante
+    if(this.item.datosSolicitud) {
+      var obj = JSON.parse(this.item.datosSolicitud)
+      Object.assign(this.datosSolicitud, obj)     
   }
+}
 }
 </script>

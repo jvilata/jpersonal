@@ -59,12 +59,15 @@ const actions = {
                 throw new Error('No existe persona asociada al usuario. Inténtelo de nuevo')
               } else {
                 user.email = response.data[0].email
-                response.data[0].id = parseInt(response.data[0].id)
+                response.data[0].id = parseInt(response.data[0].id) //convertimos de String a Int el id
                 commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, user: user, pers: response.data[0] }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
                 LocalStorage.set('email', loginData.email)
                 LocalStorage.set('password', loginData.password)
                 // this.dispatch('tabs/addTab', ['Acciones', 'Acciones', {}, 1], { root: true }) // llamo a la action->addTab del store->tabs y param: ['acciones','acciones',{},1]
+                //Aquí cargaremos datos globales a la app
                 this.dispatch('tablasAux/loadTablasAux')
+                this.dispatch('empleados/loadListaEmpleados')
+
                 this.$router.push('/sinTabs')
               }
             })

@@ -1,51 +1,51 @@
 <template>
-    <div>
-        <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
-              <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
-              <q-item-section avatar>
-                <q-icon name="edit" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-h6">
-                  OTROS CAMBIOS
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-btn
-                @click="$emit('close')"
-                flat
-                round
-                dense
-                icon="close"/>
-              </q-item-section>
-            </q-item>
-        <div class="row q-pa-sm" >
-            <div class="col-xs-12">
-                <q-input 
-                    v-model="motivoTeletrab" 
-                    label="Indique los cambios que desea realizar"
-                    type="textarea"
-                    @keyup.enter.stop />
-            </div>
-        </div>
-        <div class="row q-pb-md justify-center" >
-            <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="max-height: 50px"/>
-            </div>
-        </div>
-        <q-page-sticky position="bottom">
-        <span class="text-grey-7">Protección de Datos. </span>
-        <div class="row items-end q-my-sm">
-          <div class="col-xs-9">
-            <span class="text-grey-5"> Edicom Capital S.L. (Edicom),con domicilio en España, Parque Tecnológico de Paterna... 
-            </span>
+  <div class="container">
+    <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
+          <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
+      <q-item-section avatar>
+        <q-icon name="edit" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label class="text-h6">
+          OTROS CAMBIOS
+        </q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-btn
+        @click="$emit('close')"
+        flat
+        round
+        dense
+        icon="close"/>
+      </q-item-section>
+    </q-item>
+      <div class="row q-pa-sm" >
+          <div class="col-xs-12">
+              <q-input 
+                  v-model="motivoTeletrab" 
+                  label="Indique los cambios que desea realizar"
+                  type="textarea"
+                  @keyup.enter.stop />
           </div>
-          <div class="col-xs-3">
-              <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
+      </div>
+      <div class="row q-pb-md justify-center text-center" >
+          <div class="col-xs-12 q-mt-sm">
+              <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="height: 60px"/>
           </div>
+      </div>
+      <div class="justify-bottom text-bottom">
+      <span class="text-grey-7">Protección de Datos. </span>
+      <div class="row items-end q-my-sm">
+        <div class="col-xs-9">
+          <span class="text-grey-5"> Edicom Capital S.L. (Edicom),con domicilio en España, Parque Tecnológico de Paterna... 
+          </span>
         </div>
-        </q-page-sticky>
-    </div>
+        <div class="col-xs-3">
+            <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
+        </div>
+      </div>
+      </div>
+  </div>
 </template>
 
 <script>
