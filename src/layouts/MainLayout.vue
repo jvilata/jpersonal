@@ -16,7 +16,7 @@
           </q-btn-->
           <q-btn round flat class="bg-red-9 text-weight-light">
             <q-avatar size="40px">
-              {{ user.user.email.substr(0,2) }}
+              {{ user.pers.email.substr(0,2) }}
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
             <q-menu auto-close :offset="[110, 0]">
@@ -25,12 +25,12 @@
                   <div class="row">
                     <div class="col-4">
                       <q-avatar round flat size="80px" class="bg-red-9 text-white text-weight-light">
-                        {{ user.user.email.substr(0,2).toUpperCase() }}
+                        {{ user.pers.email.substr(0,2).toUpperCase() }}
                       </q-avatar>
                     </div>
                     <div class="col">
                       <div class="text-weight-bold">{{ user.pers.nombre }}</div>
-                      <div>{{ user.user.email }}</div>
+                      <div>{{ user.pers.email }}</div>
                       <q-btn flat class="text-weight-light" color="primary" @click="desconectar">Desconectar</q-btn>
                     </div>
                   </div>

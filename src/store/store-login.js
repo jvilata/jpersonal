@@ -38,6 +38,26 @@ const mutations = {
 const actions = {
   doLogin ({ commit }, loginData) {
     commit('loginStart')
+    loginData.auth = btoa(loginData.email + ':' + loginData.password) // token auth basica
+    loginData.password = btoa(loginData.password) // base64
+    axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/logon&auth=${loginData.auth}`, { params: {} }, { withCredentials: true })
+      .then((response) => {
+        commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, pers: response.data }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
+        LocalStorage.set('email', loginData.email)
+        LocalStorage.set('password', loginData.password)
+        // this.dispatch('tabs/addTab', ['Acciones', 'Acciones', {}, 1], { root: true }) // llamo a la action->addTab del store->tabs y param: ['acciones','acciones',{},1]
+        //Aquí cargaremos datos globales a la app
+        this.dispatch('tablasAux/loadTablasAux')
+        this.dispatch('empleados/loadListaEmpleados')
+
+        this.$router.push('/sinTabs')
+      })
+      .catch(error => {
+        commit('loginStop', error) // .response.data.error
+      })
+  },
+  doLogin2 ({ commit }, loginData) {
+    commit('loginStart')
     if (loginData.firebaseToken) commit('guardarToken', loginData.firebaseToken) // si viene de firebase tendremos token
     // para esta llamada al backend es necesario pasar los parametros en formato formData (campos de formulario)
     // tenemos que convertir los atributos del objeto loginData a campos (fields) de un formData
