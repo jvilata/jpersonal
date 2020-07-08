@@ -87,7 +87,7 @@ import { date } from 'quasar'
 import wgDate from 'components/General/wgDate.vue'
 
 export default {
-  props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
+  props: ['value', 'filialEmpleado'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
   data () {
     return {
       permisoToAdd: {
@@ -141,6 +141,7 @@ export default {
     this.permisoToAdd.tipoDiaLibre = 1
     this.permisoToAdd.empleado = this.value.empleado
     this.permisoToAdd.ejercicioAplicacion = this.value.ejercicioAplicacion
+    console.log('filialEmpleado', this.filialEmpleado)
   }
 }
 </script>
