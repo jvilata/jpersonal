@@ -2,6 +2,7 @@
   <q-item class="row q-ma-xs q-pa-xs">
 
     <q-list v-if="value.length>0" 
+      v-model="permisosPendientes"
       bordered 
       separator 
       class="rounded-borders col">
@@ -59,6 +60,9 @@ export default {
   },
   components: {
     permisoPendiente: require('components/Permisos/PermisosPendientes/permisoPendiente.vue').default
+  },
+  computed: {
+    ...mapState('permisos', ['permisosPendientes'])
   }
 }
 

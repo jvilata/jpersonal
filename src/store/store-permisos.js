@@ -44,7 +44,7 @@ const mutations = {
     }, */
     state.permisosPendientes = []
     state.permisosPendientes = lista
-    console.log('permisos pdtes:', state.permisosPendientes);
+    
     
   },
   loadPermisosConcedidos(state, lista) {
@@ -69,7 +69,6 @@ const mutations = {
 const actions = {
   getPermisosPendientes({ commit }, objFilter) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
-    console.log('objFilter', objFilter);
     
     axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {

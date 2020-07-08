@@ -138,7 +138,6 @@ export default {
   },
   mounted () {
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.value } })
-    console.log('id', this.user.pers.id)
   }
 }
 </script>

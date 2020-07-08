@@ -28,13 +28,13 @@
       <permisosFilter
         :value="filterRecord"
         @input="(value) => Object.assign(filterRecord, value)"
-        @getPermisos="getPermisos"
+        @getPermisos="(value) => getPermisos(value)"
         @close="expanded = !expanded"
       />
     </q-dialog>
 
     <q-tab-panels v-model="ltab" animated >
-      <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name"  class="q-pa-none">
+      <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name" class="q-pa-none">
         <router-view @close="$emit('close')"/>
       </q-tab-panel>
     </q-tab-panels>
@@ -97,12 +97,37 @@ export default {
       // Instalar inAppBrowser para ios
       openURL('http://www.edicomgroup.com')
     },
-    getPermisos() {
-      console.log('filterRecord', this.filterRecord);
+    getPermisos(filter) {
+      // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
+      Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
+      //var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      var objFilter = Object.assign({}, filter)
+      return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
+        .then(response => {
+          this.getPermisosPendientes(filter)
+          this.registrosSeleccionados = response.data
+          this.expanded = false
+        })
+        .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error.response.statusText })
+          this.desconectarLogin()
+        })
+      return this.$axios.get('bd_personal.asp?action=vacaciones/todas', { params: objFilter })
+        .then(response => {
+          this.getPermisosConcedidos(filter)
+          this.registrosSeleccionados = response.data
+          this.expanded = false
+        })
+        .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error.response.statusText })
+          this.desconectarLogin()
+        })
+    
+      // console.log('filterRecord', this.filterRecord);
       
-      var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
-      this.getPermisosPendientes(objFilter)
-      this.getPermisosConcedidos(objFilter)
+      // var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      // this.getPermisosPendientes(objFilter)
+      // this.getPermisosConcedidos(objFilter)
     }
   },
   mounted () {

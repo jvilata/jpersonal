@@ -1,7 +1,7 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
 
-    <q-list v-if="value.length>0" bordered separator class="rounded-borders col">
+    <q-list v-if="value.length>0" v-model="permisosConcedidos" bordered separator class="rounded-borders col">
       <q-separator/>
         <q-item-label header dense class="row bg-indigo-1">
           <q-btn-dropdown class="col-1" dropdown-icon="more_vert" size="md" unelevated dense no-icon-animation>
@@ -55,6 +55,9 @@ export default {
   },
   components: {
     permisoConcedido: require('components/Permisos/PermisosConcedidos/permisoConcedido.vue').default
+  },
+  computed: {
+    ...mapState('permisos', ['permisosConcedidos'])
   }
 }
 

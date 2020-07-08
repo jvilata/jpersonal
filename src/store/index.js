@@ -9,6 +9,7 @@ import mensajeLog from './store-log'
 import permisos from './store-permisos'
 import empleados from './store-empleados'
 import aprobacion from './store-aprobacion'
+import solicitudes from './store-solicitudes'
 
 Vue.use(Vuex)
 
@@ -30,7 +31,8 @@ export default function (/* { ssrContext } */) {
       mensajeLog,
       permisos,
       empleados,
-      aprobacion
+      aprobacion,
+      solicitudes
     },
 
     // enable strict mode (adds overhead!)

@@ -20,7 +20,7 @@
                 icon="close"/>
               </q-item-section>
             </q-item>
-        <q-form @submit="submitRecord" @keyup.esc="$emit('close')">   
+        <q-form @keyup.esc="$emit('close')">   
         <q-card flat>
                 <div class="q-pa-sm q-mt-md">
                     <div class="q-gutter-md">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="row q-mb-sm">
                             <div class="col q-mb-sm text-subtitle2">Hora Entrada 2
-                                    <q-input filled v-model="recordToSubmit.horaEntrada2" onkeyup="dif30minDesc(recordToSubmit.horaEntrada2)" class="q-pr-xs">
+                                    <q-input filled v-model="recordToSubmit.horaEntrada2" class="q-pr-xs">
                                         <template v-slot:append>
                                         <q-icon name="access_time" class="cursor-pointer">
                                             <q-popup-proxy ref="qEnt2" transition-show="scale" transition-hide="scale">
@@ -264,9 +264,6 @@ export default {
         this.sumaHoras = horasArrayNumerico.reduce(reducer);
         
     },
-    submitRecord(d){
-        console.log('result.data de cambioH', d)
-    },
     solicitarCambioHorario(){
         //Llamada POST 
          // {"horaEntrada1":"2008-01-01T08:30:00","horaSalida1":"2008-01-01T14:00:00","horaEntrada2":"2008-01-01T15:00:00","horaSalida2":"2008-01-01T17:30:00","horaEntrada3":"2008-01-01T09:00:00","horaSalida3":"2008-01-01T14:00:00","horaEntrada4":"2008-01-01T15:00:00","horaSalida4":"2008-01-01T18:00:00","aceptaCambioHorario":true,"aceptaComer30m":false}"
@@ -293,26 +290,15 @@ export default {
         // this.calculaResponsable(this.user.pers.id),
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
-            submitRecord(result.data)
-          console.log(result.data)
-          /* devuelve esto
-          { msg: "{"emailAut":["jvilata@edicom.es"],"idResp":[140]}"
-            success: true
-           }    */
+            this.$q.notify({
+            color: 'primary',
+            message: `Se ha solicitado un cambio de horario.`
+      })
         })
         .catch(error => { console.log(error.message) })
-    },
-    dif30minDesc(horaEnt){
-        if(horaEnt == this.recordToSubmit.horaEntrada2) {
-            var diff =(this.recordToSubmit.horaEntrada2 - this.recordToSubmit.horaSalida1) / 1000;
-            diff /= 60;
-            console.log(Math.abs(Math.round(diff)));
-  
-        }
     }
   },
-  beforeMount () {
-      console.log(this.user.pers.horaentrada1)
+  beforeMount() {      
    this.recordToSubmit.horaEntrada1 = this.user.pers.horaentrada1.substring(10,16)
    this.recordToSubmit.horaSalida1 = this.user.pers.horasalida1.substring(10,16)
    this.recordToSubmit.horaEntrada2 = this.user.pers.horaentrada2.substring(10,16)
@@ -328,8 +314,7 @@ export default {
       
   },
   computed:{
-    ...mapState('login', ['user']),
-    
+    ...mapState('login', ['user'])
   }
 }
 </script>

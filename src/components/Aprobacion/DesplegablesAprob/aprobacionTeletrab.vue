@@ -35,7 +35,6 @@ export default {
   props: ['item'],
   data () {
     return {
-      
       datosSolicitud: {
         paisTeletrabajo: '',
         teletrabajoFechaDesde: '',

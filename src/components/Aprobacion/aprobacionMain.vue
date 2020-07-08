@@ -12,7 +12,7 @@
           </q-item-label>
           <q-item-label>
             <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
+            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.empleado ? 'Empleado: '+ filterRecord.empleado + ' | ': '') + (filterRecord.persona ? ' Autorizador: '+ filterRecord.persona + ' | ' : '') + (filterRecord.estadoSolicitud ? ' Estado Solicitud: '+ filterRecord.estadoSolicitud + ' | ': '') + (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud  : '') : 'Pulse para definir filtro') }}</small>
           </q-item-label>
         </q-item-section>
         <q-item-section side>
@@ -67,7 +67,18 @@ export default {
     getRecords (filter) {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-      this.getListaCambios(filter)
+      var objFilter = Object.assign({}, filter)
+      
+      return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
+        .then(response => {
+          this.getListaCambios(filter)
+          this.registrosSeleccionados = response.data
+          this.expanded = false
+        })
+        .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error.response.statusText })
+          this.desconectarLogin()
+        })
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -79,7 +90,7 @@ export default {
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
-      this.filterRecord = {  empleado: this.user.pers.id }
+      this.filterRecord = {  empleado: this.user.pers.id, persona: this.user.pers.idautorizador }
       this.getRecords(this.filterRecord)
     }
   },

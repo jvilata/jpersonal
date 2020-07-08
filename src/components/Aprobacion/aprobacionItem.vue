@@ -16,7 +16,7 @@
             <q-item-section side top>
               <q-badge outline :color="item.estadoSolicitudDesc == 'APROBADO' ? 'positive' : 
                 item.estadoSolicitudDesc == 'DENEGADO' ? 'negative' : 
-                item.estadoSolicitudDesc == 'PROVISIONAL' ? 'warning' : 'primary'" 
+                item.estadoSolicitudDesc == 'CONC.PROVISIONAL' ? 'warning' : 'primary'" 
                 :label="item.estadoSolicitudDesc" />
             </q-item-section>
           </template>
@@ -80,9 +80,17 @@ export default {
     },
     confirm(){
       this.$q.dialog({
-      title: 'ELIMINAR SOLICITUD',
-      message: '¿Está seguro de que desea eliminar la solicitud?',
-      cancel: true,
+      title: 'Eliminar Solicitud',
+      message: '¿Desea eliminar la solicitud?',
+      cancel: {
+      color: 'primary',
+      flat: true
+      },
+      ok: {
+      label: 'Eliminar',
+      flat: true,
+      color: 'negative'
+      },
       persistent: true
     }).onOk(() => {
       this.$q.notify({

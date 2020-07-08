@@ -23,11 +23,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                 <div class="col-xs-4">Fecha Desde</div>
                 <div class="col-xs-8">
-                    <q-input filled :value="formatDate(recordToSubmit.dateDesde)">
+                    <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaDesde)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="recordToSubmit.dateDesde" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="recordToSubmit.teletrabajoFechaDesde" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>  
                     </template>
@@ -40,11 +40,11 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                  <div class="col-xs-4">Fecha Hasta</div>
                  <div class="col-xs-8">
-                    <q-input filled :value="formatDate(recordToSubmit.dateHasta)">
+                    <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaHasta)">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="recordToSubmit.dateHasta" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="recordToSubmit.teletrabajoFechaHasta" @input="() => $refs.qDateProxy.hide()" />
                         </q-popup-proxy>
                         </q-icon>
                     </template>
@@ -58,7 +58,7 @@
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
                  <div class="col-xs-4">Pais Teletrabajo</div>
                  <div class="col-xs-8">
-                    <q-select filled v-model="model" bottom-slots :options="options" :dense="dense" :options-dense="denseOpts">
+                    <q-select filled v-model="recordToSubmit.paisTeletrabajo" bottom-slots :options="options" :dense="dense" :options-dense="denseOpts">
                         <template v-slot:prepend>
                         <q-icon name="place" @click.stop />
                         </template>
@@ -69,11 +69,11 @@
                  </div>
             </div>
             <div class="row q-pa-sm items-baseline" style="max-width: 360px">
-                 <q-input outlined v-model="domicilioTeletrabajo" label="Domicilio Teletrabajo" class="col-xs-12" />
+                 <q-input outlined v-model="recordToSubmit.domicilioTeletrabajo" label="Domicilio Teletrabajo" class="col-xs-12" />
             </div>
             <div class="row q-pa-sm" >
                 <div class="col-xs-12">
-                <q-input v-model="motivoTeletrab" label="Motivo Teletrabajo" autogrow @keyup.enter.stop />
+                <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Motivo Teletrabajo" autogrow @keyup.enter.stop />
                 </div>
             </div>
         </q-card>
@@ -141,8 +141,12 @@ export default {
     data () {
         return {
             recordToSubmit: {
-                dateDesde: '',
-                dateHasta: ''
+                teletrabajoFechaDesde: '',
+                teletrabajoFechaHasta: '',
+                paisTeletrabajo: '',
+                aceptaTeletrabajo: true,
+                domicilioTeletrabajo: '',
+                teletrabajoObservaciones: ''
             },
             model: null,
             options: [
@@ -153,8 +157,6 @@ export default {
             val3: false,
             dense: false,
             denseOpts: false,
-            motivoTeletrab: '',
-            domicilioTeletrabajo: '',
             disabled: false
         }
     }, 
@@ -213,20 +215,20 @@ export default {
         }
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
-          console.log('resultdata', result.data)
-          /* devuelve esto
-          { msg: "{"emailAut":["jvilata@edicom.es"],"idResp":[140]}"
-            success: true
-           }    */
+            //console.log(result.data)
+          this.$q.notify({
+          color: 'primary',
+          message: `Se ha solicitado teletrabajo.`
+          })
         })
         .catch(error => { console.log(error.message) })
     }
   },
-  mounted(){
+  mounted(){   
         this.recordToSubmit.dateDesde = this.user.pers.teletrabajofechadesde
         this.recordToSubmit.dateHasta = this.user.pers.teletrabajofechahasta
-        //this.recordToSubmit.motivoTeletrab = this.user.pers.teletrabajoobservaciones
-
-    } 
+            
+        
+  }
 }
 </script>
