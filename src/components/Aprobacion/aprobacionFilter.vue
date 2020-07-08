@@ -19,6 +19,7 @@
           :disable="disableEmpleado"
         />
         <q-input outlined clearable label="Aprobador" stack-label v-model="filterR.aprobador" />
+        
         <q-select
           label="Estado"
           stack-label
@@ -64,7 +65,7 @@ export default {
       estado: ['PENDIENTE', 'CONC. PROVISIONAL', 'DENEGADO', 'CONCEDIDO'],
       tipo: ['PERMISO', 'CAMBIO HORARIO', 'TELETRABAJO', 'PROCESO SELECCIÓN', 'MODIFICACIÓN JORNADA'],
       empleadosNombre: [],
-      disableEmpleado: true
+      disableEmpleado: false
     }
   },
   computed: {
@@ -88,6 +89,8 @@ export default {
   },
   mounted () {
     this.filterR = this.value // asignamos valor del parametro por si viene de otro tab
+    console.log('value PermisosFilter', this.value);
+    
   },
   destroyed () {
     // guardamos valor en tabs por si despus queremos recuperarlo

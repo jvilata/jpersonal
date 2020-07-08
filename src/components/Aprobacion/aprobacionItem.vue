@@ -23,7 +23,7 @@
 
           <q-card>
               <q-card-section>
-                  <!-- <itemMoreInfo :item="item"/> -->
+                  <itemMoreInfo v-if="item.tipoSolicitud == 'PERMISO'" :permiso="item"/>
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item"/>
@@ -47,11 +47,11 @@ export default {
   props: ['item', 'id'],
   data () {
     return {
-      expanded: false,
+      expanded: false
     }
   },
   components: {
-    // itemMoreInfo: require('components/Aprobacion/MoreInfoItems/aprobacionItemInfo.vue').default,
+    itemMoreInfo: require('components/Aprobacion/MoreInfoItems/aprobacionItemInfo.vue').default,
     itemCambioHor: require('components/Aprobacion/aprobacionCambioHor.vue').default,
     itemTeletrab: require('components/Aprobacion/aprobacionTeletrab.vue').default,
     itemOtrosCambios: require('components/Aprobacion/aprobacionOtrosCambios.vue').default
@@ -62,8 +62,7 @@ export default {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
-    reset () {
-      
+    reset () { 
     }
   }
 }
