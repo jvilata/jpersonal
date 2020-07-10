@@ -1,8 +1,7 @@
-import Vue from 'vue'
+import { Loading } from 'quasar'
 import { axiosInstance, headerFormData } from 'boot/axios.js'
 import querystring from 'querystring'
 import login from './store-login'
-import permisos from './store-permisos'
 
 const state = {
   listaEmpleados: [],
@@ -12,17 +11,6 @@ const state = {
 const mutations = {
   loadListaEmpleados(state, lista) {
     state.listaEmpleados= lista
-  },
-  loadFilialEmpleado(state, filial) {
-    state.filialEmpleado= filial    
-    console.log('FilialEmpleado', state.filialEmpleado);
-  },
-  loadBloquesFilialEmpleado(state, bloques) {
-    state.bloqueFilialEmpleado= bloques
-    console.log('bloqueFilialEmpleado', state.bloqueFilialEmpleado);
-  },
-  setResponsable(state, idautorizador) {
-    state.idautorizador = idautorizador;
   }
 }
 
@@ -31,6 +19,7 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state 
     axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/combo&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
       .then((response) => {
+        Loading.hide()
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleados' + 'No existen datos', { root: true })
         } else {
@@ -44,7 +33,8 @@ const actions = {
 
   loadFilialEmpleado({ commit }, idempleado) {
     return new Promise((resolve, reject) => {
-      var emp = state.listaEmpleados.find(record => record.id === idempleado)
+      var emp = state.listaEmpleados.find(record => record.id == idempleado)
+      
       let objFilter = { pais: emp.paisLaboral }
       axiosInstance.get(`bd_jpersonal.asp?action=filiales/list&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true })
       .then((response) => {
@@ -70,6 +60,8 @@ const actions = {
 
   loadDiasPendientes({ commit }, objFilterP) {
     return new Promise((resolve, reject) => {
+      console.log('objFilterP', objFilterP);
+      
       axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true })
       .then((response) => {
         var diasPendientes = {
@@ -89,7 +81,7 @@ const actions = {
 
   loadDiasConcedidos({ commit }, objFilterP) {
     return new Promise((resolve, reject) => {
-      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados`, querystring.stringify(objFilterP), headerFormData)
+      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData)
       .then((response) => {
         console.log('response', response)
         resolve(response)
@@ -101,47 +93,16 @@ const actions = {
     })
   },
 
-  calculaResponsable( { commit }, [empleado, tiposol] ){
+  calcularResponsable( { commit }, params ){
     return new Promise((resolve, reject) => {
-      var idautorizador=0; 
-      idautorizador = empleado.idautorizador; 
-      emailAutorizador = empleado.emailAutorizador;
-      if (idautorizador === 0) {
-        if (empleado.pais === 'MX') {  // en MX se asigna todo a German si es de cons o dir proy
-          if ((empleado.area === 1) || (empleado.area === 2)) {
-            idautorizador = 114; // german. Mirar cpersonal_ofrepository.java si se cambia esto
-            emailAutorizador='gsanchez@edicom.es';
-          }
-        } else if (empleado.pais === 'ES') { 
-          if(empleado.area  === 2){ // si es de consultoria lo ejecuta todo el RESP TM
-            idautorizador = empleado.directorTMCodEmp;
-            emailAutorizador=empleado.directorTMEmail;
-
-            //si es un respTM la aprobacion es de ANA
-            if(idautorizador === empleado.id){
-              idautorizador = empleado.idautArea;
-              emailAutorizador = 'adarder@edicom.es';
-            }
-              
-          } else if(empleado.area === 1){
-            if(tiposol === 1){ //vacaciones de RESP_PM y PM las aprueba Javi F
-              idautorizador = 48;
-              emailAutorizador = 'jfernandez@edicom.es';
-            } else {
-              idautorizador = empleado.directorPMCodEmp;
-              emailAutorizador = empleado.directorPMEmail;
-                
-              //si es RESP_PM lo aprueba ANA 
-              if(idautorizador === empleado.id){
-                idautorizador = empleado.idautArea;
-                emailAutorizador = 'adarder@edicom.es';
-              }
-            }
-          }
-        }
-        if (idautorizador === 0 || idautorizador  === '') idautorizador = empleado.idautArea; // si no hemos asignado resp asignamos al resp area
-      }
-      resolve({ idautorizador: idautorizador, emailAutorizador: emailAutorizador })
+      axiosInstance.post(`bd_jpersonal.asp?action=cpersonal_of/calcularResponsable&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData)
+      .then((response) => {
+        resolve(response)
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'calcularResponsable' + error, { root: true })
+        reject(error)
+      })
     })
   },
 }

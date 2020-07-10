@@ -21,17 +21,17 @@
       <!-- <q-separator spaced/> -->
 
       <permisosPendientesList
-      v-model="permisosPendientes"
-      class="q-mb-lg"
+        v-model="permisosPendientes"
+        class="q-mb-lg"
       />
 
 
     <q-dialog v-model="nuevoPermiso"  >
-        <!-- formulario con campos de filtro -->
         <permisosAdd
           @close="nuevoPermiso = !nuevoPermiso"
+          @nuevo="addPermiso"
           :value="value"
-          :filialEmpleado="filialEmpleado"
+          :empleadoP="value.empleadoP"
         />
       </q-dialog>
   </div>
@@ -41,7 +41,7 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ['value', 'id', 'keyValue', 'filialEmpleado'],
+  props: ['value', 'id', 'keyValue'],
   data() {
     return {
       nuevoPermiso: false,
@@ -49,6 +49,9 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes']),
+    addPermiso() {
+      this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
+    }
   },
   computed: {
     ...mapState('permisos', ['permisosPendientes']),
@@ -60,7 +63,7 @@ export default {
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   },
   mounted() {
-    this.getPermisosPendientes({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
+    this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
   }
 }
 </script>

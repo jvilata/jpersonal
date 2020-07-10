@@ -10,7 +10,9 @@
           {{ nomFormulario }}
         </q-item-label>
         <q-item-label>
-          <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
+          <small>{{ 
+            Object.keys(filterRecord).length > 1 ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}  Ejercicio: ${filterRecord.ejercicioAplicacion}` : 'Pulse para definir filtro' 
+            }}</small>
         </q-item-label>
       </q-item-section>
       <q-item-section side>
@@ -28,7 +30,7 @@
       <permisosFilter
         :value="filterRecord"
         @input="(value) => Object.assign(filterRecord, value)"
-        @getPermisos="getPermisos"
+        @getPermisos="(value) => getPermisos(value)"
         @empleadoSelec="(value) => empleadoSelec(value)"
         @close="expanded = !expanded"
       />
@@ -53,7 +55,7 @@
         :key="index"
         :label="tab.title"
         :name="tab.link.name"
-        :to="{ name: tab.link.name, params: { id: id, value: value, filialEmpleado: empleadoP.filialEmpleado } }"
+        :to="{ name: tab.link.name, params: { id: id, value: value } }"
         exact>
       </q-route-tab>
     </q-tabs>
@@ -86,7 +88,8 @@ export default {
       empleadoP: {
         filialEmpleado: {},
         diasPendientes: {},
-        diasConcedidos: {}
+        diasConcedidos: {},
+        idAutorizadorOf: 0
       },
     }
   },
@@ -95,37 +98,42 @@ export default {
   },
   computed: {
     ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos']),
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user'])
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
-    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos']),
+    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable']),
     verNormativa() {
       // Instalar inAppBrowser para ios
       openURL('http://www.edicomgroup.com')
     },
-    getPermisos() {
-      console.log('filterRecord', this.filterRecord);
-      
-      var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+    getPermisos(value) {
+      Object.assign(this.filterRecord, value)
+      var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.getPermisosPendientes(objFilter)
       this.getPermisosConcedidos(objFilter)
     },
     empleadoSelec(value) {
-      this.loadFilialEmpleado(value).then(response => {
+      console.log('valueEmp', value);
+      
+      this.loadFilialEmpleado(value.empleado).then(response => {
         this.empleadoP.filialEmpleado = response
       })
       
-      var objFilter = { solIdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.loadDiasPendientes(objFilter).then(response => {
         this.empleadoP.diasPendientes = response
       })
 
-      objFilter = { IdEmpleado: this.filterRecord.empleado, solejercicio: this.filterRecord.ejercicioAplicacion }
+      objFilter = { IdEmpleado: value, solejercicio: value.ejercicioAplicacion }
       this.loadDiasConcedidos(objFilter).then(response => {
-        this.empleadoP.diasConcedidos = response
-        console.log('diasConcedidos', this.empleadoP.diasConcedidos);
-        
+        this.empleadoP.diasConcedidos = response.data
+      })
+
+      this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
+        console.log('calcularResponsable', response);
+        //this.empleadoP.idAutorizadorOf = response.data.msg.idResp[0]
       })
     },
   },
@@ -138,12 +146,13 @@ export default {
     } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
-      this.empleadoSelec(this.user.pers.id)
+      this.empleadoSelec(this.filterRecord)
     }
-    this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: this.filterRecord, empleadoP: this.empleadoP } })
+
+    this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
   }, 
   destroyed () {
-    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })
+    this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord, empleadoP: this.empleadoP })
   }
 }
 </script>

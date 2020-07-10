@@ -36,7 +36,7 @@
           <permisoPendiente v-for="(permiso, key) in value"
             :key="key"
             :permiso="permiso"
-            :id="key"> Permiso
+            :id="key">
           </permisoPendiente>
     </q-list>
     

@@ -18,11 +18,14 @@
         label="Empleado" 
         stack-label
         v-model="filterP.empleado"
-        :options="listaEmpleados"
-        option-value
+        :options="listaEmpleadosFilter"
+        @filter="filterEmpleados"
+        option-value="id"
         option-label="name"
         emit-value
-        map-options>
+        map-options
+        use-input
+        behavior="menu">
       </q-select>
       
       <q-input
@@ -52,7 +55,8 @@ export default {
   data() {
     return {
       filterP: {},
-      disable: false
+      disable: false,
+      listaEmpleadosFilter: []
     }
   },
   computed: {
@@ -72,8 +76,15 @@ export default {
       this.$emit('getPermisos', this.filterP)
       this.$emit('close')
     },
+    filterEmpleados(val, update, abort){
+      update(() =>{
+        const needle = val.toLowerCase()
+        this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
+    }
   },
   mounted() {
+    this.listaEmpleadosFilter = this.listaEmpleados
     this.filterP = Object.assign( {}, this.value)
   },
   destroyed () {

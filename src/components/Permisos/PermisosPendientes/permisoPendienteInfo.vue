@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['deletePermiso']),
+    ...mapActions('permisos', ['deletePermisoPendiente']),
     deleteP(id) {
       this.$q.dialog({
         title: 'Eliminar permiso',
@@ -51,7 +51,7 @@ export default {
         },
         persistent: true
       }).onOk(() => {
-        this.deletePermiso(id)
+        this.deletePermisoPendiente(this.permiso)
       })
     },
     formatDate (pdate) {

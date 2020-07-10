@@ -1,6 +1,6 @@
-import { uid, Notify } from "quasar"
-import Vue from 'vue'
+import { Notify } from "quasar"
 import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
+import querystring from 'querystring'
 import login from './store-login'
 
 const state = {
@@ -9,11 +9,6 @@ const state = {
 }
 
 const mutations = {
-  deletePermisoPendiente(state, id) {
-    let index = state.permisosPendientes.findIndex(perm => perm.id == id);
-    Vue.delete(state.permisosPendientes, index)
-    Notify.create('Permiso borrado')
-  },
   addJustificante (state, [id, justificante]) {
     let index = state.permisosConcedidos.findIndex(perm => perm.id == id);
     state.permisosConcedidos[index].justificante = justificante
@@ -44,8 +39,6 @@ const mutations = {
     }, */
     state.permisosPendientes = []
     state.permisosPendientes = lista
-    console.log('permisos pdtes:', state.permisosPendientes);
-    
   },
   loadPermisosConcedidos(state, lista) {
     //Lista se devuelve del backend
@@ -68,9 +61,7 @@ const mutations = {
 
 const actions = {
   getPermisosPendientes({ commit }, objFilter) {
-    //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
-    console.log('objFilter', objFilter);
-    
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)  
     axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         if (response.data.length === 0) {
@@ -97,22 +88,19 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + error, { root: true })
       })
   },
-  addPermisoPendiente ({ commit }, payload) { 
-    //Llamaremos al backend para insertar el permiso en la tabla PRIV_Solicitud_Dias
-    //Si va bien, llamaremos a getPermisosPendientes (.then)
-    console.log('permisoToAdd: ', payload)
-    axiosInstance.get(`bd_permisos.asp/findTablaAuxFilter?codTabla=${tabAux.codTabla}`, {}, { withCredentials: true }) // tipo acciones
+  deletePermisoPendiente({ commit }, payload){
+    console.log('payload', payload);
+    
+    axiosInstance.delete(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}&solIdEmpleado=${payload.empleado}&solejercicio=${payload.ejercicioAplicacion}`, payload, { withCredentials: true })
       .then((response) => {
-        this.dispatch('permisos/getPermisosPendientes')
-        Notify.create('Permiso añadido')
+        console.log('delete', response);
       })
       .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'addPermisoPendiente' + error, { root: true })
+        this.dispatch('mensajeLog/addMensaje', 'deletePermisoPendiente' + error, { root: true })
       })
   },
-  deletePermisoPendiente({ commit }, id){
-    commit('deletePermisoPendiente', id)
-  },
+
+
 
   addJustificante ({ commit }, [id, justificante]) {
     commit('addJustificante',[id, justificante] )
