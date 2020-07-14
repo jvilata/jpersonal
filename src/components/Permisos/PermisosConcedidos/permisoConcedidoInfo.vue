@@ -29,14 +29,27 @@
         <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-      <img :src="justificante" style="height: 50px; max-width: 50px">
+      <img :src="justificante" style="height: 50px; max-width: 50px" clickable @click="expanded = true">
       <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
       <q-input class="col-12" v-model="justificante" label="Justificante" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
       <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
     </div>
+
+    <q-dialog v-model="expanded"  >
+      <q-card style="width: 80vw">
+        <q-card-section class="row items-center q-pb-none">
+          <q-btn flat icon="close" color="primary" @click="expanded = false"/>
+        </q-card-section>
+        <q-card-section>
+          <q-img :src="justificante" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
   </div>
+
 </template>
 
 <script>
@@ -51,9 +64,9 @@ export default {
   data () {
     return {
       justificante: '',
+      expanded: false,
       options: {
-        destinationType: Camera.DestinationType.DATA_URL,
-        allowEdit: true
+        destinationType: Camera.DestinationType.DATA_URL
       } 
     }
   },

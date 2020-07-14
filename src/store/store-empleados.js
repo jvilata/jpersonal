@@ -67,7 +67,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData)
       .then((response) => {
-        console.log('response', response)
         resolve(response)
       })
       .catch(error => {

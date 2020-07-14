@@ -124,14 +124,13 @@ export default {
       
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.loadDiasPendientes(objFilter).then((response) => {
+        this.empleadoP.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
         this.empleadoP.diasPendientes.tdiaspendientes = 0
         for(let permiso of this.permisosPendientes) {
           if (permiso.tipoDiaLibre === 1) {
             this.empleadoP.diasPendientes.tdiaspendientes += permiso.diasEfectivos
           }
         }
-        this.empleadoP.diasPendientes.tdiaslibres = response.data[0].diasdevacaciones - this.empleadoP.diasPendientes.tdiaspendientes
-        this.empleadoP.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
       })
       .catch(error => {
         console.log('loadDiasPendientes', error);
@@ -140,6 +139,8 @@ export default {
       objFilter = { IdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.loadDiasConcedidos(objFilter).then(response => {
         this.empleadoP.diasConcedidos = response.data
+        this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
+        console.log('This should come first: diaslib', this.empleadoP.diasPendientes.tdiaslibres);
       })
 
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
@@ -163,6 +164,8 @@ export default {
       this.empleadoSelec(this.filterRecord)
     }
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
+    console.log('This should come second');
+    
   }, 
   destroyed () {
     this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord, empleadoP: this.empleadoP })
