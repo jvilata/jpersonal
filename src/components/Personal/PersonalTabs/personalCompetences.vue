@@ -20,6 +20,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { urlFotos } from 'boot/axios.js'
+import { date } from 'quasar'
 
 export default {
   props: ['value'], // en 'value' tenemos la tabla de datos del grid
@@ -35,51 +36,16 @@ export default {
           required: true,
           label: 'Cod Comp.',
           align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
+          field: row => row.idpk.codCompetencia,
           sortable: true
         },
-        { name: 'descripcion', align: 'center', label: 'Descripcion', field: 'descripcion', sortable: true },
-        { name: 'tipoCompetencia', label: 'Tipo', field: 'tipoCompetencia', sortable: true },
-        { name: 'fechaAdquisicion', label: 'Fecha Adq.', field: 'fechaAdquisicion' },
+        { name: 'descripcion', align: 'center', label: 'Descripcion', field: row => row.datosCompetencia.descripcion, sortable: true },
+        { name: 'tipoCompetencia', label: 'Tipo', field: row => row.datosCompetencia.tipoCompetencia, sortable: true },
+        { name: 'fechaAdquisicion', label: 'Fecha Adq.', field: 'fechaAdquisicion', format: val => date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') },
         { name: 'fechaCompromiso', label: 'Fecha Compromiso', field: 'fechaCompromiso' },
         { name: 'comentarios', label: 'Comentarios', field: 'comentarios' }
        ],
-      data: [
-        {
-          codCompetencia: 17,
-          descripcion: 'Francés',
-          tipoCompetencia: 'Idioma',
-          fechaAdquisicion: '19/3/2015',
-          fechaCompromiso: '',
-          comentarios: ''
-        }
-        // {
-        //   name: '58',
-        //   descripcion: 'C2 Americano',
-        //   tipoCompetencia: 'Idioma',
-        //   fechaAdquisicion: '28/6/2019',
-        //   fechaCompromiso: '',
-        //   comentarios: ''
-        // },
-        // {
-        //   name: '393',
-        //   descripcion: 'Seguridad de la Info',
-        //   tipoCompetencia: 'Curso',
-        //   fechaAdquisicion: '19/3/2015',
-        //   fechaCompromiso: '',
-        //   comentarios: 'Aprobado curso Seg.INFO'
-        // },
-        // {
-        //   name: '410',
-        //   descripcion: 'Doble grado en Informática y ADE',
-        //   tipoCompetencia: 'Estudios',
-        //   fechaAdquisicion: '17/04/2020',
-        //   fechaCompromiso: '',
-        //   comentarios: 'Finalizando 3º Carrera'
-        // }
-      ]
-     
+      data: []     
     }
   },
   computed: {
@@ -94,7 +60,6 @@ export default {
           .then(response => {
             console.log(response)
             this.data = response.data
-            
           })
           .catch(error => {
             this.$q.dialog({ title: 'Error', message: error.response.statusText })

@@ -51,8 +51,10 @@ export default {
   methods: {
     ...mapActions('empleados', ['loadDetalleEmpleado']),
     formatDate(date1){
-      date1 = date.extractDate(date1, 'YYYY-MM-DDTHH:mm:ss')
-      return date.formatDate(date1, 'DD/MM/YYYY')
+      if(date1 !== '') {
+        date1 = date.extractDate(date1, 'YYYY-MM-DDTHH:mm:ss')
+        return date.formatDate(date1, 'DD/MM/YYYY')
+      }
     }
   },
   computed: {

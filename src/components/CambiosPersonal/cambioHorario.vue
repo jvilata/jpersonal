@@ -340,19 +340,20 @@ export default {
     calculoHorasSem() {
         let diff = 0;
         this.sumaHoras = 0;
-        if (this.recordToSubmit.horaEntrada1 === null) this.recordToSubmit.horaEntrada1 = this.recordToSubmit.horaSalida1
-        if (this.recordToSubmit.horaSalida1 === null) this.recordToSubmit.horaSalida1 = this.recordToSubmit.horaEntrada1
-        if (this.recordToSubmit.horaEntrada2 === null) this.recordToSubmit.horaEntrada2 = this.recordToSubmit.horaSalida2
-        if (this.recordToSubmit.horaSalida2 === null) this.recordToSubmit.horaSalida2 = this.recordToSubmit.horaEntrada2
-        if (this.recordToSubmit.horaEntrada3 === null) this.recordToSubmit.horaEntrada3 = this.recordToSubmit.horaSalida3
-        if (this.recordToSubmit.horaSalida3 === null) this.recordToSubmit.horaSalida3 = this.recordToSubmit.horaEntrada3
-        if (this.recordToSubmit.horaEntrada4 === null) this.recordToSubmit.horaEntrada4 = this.recordToSubmit.horaSalida4
-        if (this.recordToSubmit.horaSalida4 === null) this.recordToSubmit.horaSalida4 = this.recordToSubmit.horaEntrada4
+        if (this.recordToSubmit.horaEntrada1 === null || this.recordToSubmit.horaEntrada1 === '') this.recordToSubmit.horaEntrada1 = this.recordToSubmit.horaSalida1
+        console.log(this.recordToSubmit)
+        if (this.recordToSubmit.horaSalida1 === null  || this.recordToSubmit.horaSalida1 === '') this.recordToSubmit.horaSalida1 = this.recordToSubmit.horaEntrada1
+        if (this.recordToSubmit.horaEntrada2 === null  || this.recordToSubmit.horaEntrada2 === '') this.recordToSubmit.horaEntrada2 = this.recordToSubmit.horaSalida2
+        if (this.recordToSubmit.horaSalida2 === null  || this.recordToSubmit.horaSalida2 === '') this.recordToSubmit.horaSalida2 = this.recordToSubmit.horaEntrada2
+        if (this.recordToSubmit.horaEntrada3 === null || this.recordToSubmit.horaEntrada3 === '') this.recordToSubmit.horaEntrada3 = this.recordToSubmit.horaSalida3
+        if (this.recordToSubmit.horaSalida3 === null || this.recordToSubmit.horaSalida3 === '') this.recordToSubmit.horaSalida3 = this.recordToSubmit.horaEntrada3
+        if (this.recordToSubmit.horaEntrada4 === null || this.recordToSubmit.horaEntrada4 === '') this.recordToSubmit.horaEntrada4 = this.recordToSubmit.horaSalida4
+        if (this.recordToSubmit.horaSalida4 === null || this.recordToSubmit.horaSalida4 === '') this.recordToSubmit.horaSalida4 = this.recordToSubmit.horaEntrada4
         var horasArray = [this.recordToSubmit.horaEntrada1, this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, this.recordToSubmit.horaSalida2]
         var i;
         let unit = 'hours'
         for( i = 0; i < horasArray.length ; i+=2 ) {
-            if(horasArray[i] !== null) {
+            if(horasArray[i] !== null && horasArray[i] !== '') {
                 if(horasArray[i] > horasArray[i+1]) { 
                     //si es horario de noche, la hora de entrada será mayor que la de salida -> hay que sumarle un dia para que la diferencia calculada sea correcta
                     horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) 
@@ -365,7 +366,7 @@ export default {
         this.sumaHoras *= 4 // *4 porque es de Lunes-Jueves con ese horario
         horasArray = [this.recordToSubmit.horaEntrada3, this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, this.recordToSubmit.horaSalida4 ]
         for( i = 0; i < horasArray.length ; i+=2 ) {
-            if(horasArray[i] !== null) {
+            if(horasArray[i] !== null && horasArray[i] !== '') {
                 if(horasArray[i] > horasArray[i+1]) { horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) }
              diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)
              this.sumaHoras += Math.abs(diff)
@@ -484,37 +485,37 @@ export default {
     },
 
     formatTime(time){
-        if(time !== null) return date.formatDate(date.extractDate(time,'YYYY-MM-DDTHH:mm'), 'HH:mm')
+        if(time !== null && time !== '') return date.formatDate(date.extractDate(time,'YYYY-MM-DDTHH:mm'), 'HH:mm')
     },
 
     ajustarFechaHora(pdate){
         var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm')
         d1 = new Date(2008,0,1, d1.getHours(), d1.getMinutes()) // el backend trabaja con 2008-1-1THH:mm
-        return date.formatDate(d1, 'YYYY-MM-DDTHH:mm')
+        return date.formatDate(d1, 'YYYY-MM-DDTHH:mm:ss')
     },
 
-    cargarHoras(){
-        this.recordToSubmit.horaEntrada1 = this.user.pers.horaEntrada1
-        this.recordToSubmit.horaSalida1 = this.user.pers.horaSalida1
-        this.recordToSubmit.horaEntrada2 = this.user.pers.horaEntrada2 
-        this.recordToSubmit.horaSalida2 = this.user.pers.horaSalida2
-        this.recordToSubmit.horaEntrada3 = this.user.pers.horaEntrada3 
-        this.recordToSubmit.horaSalida3 = this.user.pers.horaSalida3
-        this.recordToSubmit.horaEntrada4 = this.user.pers.horaEntrada4
-        this.recordToSubmit.horaSalida4 = this.user.pers.horaSalida4 
+    cargarHoras(res){
+        this.recordToSubmit.horaEntrada1 = res.horaEntrada1
+        this.recordToSubmit.horaSalida1 = res.horaSalida1
+        this.recordToSubmit.horaEntrada2 = res.horaEntrada2 
+        this.recordToSubmit.horaSalida2 = res.horaSalida2
+        this.recordToSubmit.horaEntrada3 = res.horaEntrada3 
+        this.recordToSubmit.horaSalida3 = res.horaSalida3
+        this.recordToSubmit.horaEntrada4 = res.horaEntrada4
+        this.recordToSubmit.horaSalida4 = res.horaSalida4 
     }
   },
 
-  beforeMount() { 
-      this.cargarHoras()
-  },
+//   beforeMount() { 
+//       this.cargarHoras()
+//   },
 
   mounted(){
-      this.calculoHorasSem()
-      this.$router.replace({ name: 'cambioHorario', params: { id: this.id, value: this.value } }) 
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {
          this.jornadaEmpl = Object.assign({}, response.data.jornada) 
+         this.cargarHoras(response.data)
+         this.calculoHorasSem()
        })
  },
 

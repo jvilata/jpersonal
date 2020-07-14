@@ -34,7 +34,7 @@
                 <q-btn
                   @click="openForm('otrosCambios')" 
                   color="primary" 
-                  label="Solicitar Otros Cambios" 
+                  label="Solicitar Cambios" 
                   style="height: 60px"/>
               </div>
             </div>
@@ -76,7 +76,7 @@ export default {
     ...mapActions('empleados', ['loadDetalleEmpleado']),
     ...mapActions('tabs', ['addTab']),
     openForm (otrosCambios) {
-      this.addTab(['otrosCambios', 'Otros Cambios', {}, 1])
+      this.addTab(['otrosCambios', 'Otros Cambios', {}, this.id])
     },
     updateRecord () {
       this.recordToSubmit.tipoProducto = JSON.stringify(this.recordToSubmit.tipoProducto.split(',')) // convierto a array en JSON
@@ -104,7 +104,6 @@ export default {
       //Llamaremos al BACKEND para pedir datos de este usuario 
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {
-         //console.log('response.data', response.data)
          this.recordToSubmit = Object.assign({}, response.data) // v-model: en 'value' podemos leer el valor del v-model
        })
     },

@@ -16,7 +16,9 @@
       <template v-slot:header="props">
         <!-- CABECERA DE LA TABLA -->
         <q-tr :props="props">
-
+          <q-th>
+            
+          </q-th>
           <q-th
             v-for="col in props.cols"
             :key="col.name"

@@ -28,7 +28,7 @@
                         outlined
                         stack-label
                         :value="formatDate(recordToSubmit.teletrabajoFechaDesde)"
-                        @blur="horasCorrectas()"
+                        @blur="fechasCorrectas()"
                         :rules="[val => !!val || 'Campo obligatorio']">
                     <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer">
@@ -49,7 +49,7 @@
                         clearable
                         outlined 
                         stack-label 
-                        @blur="horasCorrectas()"
+                        @blur="fechasCorrectas()"
                         :value="formatDate(recordToSubmit.teletrabajoFechaHasta)"
                         :rules="[val => !!val || 'Campo obligatorio']">
                     <template v-slot:prepend>
@@ -256,7 +256,7 @@ export default {
           return date.formatDate(date1, 'DD/MM/YYYY')
     },
 
-    horasCorrectas(){
+    fechasCorrectas(){
         console.log(date.getDateDiff(this.recordToSubmit.teletrabajoFechaHasta, this.recordToSubmit.teletrabajoFechaDesde, 'days'))
         if( date.getDateDiff(this.recordToSubmit.teletrabajoFechaHasta, this.recordToSubmit.teletrabajoFechaDesde, 'days') < 0 ) {
             this.alerta1('Fechas erróneas', 'La fecha en la que empieza el teletrabajo no puede ser un día posterior a la fecha de fin')
