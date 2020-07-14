@@ -42,10 +42,11 @@ const actions = {
     loginData.password = btoa(loginData.password) // base64
     axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/logon&auth=${loginData.auth}`, { params: {} }, { withCredentials: true })
       .then((response) => {
+        if(!response.data.id) { throw new Error("Credenciales incorrectas")}
         commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, pers: response.data }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
         LocalStorage.set('email', loginData.email)
         LocalStorage.set('password', loginData.password)
-        // this.dispatch('tabs/addTab', ['Acciones', 'Acciones', {}, 1], { root: true }) // llamo a la action->addTab del store->tabs y param: ['acciones','acciones',{},1]
+        
         //Aquí cargaremos datos globales a la app
         this.dispatch('tablasAux/loadTablasAux')
         this.dispatch('empleados/loadListaEmpleados')

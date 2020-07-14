@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item left-color="positive" right-color="negative" @left="reset" @right="reset">
+  <q-slide-item left-color="positive" right-color="negative" >
     <q-expansion-item
           clickable
           expand-icon="expand_more"

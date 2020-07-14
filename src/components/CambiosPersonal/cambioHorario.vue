@@ -258,8 +258,9 @@
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn @click="solicitarCambioHorario" :disabled="!recordToSubmit.aceptaComer30m || !condiciones || recordToSubmit.aceptaCambioHorario ? !disabled : disabled" color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
+                    <!-- :disabled="!recordToSubmit.aceptaComer30m || !condiciones || recordToSubmit.aceptaCambioHorario ? !disabled : disabled" -->
                 </div>
             </div>
         </q-card>

@@ -78,22 +78,7 @@ export default {
     openForm (otrosCambios) {
       this.addTab(['otrosCambios', 'Otros Cambios', {}, this.id])
     },
-    updateRecord () {
-      this.recordToSubmit.tipoProducto = JSON.stringify(this.recordToSubmit.tipoProducto.split(',')) // convierto a array en JSON
-      var formData = new FormData()
-      for (var key in this.recordToSubmit) {
-        formData.append(key, this.recordToSubmit[key])
-      }
-      return this.$axios.post('activos/bd_activos.php/guardarBD', formData, headerFormData)
-        .then(response => {
-          this.$q.dialog({ title: 'Aviso', message: 'Se ha actualizado registro', ok: true, persistent: true })
-          this.$emit('close')
-        })
-        .catch(error => {
-          this.$q.dialog({ title: 'Error', message: error.response.statusText })
-          this.desconectarLogin()
-        })
-    },
+    
     calculaAnyosExperiencia(){
        var fechaActual = (new Date()).getFullYear()
           var fechaInicio = date.formatDate(extractDate(this.user.pers.fecha_de_alta, 'YYYY-MM-DDTHH:mm:ss'), 'YYYY')

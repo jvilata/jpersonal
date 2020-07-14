@@ -16,9 +16,6 @@
       <template v-slot:header="props">
         <!-- CABECERA DE LA TABLA -->
         <q-tr :props="props">
-          <q-th>
-            
-          </q-th>
           <q-th
             v-for="col in props.cols"
             :key="col.name"
@@ -40,7 +37,7 @@
           >
             <div :style="col.style">
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF }${props.row.idpersonal}.jpg`" />
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`" />
               <div v-if="col.name==='vigente'">
                 <q-checkbox v-model="col.value" />
               </div>
@@ -84,7 +81,7 @@ export default {
       urlF: urlFotos,
       rowId: '',
       columns: [
-        { name: 'foto', align: 'left', label: 'Foto', field: 'foto', sortable: true },
+        { name: 'foto', align: 'left', label: 'Foto', field: 'foto' },
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
         { name: 'id', label: 'IdEmpleado', align: 'left', field: 'id', sortable: true, style: 'width: 20px' },
         { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },

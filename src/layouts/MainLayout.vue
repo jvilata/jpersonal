@@ -118,10 +118,20 @@ export default {
           }
         },
         {
+          title: 'Consultar cambios-permisos',
+          icon: 'how_to_reg',
+          link: {
+            name: 'aprobacionMain',
+            opcion: 1,
+            label: 'Aprobación Cambios-Permisos'
+          }
+        },
+        {
           title: 'Aprobación de cambios-permisos',
           icon: 'how_to_reg',
           link: {
             name: 'aprobacionMain',
+            opcion: 2,
             label: 'Aprobación Cambios-Permisos'
           }
         }
@@ -135,7 +145,7 @@ export default {
     ...mapActions('tabs', ['addTab']),
     ...mapActions('login', ['desconectarLogin']),
     openForm (link) {
-      this.addTab([link.name, link.label, {}, 1])
+      this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
     },
     desconectar () {
       this.desconectarLogin()

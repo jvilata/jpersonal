@@ -86,13 +86,21 @@ export default {
     }
   },
   mounted () {
+    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
-      this.filterRecord = {  empleado: this.user.pers.id, persona: this.user.pers.idautorizador }
+      if (this.keyValue === 1) { //Es tab de consultar solicitud
+        this.nomFormulario = 'Consultar Solicitudes'
+        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+      } else {
+        //Es aprobador
+        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+      }
       this.getRecords(this.filterRecord)
+      
     }
   },
   destroyed () {

@@ -1,17 +1,22 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
-    <!-- GRID. en row-key ponemos la columna del json que sea la id unica de la fila -->
     <q-table
       dense
       class="personalGrid-header-table"
       virtual-scroll
+      :pagination.sync="pagination"
+      :rows-per-page-options="[0]"
       :virtual-scroll-sticky-size-start="48"
       row-key="name"
       :data="data"
       :columns="columns"
-      table-style="max-height: 60vh; max-width: 96vw"
+      table-style="max-height: 65vh; max-width: 96vw"
     >
-
+    <template v-slot:bottom>
+        <div>
+          {{ data.length }} Filas
+        </div>
+      </template>
     </q-table>
     
   </q-item>
@@ -34,16 +39,17 @@ export default {
         {
           name: 'codCompetencia',
           required: true,
-          label: 'Cod Comp.',
+          label: 'Cod.',
           align: 'left',
           field: row => row.idpk.codCompetencia,
-          sortable: true
+          sortable: true,
+          style: 'width: 20px; whiteSpace: normal'
         },
-        { name: 'descripcion', align: 'center', label: 'Descripcion', field: row => row.datosCompetencia.descripcion, sortable: true },
-        { name: 'tipoCompetencia', label: 'Tipo', field: row => row.datosCompetencia.tipoCompetencia, sortable: true },
-        { name: 'fechaAdquisicion', label: 'Fecha Adq.', field: 'fechaAdquisicion', format: val => date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') },
-        { name: 'fechaCompromiso', label: 'Fecha Compromiso', field: 'fechaCompromiso' },
-        { name: 'comentarios', label: 'Comentarios', field: 'comentarios' }
+        { name: 'descripcion', align: 'left', label: 'Descripcion', field: row => row.datosCompetencia.descripcion, sortable: true, style: 'min-width: 200px; whiteSpace: normal' },
+        { name: 'tipoCompetencia', align: 'left', label: 'Tipo', field: row => row.datosCompetencia.tipoCompetencia, sortable: true },
+        { name: 'fechaAdquisicion', align: 'left', label: 'Fecha Adq.', field: 'fechaAdquisicion', format: val => date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') },
+        { name: 'fechaCompromiso', align: 'left', label: 'Fecha Compromiso', field: 'fechaCompromiso' },
+        { name: 'comentarios', align: 'left', label: 'Comentarios', field: 'comentarios' }
        ],
       data: []     
     }
