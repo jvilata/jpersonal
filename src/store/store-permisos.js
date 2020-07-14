@@ -20,40 +20,10 @@ const mutations = {
     Notify.create('Justificante eliminado')
   },
   loadPermisosPendientes(state, lista) {
-    //Lista se devuelve del backend
-    /* {
-      id: 0,
-      ejercicioAplicacion: 2020,
-      fechaDesde: '2020-06-04 00:00:00',
-      fechaHasta: '2020-06-04 00:00:00',
-      fechaSolicitud: "2020-06-29T15:51:27.000+0000",
-      diasEfectivos: 1,
-      datosTipoDiaLibre: { descripcionDiaLibre: 'Vacaciones' },
-      tipoDiaLibre: 1,
-      observaciones: 'test0',
-      tipoSolicitud: 'PERMISO',
-      estadoSolicitud: 1,
-      estadoSolicitudDesc: 'PENDIENTE',
-      empleado: 140,
-      datosEmpleado: { nombre: 'JOSE BLAS VILATA TAMARIT' }
-    }, */
     state.permisosPendientes = []
     state.permisosPendientes = lista
   },
   loadPermisosConcedidos(state, lista) {
-    //Lista se devuelve del backend
-    /* {
-      id: 0,
-      ejercicioAplicacion: 2020,
-      fechaDesde: '2020-06-04 00:00:00',
-      fechaHasta: '2020-06-04 00:00:00',
-      diasEfectivos: 1,
-      datosTipoDiaLibre: { descripcionDiaLibre: 'Vacaciones' },
-      tipoDiaLibre: 1,
-      observaciones: 'test0',
-      empleado: 140,
-      datosEmpleado: { nombre: 'JOSE BLAS VILATA TAMARIT' }
-    }, */
     state.permisosConcedidos = []
     state.permisosConcedidos = lista
   }
@@ -89,15 +59,7 @@ const actions = {
       })
   },
   deletePermisoPendiente({ commit }, payload){
-    console.log('payload', payload);
-    
-    axiosInstance.delete(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}&solIdEmpleado=${payload.empleado}&solejercicio=${payload.ejercicioAplicacion}`, payload, { withCredentials: true })
-      .then((response) => {
-        console.log('delete', response);
-      })
-      .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'deletePermisoPendiente' + error, { root: true })
-      })
+    return axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}`, payload, { withCredentials: true })
   },
 
 

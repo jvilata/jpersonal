@@ -10,7 +10,7 @@
     :caption="permiso.datosTipoDiaLibre.descripcionDiaLibre">
     <q-card>
         <q-card-section>
-            <permisoMoreInfo :permiso="permiso"/>
+            <permisoMoreInfo :permiso="permiso" @refresh="$emit('refresh')"/>
         </q-card-section>
     </q-card>
   </q-expansion-item>
@@ -31,7 +31,13 @@ export default {
   },
   methods: {
     formatDate (pdate) {
-      return date.formatDate(pdate, 'DD/MM/YYYY')
+      let dateObj = pdate.split((/[-: T]/g))
+      var YYYY = dateObj[0] + '';
+      var MM = (dateObj[1]) + '';
+      MM = (MM.length === 1) ? '0' + MM : MM;
+      var DD = dateObj[2] + '';
+      DD = (DD.length === 1) ? '0' + DD : DD;
+      return DD + "/" + MM + "/" + YYYY;
     }
   }
 }

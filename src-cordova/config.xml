@@ -22,4 +22,13 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <allow-navigation href="about:*" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+        <string>Se necesita acceso a la camara para escanear documentos</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+        <string>Se necesita acceso a la libreria para acceder a los justificantes</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
+        <string>Se necesita acceso a la libreria para guardar los documentos escaneados</string>
+    </edit-config>
 </widget>

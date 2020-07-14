@@ -33,11 +33,14 @@
           </div>
         </q-item-label>
 
+          
           <permisoPendiente v-for="(permiso, key) in value"
             :key="key"
             :permiso="permiso"
-            :id="key">
+            :id="key"
+            @refresh="$emit('refresh')">
           </permisoPendiente>
+
     </q-list>
     
 

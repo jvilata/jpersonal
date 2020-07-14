@@ -97,7 +97,7 @@ cfg.module.rules.push({
       importStrategy: 'auto',
 
       // Quasar plugins
-      plugins: ['Dialog', 'Loading', 'LocalStorage', 'Notify']
+      plugins: ['Dialog', 'Loading', 'LocalStorage', 'Notify', 'BottomSheet']
     },
 
     // animations: 'all', // --- includes all animations

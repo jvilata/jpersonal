@@ -29,14 +29,9 @@
         <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-      <q-file stack-label dense bottom-slots v-model="justificante" label="Seleccionar justificante" counter>
-        <template v-slot:prepend>
-          <q-icon flat name="cloud_upload" dense></q-icon>
-        </template>
-        <template v-slot:after>
-          <q-btn flat icon="close" @click.stop="delJust" dense/>
-        </template>
-      </q-file>
+      <img :src="justificante" style="height: 50px; max-width: 50px">
+      <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
+      <q-input class="col-12" v-model="justificante" label="Justificante" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
       <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
@@ -49,11 +44,17 @@ import { mapActions } from "vuex";
 import { date } from 'quasar'
 import  { Vue }  from 'vue'
 
+document.addEventListener('deviceready', () => {}, false)
+
 export default {
   props: ['permiso'],
   data () {
     return {
-      justificante: []
+      justificante: '',
+      options: {
+        destinationType: Camera.DestinationType.DATA_URL,
+        allowEdit: true
+      } 
     }
   },
   methods: {
@@ -82,8 +83,49 @@ export default {
         //this.$forceUpdate()
       })
     },
+    addPhoto() {
+      this.$q.bottomSheet({ 
+        message: 'Seleccionar Justificante',
+        actions: [
+          {
+            label: 'Cámara',
+            icon: 'photo_camera',
+            id: 'camara'
+          },
+          {
+            label: 'Galería',
+            icon: 'insert_photo',
+            id: 'galeria'
+          }
+        ]
+      }).onOk(action => {
+        console.log('Action chosen:', action.id)
+        if (action.id === 'galeria') { this.options.sourceType = Camera.PictureSourceType.SAVEDPHOTOALBUM }
+
+        navigator.camera.getPicture(
+          (data) => { // on success
+            console.log('data', data);
+            //let data64 = btoa(data)
+            this.justificante = `data:image/jpeg;base64,${data}`
+            console.log('justificante', this.justificante);
+            
+            this.options.sourceType = Camera.PictureSourceType.CAMERA
+          },
+          () => { // on fail
+            this.$q.notify('Could not access device camera.')
+            this.options.sourceType = Camera.PictureSourceType.CAMERA
+          },
+          this.options)
+      })
+    },
     formatDate (pdate) {
-      return date.formatDate(pdate, 'DD/MM/YYYY')
+      let dateObj = pdate.split((/[-: T]/g))
+      var YYYY = dateObj[0] + '';
+      var MM = (dateObj[1]) + '';
+      MM = (MM.length === 1) ? '0' + MM : MM;
+      var DD = dateObj[2] + '';
+      DD = (DD.length === 1) ? '0' + DD : DD;
+      return DD + "/" + MM + "/" + YYYY;
     },
   },
   mounted() {

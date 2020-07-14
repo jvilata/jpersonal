@@ -11,7 +11,6 @@
             {{ nomFormulario }}
           </q-item-label>
           <q-item-label>
-            <!-- poner un campo de fiterRecord que exista en este filtro -->
             <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
           </q-item-label>
         </q-item-section>
@@ -26,7 +25,6 @@
       </q-item>
 
       <q-dialog v-model="expanded"  >
-        <!-- formulario con campos de filtro -->
         <aprobacionFilter
           @getRecords="(value) => getRecords(value)"
           :value="filterRecord"
@@ -35,7 +33,6 @@
         />
       </q-dialog>
 
-      <!-- formulario tabla de resultados de busqueda -->
       <aprobacionItemsList
         v-model="listaCambios"
         @deleteCambios="(id) => deleteSolicitud(id)"

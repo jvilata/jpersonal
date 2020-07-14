@@ -1,7 +1,9 @@
-import { Loading } from 'quasar'
+import { Loading, copyToClipboard } from 'quasar'
 import { axiosInstance, headerFormData } from 'boot/axios.js'
 import querystring from 'querystring'
 import login from './store-login'
+import permisos from './store-permisos'
+import { getMaxListeners } from 'process'
 
 const state = {
   listaEmpleados: [],
@@ -34,7 +36,6 @@ const actions = {
   loadFilialEmpleado({ commit }, idempleado) {
     return new Promise((resolve, reject) => {
       var emp = state.listaEmpleados.find(record => record.id == idempleado)
-      
       let objFilter = { pais: emp.paisLaboral }
       axiosInstance.get(`bd_jpersonal.asp?action=filiales/list&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true })
       .then((response) => {
@@ -59,24 +60,7 @@ const actions = {
   },
 
   loadDiasPendientes({ commit }, objFilterP) {
-    return new Promise((resolve, reject) => {
-      console.log('objFilterP', objFilterP);
-      
-      axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true })
-      .then((response) => {
-        var diasPendientes = {
-          tdiaslibres: 0,
-          tdiasvacaciones: response.data[0].diasdevacaciones,
-          tdiaspendientes: 0
-        }
-
-        resolve(diasPendientes)
-      })
-      .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'loadDiasPendientes' + error, { root: true })
-        reject(error)
-      })
-    })
+    return axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true })
   },
 
   loadDiasConcedidos({ commit }, objFilterP) {
@@ -94,17 +78,18 @@ const actions = {
   },
 
   calcularResponsable( { commit }, params ){
-    return new Promise((resolve, reject) => {
-      axiosInstance.post(`bd_jpersonal.asp?action=cpersonal_of/calcularResponsable&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData)
-      .then((response) => {
-        resolve(response)
-      })
-      .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'calcularResponsable' + error, { root: true })
-        reject(error)
-      })
-    })
+    return axiosInstance.post(`bd_jpersonal.asp?action=cpersonal_of/calcularResponsable&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData)
   },
+
+  sendMail({ commit }, datos) {
+    axiosInstance.post(`bd_jpersonal.asp?action=services/sendmail&auth=${login.state.user.auth}`, querystring.stringify(datos), headerFormData)
+    .then((response) => {
+      console.log('response', response)
+    })
+    .catch(error => {
+      this.dispatch('mensajeLog/addMensaje', 'sendMail' + error, { root: true })
+    })
+  }
 }
 
 

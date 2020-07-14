@@ -24,7 +24,6 @@
         option-label="name"
         emit-value
         map-options
-        use-input
         behavior="menu">
       </q-select>
       
@@ -51,7 +50,7 @@ import { mapState, mapActions } from 'vuex'
 import { openURL } from "quasar";
 
 export default {
-  props: ['value'],
+  props: ['value', 'filialEmp'],
   data() {
     return {
       filterP: {},
@@ -84,8 +83,10 @@ export default {
     }
   },
   mounted() {
+    console.log('filialEmp', this.filialEmp);
     this.listaEmpleadosFilter = this.listaEmpleados
     this.filterP = Object.assign( {}, this.value)
+    
   },
   destroyed () {
     // guardamos valor en tabs por si despus queremos recuperarlo

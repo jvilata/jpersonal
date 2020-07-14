@@ -74,24 +74,6 @@ const routes = [
                 name: 'personalCompetences', 
                 component: () => import('components/Personal/PersonalTabs/personalCompetences.vue'), 
                 props: true 
-              },
-              { 
-                path: 'cambioHorario', 
-                name: 'cambioHorario', 
-                component: () => import('components/CambiosPersonal/cambioHorario.vue'), 
-                props: true 
-              },
-              { 
-                path: 'teletrabajo', 
-                name: 'teletrabajo', 
-                component: () => import('components/CambiosPersonal/teletrabajo.vue'), 
-                props: true 
-              },
-              { 
-                path: 'otrosCambios', 
-                name: 'otrosCambios', 
-                component: () => import('components/CambiosPersonal/otrosCambios.vue'), 
-                props: true 
               }
                
             ]

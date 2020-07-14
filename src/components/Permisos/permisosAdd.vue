@@ -125,7 +125,9 @@ export default {
     ...mapActions('empleados', ['calculaResponsable']),
     ...mapActions('mensajeLog', ['addMensaje']),
     formatDate (pdate, mask) {
+      console.log(pdate);
       return date.formatDate(pdate, mask)
+
     },
     calcDiasEfectivos() {
       if (this.permisoToAdd.fechaDesde && this.permisoToAdd.fechaHasta) {
@@ -140,12 +142,6 @@ export default {
       }
     },
     solicitarPermiso() {
-      //Cargamos datos adicionales para las comprobaciones
-      console.log('empleadoP', this.empleadoP)
-      this.empleadoP.diasPendientes.tdiaspendientes = this.permisosPendientes.length
-      this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.permisosConcedidos.length
-
-
       //Creamos el registro de la solicitud
       let solicitud = {
         ejercicioAplicacion: this.permisoToAdd.ejercicioAplicacion,
@@ -197,15 +193,19 @@ export default {
           binsertar = this.solicitarSegunReglas2017(solicitud)
         }
       }
-      if ( (solicitud.tipoDiaLibre >= 10) && (solicitud.tipoDiaLibre <= 15) || solicitud.tipoDiaLibre == 17) { //Permiso NO Retribuido
+      if ( (solicitud.tipoDiaLibre >= 10) && (solicitud.tipoDiaLibre <= 15) || solicitud.tipoDiaLibre === 17) { //Permiso NO Retribuido
+
+        console.log('tdiaslibres', this.empleadoP.diasPendientes.tdiaslibres);
+        console.log('diasefectivos', solicitud.diasEfectivos);
+        console.log('suma', (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes));
+        
         if ( solicitud.diasEfectivos < 1 ) { //Solo permito dias completos
           this.alerta('Atención',"Sólo se permiten permisos no retribuidos de día completo, considere cambiar por Vacaciones. Por favor corrija la entrada")
           binsertar = false
-        } else 
-            if ( this.empleadoP.diasPendientes.tdiaslibres >= (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes) ) {
+        } else if ( this.empleadoP.diasPendientes.tdiaslibres >= (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes) ) {
               this.alerta('Aviso',"Mientras queden suficientes vacaciones la empresa recomienda no tomar permisos no retribuidos. Por favor corrija la entrada si lo considera conveniente");
-            }
         }
+      }
 
       //LLAMADA BACKEND
       if (binsertar) {
