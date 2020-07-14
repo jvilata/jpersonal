@@ -26,7 +26,6 @@ const mutations = {
     state.bloqueFilialEmpleado= bloques
     console.log('bloqueFilialEmpleado', state.bloqueFilialEmpleado);
   },
-  }
 }
 
 const actions = {
