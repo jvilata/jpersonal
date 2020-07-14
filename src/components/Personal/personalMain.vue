@@ -58,18 +58,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('login', ['user']) // importo state.user desde store-login
+    ...mapState('login', ['user']), // importo state.user desde store-login
+
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
+    ...mapActions('empleados', ['loadListaDetalleEmpleados']),
     getRecords (filter) {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
       var objFilter = Object.assign({}, filter)
       // objFilter.estadoActivo = (objFilter.estadoActivo !== null ? objFilter.estadoActivo.join() : null) // paso de array a concatenacion de strings (join)
-      return this.$axios.get('bd_personal.asp?action=findPersonal', { params: objFilter })
+      this.loadListaDetalleEmpleados(filter)
         .then(response => {
-          this.registrosSeleccionados = response.data
+          this.registrosSeleccionados = response.data.root
           this.expanded = false
         })
         .catch(error => {
@@ -85,7 +87,7 @@ export default {
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
-      this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1', id: this.user.pers.id  }
+      this.filterRecord = { codEmpresa: this.user.codEmpresa, vigente: '1', query: this.user.pers.nombre  }
       this.getRecords(this.filterRecord)
     }
   },

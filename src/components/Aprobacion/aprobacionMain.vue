@@ -11,7 +11,8 @@
             {{ nomFormulario }}
           </q-item-label>
           <q-item-label>
-            <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
+            <!-- poner un campo de fiterRecord que exista en este filtro -->
+            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + (filterRecord.estadoSolicitud ? ' Estado Solicitud: '+ filterRecord.estadoSolicitud + ' | ': '') + (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud  : '') : 'Pulse para definir filtro') }}</small>
           </q-item-label>
         </q-item-section>
         <q-item-section side>
@@ -55,6 +56,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user']), // importo state.user desde store-login
     ...mapState('aprobacion', ['listaCambios'])
   },
@@ -64,20 +66,39 @@ export default {
     getRecords (filter) {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-      this.getListaCambios(filter)
+      var objFilter = Object.assign({}, filter)
+      
+      return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
+        .then(response => {
+          this.getListaCambios(filter)
+          this.registrosSeleccionados = response.data
+          this.expanded = false
+        })
+        .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error.response.statusText })
+          this.desconectarLogin()
+        })
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
     }
   },
   mounted () {
+    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
-      this.filterRecord = {  empleado: this.user.pers.id }
+      if (this.keyValue === 1) { //Es tab de consultar solicitud
+        this.nomFormulario = 'Consultar Solicitudes'
+        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+      } else {
+        //Es aprobador
+        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+      }
       this.getRecords(this.filterRecord)
+      
     }
   },
   destroyed () {

@@ -4,11 +4,11 @@
       <div class="row q-pa-sm items-baseline" style="max-width: 360px">
           <div class="col-xs-4">Fecha Desde</div>
           <div class="col-xs-8">
-              <q-input filled :value="formatDate(dateDesde)">
+              <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaDesde)">
               <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="dateDesde" @input="() => $refs.qDateProxy.hide()" />
+                      <q-date v-model="recordToSubmit.teletrabajoFechaDesde" @input="() => $refs.qDateProxy.hide()" />
                   </q-popup-proxy>
                   </q-icon>  
               </template>
@@ -21,11 +21,11 @@
       <div class="row q-pa-sm items-baseline" style="max-width: 360px">
             <div class="col-xs-4">Fecha Hasta</div>
             <div class="col-xs-8">
-              <q-input filled :value="formatDate(dateHasta)">
+              <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaHasta)">
               <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="dateHasta" @input="() => $refs.qDateProxy.hide()" />
+                      <q-date v-model="recordToSubmit.teletrabajoFechaHasta" @input="() => $refs.qDateProxy.hide()" />
                   </q-popup-proxy>
                   </q-icon>
               </template>
@@ -37,7 +37,7 @@
             </div>
       </div>
       <div class="col-xs-12">
-        <q-input v-model="observaciones" label="Observaciones" autogrow @keyup.enter.stop />
+        <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Observaciones" autogrow @keyup.enter.stop />
       </div>
       <div class="row justify-center text-center q-pt-xl">
         <q-btn
@@ -61,9 +61,7 @@ export default {
   data () {
     return {
       expanded: false,
-      dateDesde: '',
-      dateHasta: '',
-      observaciones: ''
+      recordToSubmit: {}
     }
   },
   computed: {
@@ -71,18 +69,24 @@ export default {
     ...mapState('login', ['user'])
   },
   methods: {
+    ...mapActions('empleados', ['loadDetalleEmpleado']),
     ...mapActions('tabs', ['addTab']),
     openForm (link) {
       this.addTab(['teletrabajo', 'Teletrabajo', {}, 1])
     },
-    editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
-    //rowChanges contiene toda la info de cada persona 
-      this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
-      //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
-    },
-    formatDate(pdate) {
-      return date.formatDate(pdate, 'DD/MM/YYYY')
+    formatDate(date1) {
+      if(date1 !== '') {
+        date1 = date.extractDate(date1, 'YYYY-MM-DDTHH:mm:ss')
+        return date.formatDate(date1, 'DD/MM/YYYY')
+      }
     }
+  },
+  mounted () {
+     //Llamaremos al BACKEND para pedir datos de este usuario 
+      this.loadDetalleEmpleado(this.user.pers.id)
+       .then(response => {
+         this.recordToSubmit = Object.assign({}, response.data) // v-model: en 'value' podemos leer el valor del v-model
+       })
   }
 }
 </script>

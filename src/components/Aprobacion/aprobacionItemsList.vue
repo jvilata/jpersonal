@@ -50,10 +50,6 @@ import { date } from 'quasar'
 
 export default {
   props: ['value'], // en 'value' tenemos la tabla de datos del grid
-  data () {
-    return {
-    }
-  },
   components: {
     aprobacionItem: require('components/Aprobacion/aprobacionItem.vue').default
   }

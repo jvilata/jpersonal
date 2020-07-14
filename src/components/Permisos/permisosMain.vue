@@ -38,7 +38,7 @@
     </q-dialog>
 
     <q-tab-panels v-model="ltab" animated >
-      <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name"  class="q-pa-none">
+      <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name" class="q-pa-none">
         <router-view @close="$emit('close')"/>
       </q-tab-panel>
     </q-tab-panels>

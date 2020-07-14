@@ -20,7 +20,13 @@
           use-input
           behavior="menu"
         />
-        <q-input outlined clearable label="Aprobador" stack-label v-model="filterR.persona" />
+        <q-input 
+          outlined 
+          clearable 
+          label="Aprobador" 
+          stack-label 
+          v-model="filterR.persona" 
+        />
         <q-select
           label="Estado"
           stack-label
@@ -51,8 +57,8 @@
         />
 
       <q-card-actions align="right">
+        <q-btn  flat label="Cancel" color="primary" @click="$emit('close')"/>
         <q-btn  flat type="submit" label="Buscar" color="primary"/>
-        <q-btn  flat label="Cancel" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
       </q-card-actions>
   </q-form>
   </q-card>
@@ -74,14 +80,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('empleados', ['listaEmpleados', 'search']),
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user']),
     ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
   },
   methods: {
-    ...mapActions('empleados', ['setSearch']),
     getRecords () {
-      this.$emit('getRecords', this.filterR) // lo captura accionesMain
+      this.$emit('getRecords', this.filterR) // lo captura aprobacionMain
     },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD-MM-YYYY')

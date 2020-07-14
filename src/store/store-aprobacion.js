@@ -26,6 +26,7 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'getListaCambios' + error, { root: true })
       })
   },
+  
   deleteCambios( { commit }, objToDelete) {
     axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${objToDelete.id}&auth=${login.state.user.auth}`, { }, { withCredentials: true }) // tipo acciones
       .then((response) => {

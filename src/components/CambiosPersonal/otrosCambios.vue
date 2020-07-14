@@ -22,7 +22,7 @@
       <div class="row q-pa-sm" >
           <div class="col-xs-12">
               <q-input 
-                  v-model="motivoTeletrab" 
+                  v-model="recordToSubmit.motivoTeletrab" 
                   label="Indique los cambios que desea realizar"
                   type="textarea"
                   @keyup.enter.stop />
@@ -30,7 +30,7 @@
       </div>
       <div class="row q-pb-md justify-center text-center" >
           <div class="col-xs-12 q-mt-sm">
-              <q-btn :disabled="motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="height: 60px"/>
+              <q-btn @click="solicitarCambios()" :disabled="recordToSubmit.motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="height: 60px"/>
           </div>
       </div>
       <div class="justify-bottom text-bottom">
@@ -49,17 +49,22 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex' 
+
 export default {
   props: ['value', 'id', 'keyValue'], 
   data() {
     return {
-      motivoTeletrab: '',
+      recordToSubmit: {
+        motivoTeletrab: ''
+      },
       protDatos: 'PROTECCIÓN DE DATOS',
       protMas: '',
       disabled: false
   }
   },
   methods: {
+    ...mapActions('empleados', ['loadFilialEmpleado']),
     confirm () {
       this.$q.dialog({
         title: 'Protección de Datos',
@@ -76,6 +81,36 @@ export default {
         // console.log('I am triggered on both OK and Cancel')
       })
     },
+    solicitarCambios() {
+      this.loadFilialEmpleado(this.user.pers.id)
+      .then(result => {
+        var data = {
+        descripcion: this.recordToSubmit.motivoTeletrab,
+        tipologia: 11, // recopilacion
+        encargado: 1174,
+        prioridad: 1,
+        fechaT: new Date(),
+        estado: 'PENDIENTE',
+        empleado: this.user.pers.idpersonal,
+        solicitante: this.user.pers.idpersonal ,
+        delegacion: result.filial.idfilial
+        }
+        this.$axios.post(`bd_jpersonal.asp?action=tareasLaboral/list&auth=${this.user.auth}`, data)
+          .then(result => {
+            this.$q.dialog({
+            color: 'primary',
+            message: `Se ha registrado su solicitud de cambio.`
+            }).onOk(() => {
+              this.$emit('close')
+            })
+          })
+          .catch(error => { console.log(error.message) })  
+      })
+      .catch(error => { console.log(error.message) })
+      }
+  },
+  computed:{
+    ...mapState('login', ['user'])
   }
     
 }

@@ -89,6 +89,7 @@ export default {
     },
   },
   mounted(){
+    
     if(this.item.fechaSolicitud) {
       this.fechaSolicitud = (new Date(Date.parse(this.item.fechaSolicitud)))
       this.fechaSolicitud = this.fechaSolicitud.toLocaleDateString("en-GB")
