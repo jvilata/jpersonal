@@ -14,9 +14,9 @@
                 <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
             </q-item-section>
             <q-item-section side top>
-              <q-badge outline :color="item.estadoSolicitudDesc == 'APROBADO' ? 'positive' : 
-                item.estadoSolicitudDesc == 'DENEGADO' ? 'negative' : 
-                item.estadoSolicitudDesc == 'CONC.PROVISIONAL' ? 'warning' : 'primary'" 
+              <q-badge outline :color="item.estadoSolicitudDesc === 'CONCEDIDA' ? 'positive' : 
+                item.estadoSolicitudDesc === 'DENEGADA' ? 'negative' : 
+                item.estadoSolicitudDesc === 'CONC.PROVISIONAL' ? 'warning' : 'primary'" 
                 :label="item.estadoSolicitudDesc" />
             </q-item-section>
           </template>
@@ -59,25 +59,18 @@ import { date } from 'quasar'
 
 export default {
   props: ['item', 'id'],
-  data () {
-    return {
-      expanded: false
-    }
-  },
   components: {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
     itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
 
-
   },
   methods: {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
-    reset () { 
-    },
+
     confirm(){
       this.$q.dialog({
       title: 'Eliminar Solicitud',

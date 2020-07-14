@@ -16,7 +16,7 @@
           </q-btn-->
           <q-btn round flat class="bg-red-9 text-weight-light">
             <q-avatar size="40px">
-              {{ user.pers.email.substr(0,2) }}
+              {{ user.pers.email.substring(0,2) }}
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
             <q-menu auto-close :offset="[110, 0]">
@@ -25,7 +25,7 @@
                   <div class="row">
                     <div class="col-4">
                       <q-avatar round flat size="80px" class="bg-red-9 text-white text-weight-light">
-                        {{ user.pers.email.substr(0,2).toUpperCase() }}
+                        {{ user.pers.email.substring(0,2).toUpperCase() }}
                       </q-avatar>
                     </div>
                     <div class="col">
@@ -73,15 +73,6 @@
       <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png" />
     </q-drawer>
     <q-footer>
-      <!-- podemos poner tabs en el pie para dispositivos moviles pero quita pantalla y no me gusta
-      <q-tabs>
-        <q-route-tab v-for="link in menuItems"
-          :key="link.title"
-          :icon="link.icon"
-          :label="link.title"
-          :to="link.link"
-          exact />
-      </q-tabs> -->
     </q-footer>
 
     <q-page-container>
@@ -106,24 +97,8 @@ export default {
           title: 'Consultar Datos',
           icon: 'group',
           link: {
-            name: 'personalMain',
+            name: 'personalFormMain',
             label: 'Consultar Datos'
-          }
-        },
-        {
-          title: 'Clientes',
-          icon: 'list',
-          link: {
-            name: 'clientesMain',
-            label: 'Clientes'
-          }
-        },
-        {
-          title: 'Dashboard',
-          icon: 'dashboard',
-          link: {
-            name: 'dashboardMain',
-            label: 'Dashboard'
           }
         },
         {
@@ -132,6 +107,14 @@ export default {
           link: {
             name: 'permisosMain',
             label: 'Solicitud de permisos'
+          }
+        },
+        {
+          title: 'Buscar Empleado',
+          icon: 'search',
+          link: {
+            name: 'personalMain',
+            label: 'Buscar Empleado'
           }
         },
         {

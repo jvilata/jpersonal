@@ -6,12 +6,16 @@ import permisos from './store-permisos'
 
 const state = {
   listaEmpleados: [],
+  listaPaises: [],
   idautorizador: 0
 }
 
 const mutations = {
   loadListaEmpleados(state, lista) {
     state.listaEmpleados= lista
+  },
+  loadListaPaises(state, lista) {
+    state.listaPaises= lista
   },
   loadFilialEmpleado(state, filial) {
     state.filialEmpleado= filial    
@@ -27,6 +31,14 @@ const mutations = {
 }
 
 const actions = {
+  loadListaDetalleEmpleados({ commit }, objFilter) {
+    return axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) 
+  },
+
+  loadDetalleEmpleado({ commit }, id) {
+    return axiosInstance.get(`bd_jpersonal.asp?action=pers_empleados_of/id/${id}&auth=${login.state.user.auth}`, { }, { withCredentials: true }) 
+  },
+
   loadListaEmpleados({ commit }, objFilter) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state 
     axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/combo&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
@@ -42,6 +54,40 @@ const actions = {
       })
   },
 
+  loadCompetencias({ commit }) {
+    return axiosInstance.get(`bd_jpersonal.asp?action=competencias&auth=${login.state.user.auth}`, { params: {idempleado: login.state.user.pers.id} }, { withCredentials: true }) 
+  },
+
+  loadListaPaises({ commit }) {
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state 
+    axiosInstance.get(`bd_jpersonal.asp?action=Codigospais/list&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        if (response.data.length === 0) {
+          this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + 'No existen datos', { root: true })
+        } else {
+          commit('loadListaPaises', response.data)
+        }
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + error, { root: true })
+      })
+  },
+
+  loadListaPuestos({ commit }, anyosExp, areaempleado) {
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state 
+    axiosInstance.get(`bd_jpersonal.asp?action=puesto/list&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        if (response.data.length === 0) {
+          this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + 'No existen datos', { root: true })
+        } else {
+          commit('loadListaPaises', response.data)
+        }
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + error, { root: true })
+      })
+  },
+
   loadFilialEmpleado({ commit }, idempleado) {
     return new Promise((resolve, reject) => {
       var emp = state.listaEmpleados.find(record => record.id === idempleado)
@@ -53,7 +99,6 @@ const actions = {
         axiosInstance.get(`bd_jpersonal.asp?action=filialesbloques/list&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true })
         .then((response) => {
           filialEmpleado.bloquesFilial = response.data
-          
           resolve(filialEmpleado)
         })
         .catch(error => {
@@ -77,7 +122,6 @@ const actions = {
           tdiasvacaciones: response.data[0].diasdevacaciones,
           tdiaspendientes: 0
         }
-
         resolve(diasPendientes)
       })
       .catch(error => {
@@ -91,7 +135,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados`, querystring.stringify(objFilterP), headerFormData)
       .then((response) => {
-        console.log('response', response)
         resolve(response)
       })
       .catch(error => {

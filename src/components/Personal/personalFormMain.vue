@@ -24,7 +24,7 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label class="text-h6">
-                  {{ value.nombre }}
+                  {{ user.pers.nombre }}
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
@@ -132,8 +132,7 @@ export default {
   methods: {
     ...mapActions('tabs', ['addTab']),
     openForm (link) {
-      this.addTab([link.name, link.label + this.user.pers.id, {}, this.id])
-
+      this.addTab([link.name, link.label, {}, this.id])
     }
   },
   mounted () {

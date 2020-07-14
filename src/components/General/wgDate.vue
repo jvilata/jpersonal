@@ -26,7 +26,7 @@ export default {
         firstDayOfWeek: 1
       },
       myDate: '',
-      myMask: 'YYYY-MM-DD HH:mm:ss',
+      myMask: 'YYYY-MM-DDTHH:mm:ss',
       myShowTime: false
     }
   },

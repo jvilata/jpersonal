@@ -31,7 +31,7 @@ export default {
       rowId: '',
       columns: [
         {
-          name: 'name',
+          name: 'codCompetencia',
           required: true,
           label: 'Cod Comp.',
           align: 'left',
@@ -47,60 +47,65 @@ export default {
        ],
       data: [
         {
-          name: 17,
+          codCompetencia: 17,
           descripcion: 'Francés',
           tipoCompetencia: 'Idioma',
           fechaAdquisicion: '19/3/2015',
           fechaCompromiso: '',
           comentarios: ''
-        },
-        {
-          name: '58',
-          descripcion: 'C2 Americano',
-          tipoCompetencia: 'Idioma',
-          fechaAdquisicion: '28/6/2019',
-          fechaCompromiso: '',
-          comentarios: ''
-        },
-        {
-          name: '393',
-          descripcion: 'Seguridad de la Info',
-          tipoCompetencia: 'Curso',
-          fechaAdquisicion: '19/3/2015',
-          fechaCompromiso: '',
-          comentarios: 'Aprobado curso Seg.INFO'
-        },
-        {
-          name: '410',
-          descripcion: 'Doble grado en Informática y ADE',
-          tipoCompetencia: 'Estudios',
-          fechaAdquisicion: '17/04/2020',
-          fechaCompromiso: '',
-          comentarios: 'Finalizando 3º Carrera'
         }
+        // {
+        //   name: '58',
+        //   descripcion: 'C2 Americano',
+        //   tipoCompetencia: 'Idioma',
+        //   fechaAdquisicion: '28/6/2019',
+        //   fechaCompromiso: '',
+        //   comentarios: ''
+        // },
+        // {
+        //   name: '393',
+        //   descripcion: 'Seguridad de la Info',
+        //   tipoCompetencia: 'Curso',
+        //   fechaAdquisicion: '19/3/2015',
+        //   fechaCompromiso: '',
+        //   comentarios: 'Aprobado curso Seg.INFO'
+        // },
+        // {
+        //   name: '410',
+        //   descripcion: 'Doble grado en Informática y ADE',
+        //   tipoCompetencia: 'Estudios',
+        //   fechaAdquisicion: '17/04/2020',
+        //   fechaCompromiso: '',
+        //   comentarios: 'Finalizando 3º Carrera'
+        // }
       ]
      
     }
   },
   computed: {
     ...mapState('tablasAux', ['listaSINO']),
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user']),
+   
   },
   methods: {
-    ...mapActions('tabs', ['addTab']),
-    editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
-    //rowChanges contiene toda la info de cada persona 
-      this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
-      //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
-    },
-    ampliarImagen (record) {
-      this.regper = record
-      this.expanded = true
-    },
-    mostrarDatosPieTabla () {
-      return this.value.length + ' Filas'
-    }
+    ...mapActions('empleados', ['loadCompetencias']),
+    getCompetencias(){
+      this.loadCompetencias()
+          .then(response => {
+            console.log(response)
+            this.data = response.data
+            
+          })
+          .catch(error => {
+            this.$q.dialog({ title: 'Error', message: error.response.statusText })
+            this.desconectarLogin()
+          })
+    } 
+  },
+  mounted(){
+    this.getCompetencias()
   }
+   
 }
 </script>
 <style lang="sass">

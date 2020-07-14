@@ -80,7 +80,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('empleados', ['listaEmpleados', 'search']),
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user']),
     ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
   },

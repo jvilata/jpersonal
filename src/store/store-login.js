@@ -49,6 +49,7 @@ const actions = {
         //Aquí cargaremos datos globales a la app
         this.dispatch('tablasAux/loadTablasAux')
         this.dispatch('empleados/loadListaEmpleados')
+        this.dispatch('empleados/loadListaPaises')
 
         this.$router.push('/sinTabs')
       })
@@ -56,50 +57,7 @@ const actions = {
         commit('loginStop', error) // .response.data.error
       })
   },
-  doLogin2 ({ commit }, loginData) {
-    commit('loginStart')
-    if (loginData.firebaseToken) commit('guardarToken', loginData.firebaseToken) // si viene de firebase tendremos token
-    // para esta llamada al backend es necesario pasar los parametros en formato formData (campos de formulario)
-    // tenemos que convertir los atributos del objeto loginData a campos (fields) de un formData
-    if (!loginData.action) loginData.action = 'login' // añadimos el atributo action que espera el backend si no lo tiene
-    loginData.auth = btoa(loginData.email + ':' + loginData.password) // token auth basica
-    loginData.password = btoa(loginData.password) // base64
-    axiosInstance.post('login.asp', querystring.stringify(loginData), headerFormData)
-      .then((response) => {
-        // const str = response.data.replace(/'/g, '"') // el JSON que devuelve no es correcto porque es con comillas simples y hay que pasarlo a dobles
-        const user = response.data //Devuelve el nombre de usuario (user.login)
-        if (user.failure) {
-          throw new Error('Credenciales incorrectas. Inténtelo de nuevo')
-        } else {
-          // si el usuario existe, busco sus datos personales
-          axiosInstance.get('bd_personal.asp?action=findPersonal', { params: { login: user.login } }) // { idPersonal: user.idPersonal } 
-            .then((response) => {
-              if (response.data.failure) throw new Error(response.data.failure)
-              if (response.data.length === 0) {
-                throw new Error('No existe persona asociada al usuario. Inténtelo de nuevo')
-              } else {
-                user.email = response.data[0].email
-                response.data[0].id = parseInt(response.data[0].id) //convertimos de String a Int el id
-                commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, user: user, pers: response.data[0] }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
-                LocalStorage.set('email', loginData.email)
-                LocalStorage.set('password', loginData.password)
-                // this.dispatch('tabs/addTab', ['Acciones', 'Acciones', {}, 1], { root: true }) // llamo a la action->addTab del store->tabs y param: ['acciones','acciones',{},1]
-                //Aquí cargaremos datos globales a la app
-                this.dispatch('tablasAux/loadTablasAux')
-                this.dispatch('empleados/loadListaEmpleados')
-
-                this.$router.push('/sinTabs')
-              }
-            })
-            .catch(error => {
-              commit('loginStop', error) // .response.data.error
-            })
-        }
-      })
-      .catch(error => {
-        commit('loginStop', error) // .response.data.error
-      })
-  },
+  
   desconectarLogin ({ commit }) {
     // cerramos todos los tabs y redirigimos al login
     this.dispatch('tabs/removeAllTabs', [], { root: true })

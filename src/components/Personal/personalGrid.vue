@@ -16,8 +16,6 @@
       <template v-slot:header="props">
         <!-- CABECERA DE LA TABLA -->
         <q-tr :props="props">
-          <q-th>
-          </q-th>
 
           <q-th
             v-for="col in props.cols"
@@ -33,31 +31,6 @@
 
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
-          <q-td>
-            <!-- columna de acciones: editar, borrar, etc -->
-            <div style="max-width: 20px">
-            <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="rowId===`m_${props.row.id}`"
-              @click.stop="editRecord(props.row, props.row.id)"
-              round
-              dense
-              size="sm"
-              color="primary"
-              icon="edit">
-              <q-tooltip>Editar</q-tooltip>
-            </q-btn>
-            <!--q-btn flat v-if="rowId===`m_${props.row.id}`"
-              @click.stop="deleteRecord(props.row.id)"
-              round
-              dense
-              size="sm"
-              color="red"
-              icon="delete">
-              <q-tooltip>Borrar</q-tooltip>
-            </q-btn-->
-            </div>
-          </q-td>
-
           <q-td
             v-for="col in props.cols"
             :key="col.name"
@@ -112,14 +85,14 @@ export default {
         { name: 'foto', align: 'left', label: 'Foto', field: 'foto', sortable: true },
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
         { name: 'id', label: 'IdEmpleado', align: 'left', field: 'id', sortable: true, style: 'width: 20px' },
-        { name: 'idPersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
-        { name: 'nombreArea', align: 'left', label: 'Area', field: 'nombrearea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
+        { name: 'areaNombre', align: 'left', label: 'Area', field: 'areaNombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
         { name: 'extension', align: 'left', label: 'Extension', field: 'extension', sortable: true },
-        { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'pais_laboral', sortable: true, style: 'width: 30px' },
-        { name: 'paisTrabaja', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },
-        { name: 'grupoetm', align: 'left', label: 'GrupoETM', field: 'grupoetm', sortable: true },
-        { name: 'vehiculo', align: 'left', label: 'Vehiculo', field: 'vehiculo', sortable: true, style: 'width: 130px; whiteSpace: normal', format: val => val.substring(0, 30) },
-        { name: 'fecha_de_alta', align: 'left', label: 'Fecha Alta', field: 'fecha_de_alta', sortable: true },
+        { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'paisLaboral', sortable: true, style: 'width: 30px' },
+        { name: 'pais', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },
+        { name: 'grupoETM', align: 'left', label: 'GrupoETM', field: 'grupoETM', sortable: true },
+        { name: 'proximaTutorizacion', align: 'left', label: 'Próx.Tutoriz.', field: 'proximaTutorizacion', sortable: true },
+        { name: 'vehiculo', align: 'left', label: 'Vehiculo', field: 'vehiculo', sortable: true, style: 'width: 130px; whiteSpace: normal', format: val => val !== null ? val.substring(0, 30) : ''},
         { name: 'vigente', align: 'left', label: 'Vigente', field: 'vigente', sortable: true, format: val => val === 'Verdadero' }
       ],
       pagination: { rowsPerPage: 0 }
@@ -130,12 +103,6 @@ export default {
     ...mapState('login', ['user'])
   },
   methods: {
-    ...mapActions('tabs', ['addTab']),
-    editRecord (rowChanges, id) { // no lo uso aqui pero lo dejo como demo
-    //rowChanges contiene toda la info de cada persona 
-      this.addTab(['personalFormMain', 'Personal-' + rowChanges.id, rowChanges, rowChanges.id])
-      //'personalFormMain es el ComponentName // Personal- +id es el label del tab // rowChanges es el VALUE 
-    },
     ampliarImagen (record) {
       this.regper = record
       this.expanded = true

@@ -12,7 +12,7 @@
           </q-item-label>
           <q-item-label>
             <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.empleado ? 'Empleado: '+ filterRecord.empleado + ' | ': '') + (filterRecord.persona ? ' Autorizador: '+ filterRecord.persona + ' | ' : '') + (filterRecord.estadoSolicitud ? ' Estado Solicitud: '+ filterRecord.estadoSolicitud + ' | ': '') + (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud  : '') : 'Pulse para definir filtro') }}</small>
+            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + (filterRecord.estadoSolicitud ? ' Estado Solicitud: '+ filterRecord.estadoSolicitud + ' | ': '') + (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud  : '') : 'Pulse para definir filtro') }}</small>
           </q-item-label>
         </q-item-section>
         <q-item-section side>
@@ -58,6 +58,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user']), // importo state.user desde store-login
     ...mapState('aprobacion', ['listaCambios'])
   },

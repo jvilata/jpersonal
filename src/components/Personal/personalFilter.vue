@@ -12,29 +12,30 @@
     <q-form @submit="getRecords" class="q-gutter-y-xs">
     <q-tab-panels v-model="tab">
       <q-tab-panel name="General">
-        <q-input outlined clearable label="ID" stack-label autofocus v-model="filterR.id" />
-        <q-input outlined clearable label="Persona" stack-label autofocus v-model="filterR.nombre" /> 
+        <q-input outlined clearable label="Persona" stack-label autofocus v-model="filterR.query" /> 
         <q-input outlined clearable label="Área" stack-label v-model="filterR.area" />
-        <q-input outlined clearable label="País Laboral" stack-label v-model="filterR.paisLaboral" />
-        <q-input outlined clearable label="País Trabaja" stack-label v-model="filterR.pais" />
+        <q-input outlined clearable label="País Laboral" stack-label v-model="filterR.paisLab" />
+        <q-input outlined clearable label="País Trabajo" stack-label v-model="filterR.paisTrab" />
+        <q-input outlined clearable label="Vehiculo" stack-label v-model="filterR.vehiculo" />
       </q-tab-panel>
       <q-tab-panel name="Avanzada">
         <!--q-input outlined clearable label="Agrupación ETM" stack-label v-model="filterR.agrupacionETM" /-->
         <q-input outlined clearable label="Equipo ETM" stack-label v-model="filterR.equipoETM" />
-        <q-input outlined clearable label="Fecha Alta Desde" stack-label :value="formatDate(filterR.fechaAltaDesde)" @input="val => filterR.fechaAltaDesde=val" >
+        <q-input outlined clearable label="Grupo ETM" stack-label v-model="filterR.agrupacionETM" />
+        <q-input outlined clearable label="Fecha Alta Desde" stack-label :value="formatDate(filterR.sfecha_de_alta_desde)" @input="val => filterR.fechaAltaDesde=val" >
           <template v-slot:append>
               <q-icon name="event" class="cursos-pointer">
                 <q-popup-proxy>
-                  <wgDate v-model="filterR.fechaAltaDesde" />
+                  <wgDate v-model="filterR.sfecha_de_alta_desde" />
                 </q-popup-proxy>
               </q-icon>
           </template>
         </q-input>
-        <q-input outlined clearable label="Fecha Alta Hasta" stack-label :value="formatDate(filterR.fechaAltaHasta)"  @input="val => filterR.fechaAltaHasta=val" >
+        <q-input outlined clearable label="Fecha Alta Hasta" stack-label :value="formatDate(filterR.sfecha_de_alta_hasta)"  @input="val => filterR.fechaAltaHasta=val" >
           <template v-slot:append>
               <q-icon name="event" class="cursos-pointer">
                 <q-popup-proxy>
-                  <wgDate v-model="filterR.fechaAltaHasta" />
+                  <wgDate v-model="filterR.sfecha_de_alta_hasta" />
                 </q-popup-proxy>
               </q-icon>
           </template>
