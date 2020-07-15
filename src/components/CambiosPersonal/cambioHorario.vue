@@ -260,7 +260,18 @@
                     <div class="column q-mt-sm" style="max-width: 150px">
                         <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
+                    <q-dialog v-model="dialogMes" @click="$emit('close')">
+                        <q-card class="bg-indigo-1 text-black" style="width: 250px">
+                            <q-card-section>
+                                <div class="text-subtitle2">Solicitud registrada con éxito</div>
+                            </q-card-section>
+                            <q-card-actions align="center" class="bg-white">
+                                <q-btn icon="done" flat size="lg" color="green" v-close-popup />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
                     <!-- :disabled="!recordToSubmit.aceptaComer30m || !condiciones || recordToSubmit.aceptaCambioHorario ? !disabled : disabled" -->
+                    <q-btn @click="dialogMes=true">BOTON PRUBEA</q-btn>
                 </div>
             </div>
         </q-card>
@@ -297,7 +308,8 @@ export default {
         checkComer30: false,
         jornadaEmpl: 0,
         disabled: false,
-        condiciones: false
+        condiciones: false,
+        dialogMes: false
     }
   },
   methods: {
@@ -307,6 +319,19 @@ export default {
     openForm (link) {
       this.addTab([link.name, link.label, {}, 1])
     },
+    //PRUEBA
+    // confirm(){
+    //   this.$q.dialog({
+    //     transitionShow: 'slide-down',
+    //     transitionHide: 'slide-up',
+    //     color: 'primary',
+    //     message: 'Se ha registrado su solicitud de cambio',
+    //     persistent: true,
+    //   }).onOk(() => {
+    //   }).onOk(() => {
+    //   }).onDismiss(() => {
+    //   })
+    // },//TERMINA LA PRUEBA
 
     confirm1 () {
     this.$q.dialog({
@@ -483,6 +508,7 @@ export default {
       })
         })
         .catch(error => { console.log(error.message) })
+        this.dialogMes = true
     },
 
     formatTime(time){
