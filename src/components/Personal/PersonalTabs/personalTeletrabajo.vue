@@ -1,10 +1,10 @@
 <template>
   <q-item class="row q-ma-xs q-pa-xs">
     <q-card flat>
-      <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+      <div class="row q-pa-sm items-baseline" style="max-width: 380px">
           <div class="col-xs-4">Fecha Desde</div>
           <div class="col-xs-8">
-              <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaDesde)">
+              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaDesde)">
               <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -12,16 +12,13 @@
                   </q-popup-proxy>
                   </q-icon>  
               </template>
-              <template v-slot:append>
-                  <q-icon name="close" @click.stop="model = ''" class="cursor-pointer" />
-                  </template>
               </q-input>
           </div>
       </div>
-      <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+      <div class="row q-pa-sm items-baseline" style="max-width: 380px">
             <div class="col-xs-4">Fecha Hasta</div>
             <div class="col-xs-8">
-              <q-input filled :value="formatDate(recordToSubmit.teletrabajoFechaHasta)">
+              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaHasta)">
               <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -29,15 +26,11 @@
                   </q-popup-proxy>
                   </q-icon>
               </template>
-              <template v-slot:append>
-                  <q-icon name="close" @click.stop="model = ''" class="cursor-pointer" />
-              </template>
-              
               </q-input>
             </div>
       </div>
-      <div class="col-xs-12">
-        <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Observaciones" autogrow @keyup.enter.stop />
+      <div class="col-xs-12 q-pa-sm" style="max-width: 380px">
+        <q-input readonly v-model="recordToSubmit.teletrabajoObservaciones" label="Observaciones" autogrow @keyup.enter.stop />
       </div>
       <div class="row justify-center text-center q-pt-xl">
         <q-btn

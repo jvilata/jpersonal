@@ -72,13 +72,9 @@ export default {
         cancel: true,
         persistent: true,
       }).onOk(() => {
-
       }).onOk(() => {
-        // console.log('>>>> second OK catcher')
       }).onCancel(() => {
-        // console.log('>>>> Cancel')
       }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
       })
     },
     solicitarCambios() {

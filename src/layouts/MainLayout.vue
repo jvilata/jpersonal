@@ -94,7 +94,7 @@ export default {
       miniState: false,
       menuItems: [
         {
-          title: 'Consultar Datos',
+          title: 'Consultar/Modificar Datos',
           icon: 'group',
           link: {
             name: 'personalFormMain',

@@ -6,10 +6,10 @@
       <q-card-section  class="q-pt-md q-pl-xs q-pr-xs">
         <div class="text-subtitle1 text-bold text-center">Horario de Lunes - Jueves:</div>
         <div class="row q-mb-sm">
-          <q-input outlined :value="formatTime(recordToSubmit.horaEntrada1)" label="Hora Entrada 1" class="col-xs-6 col-sm-3" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaSalida1)" label="Hora Salida 1" class="col-xs-6 col-sm-3" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaEntrada2)" label="Hora Entrada 2" class="col-xs-6 col-sm-3 q-pt-md" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaSalida2)" label="Hora Salida 2" class="col-xs-6 col-sm-3 q-pt-md" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaEntrada1)" label="Hora Entrada 1" class="col-xs-6 col-sm-3" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaSalida1)" label="Hora Salida 1" class="col-xs-6 col-sm-3" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaEntrada2)" label="Hora Entrada 2" class="col-xs-6 col-sm-3 q-pt-md" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaSalida2)" label="Hora Salida 2" class="col-xs-6 col-sm-3 q-pt-md" />
         </div>
       </q-card-section>
     </q-card>
@@ -17,10 +17,10 @@
       <q-card-section  class="q-pt-md q-pl-xs q-pr-xs">
         <div class="text-subtitle1 text-bold text-center">Horario de Viernes:</div>
         <div class="row q-mb-sm">
-          <q-input outlined :value="formatTime(recordToSubmit.horaEntrada3)" label="Hora Entrada 3" class="col-xs-6 col-sm-3" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaSalida3)" label="Hora Salida 3" class="col-xs-6 col-sm-3" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaEntrada4)" label="Hora Entrada 4" class="col-xs-6 col-sm-3 q-pt-md" />
-          <q-input outlined :value="formatTime(recordToSubmit.horaSalida4)" label="Hora Salida 4" class="col-xs-6 col-sm-3 q-pt-md" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaEntrada3)" label="Hora Entrada 3" class="col-xs-6 col-sm-3" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaSalida3)" label="Hora Salida 3" class="col-xs-6 col-sm-3" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaEntrada4)" label="Hora Entrada 4" class="col-xs-6 col-sm-3 q-pt-md" />
+          <q-input outlined readonly :value="formatTime(recordToSubmit.horaSalida4)" label="Hora Salida 4" class="col-xs-6 col-sm-3 q-pt-md" />
         </div>
       </q-card-section>
     </q-card>

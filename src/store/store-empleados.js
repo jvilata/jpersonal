@@ -8,7 +8,8 @@ import { getMaxListeners } from 'process'
 const state = {
   listaEmpleados: [],
   listaPaises: [],
-  idautorizador: 0
+  idautorizador: 0,
+  listaPuestos: []
 }
 
 const mutations = {
@@ -26,7 +27,10 @@ const mutations = {
     state.bloqueFilialEmpleado= bloques
     console.log('bloqueFilialEmpleado', state.bloqueFilialEmpleado);
   },
-}
+  loadListaPuestos(state, lista) {
+    state.listaPuestos= lista
+  }
+} 
 
 const actions = {
   loadListaDetalleEmpleados({ commit }, objFilter) {
@@ -72,18 +76,18 @@ const actions = {
       })
   },
 
-  loadListaPuestos({ commit }, anyosExp, areaempleado) {
+  loadListaPuestos({ commit }, codPuesto ) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state 
     axiosInstance.get(`bd_jpersonal.asp?action=puesto/list&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + 'No existen datos', { root: true })
+          this.dispatch('mensajeLog/addMensaje', 'loadListaPuestos' + 'No existen datos', { root: true })
         } else {
-          commit('loadListaPaises', response.data)
+          commit('loadListaPuestos', response.data)
         }
       })
       .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'loadListaPaises' + error, { root: true })
+        this.dispatch('mensajeLog/addMensaje', 'loadListaPuestos' + error, { root: true })
       })
   },
 
