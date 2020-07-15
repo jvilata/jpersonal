@@ -57,18 +57,13 @@ export default {
           this.$emit('refresh')
         })
         .catch(error => {
-          this.dispatch('mensajeLog/addMensaje', 'deletePermisoPendiente' + error, { root: true })
+          console.log('deletePermisoPendiente', error);
         })
       })
     },
     formatDate (pdate) {
-      let dateObj = pdate.split((/[-: T]/g))
-      var YYYY = dateObj[0] + '';
-      var MM = (dateObj[1]) + '';
-      MM = (MM.length === 1) ? '0' + MM : MM;
-      var DD = dateObj[2] + '';
-      DD = (DD.length === 1) ? '0' + DD : DD;
-      return DD + "/" + MM + "/" + YYYY;
+      var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm:ss.000ZZ')
+      return date.formatDate(d1, 'DD/MM/YYYY')
     }
   }
 }

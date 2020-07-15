@@ -1,9 +1,7 @@
-import { Loading, copyToClipboard } from 'quasar'
+import { Loading } from 'quasar'
 import { axiosInstance, headerFormData } from 'boot/axios.js'
 import querystring from 'querystring'
 import login from './store-login'
-import permisos from './store-permisos'
-import { getMaxListeners } from 'process'
 
 const state = {
   listaEmpleados: [],
@@ -135,16 +133,6 @@ const actions = {
 
   calcularResponsable( { commit }, params ){
     return axiosInstance.post(`bd_jpersonal.asp?action=cpersonal_of/calcularResponsable&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData)
-  },
-
-  sendMail({ commit }, datos) {
-    axiosInstance.post(`bd_jpersonal.asp?action=services/sendmail&auth=${login.state.user.auth}`, querystring.stringify(datos), headerFormData)
-    .then((response) => {
-      console.log('response', response)
-    })
-    .catch(error => {
-      this.dispatch('mensajeLog/addMensaje', 'sendMail' + error, { root: true })
-    })
   }
 }
 

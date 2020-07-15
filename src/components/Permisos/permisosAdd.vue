@@ -1,84 +1,86 @@
  <!-- componente que se llama desde accionesMain y que presenta el formulario de filtro y el boton de busqueda -->
   <template>
-  <q-card style="width: 400px;" class="q-pr-xs q-gutter-xs">
-    <q-card-section class="bg-primary text-white">
-      <div class="text-h6">Solicitar nuevo permiso</div>
-    </q-card-section>
+  <div>
+    <q-card style="width: 400px;" class="q-pr-xs q-gutter-xs">
+      <q-card-section class="bg-primary text-white">
+        <div class="text-h6">Solicitar nuevo permiso</div>
+      </q-card-section>
 
-    <q-form @submit="solicitarPermiso" class="q-gutter-y-xs">
+      <q-form @submit="solicitarPermiso" class="q-gutter-y-xs">
 
-      <q-input 
-        outlined 
-        clearable 
-        label="Fecha Desde" 
-        stack-label 
-        :value="formatDate(permisoToAdd.fechaDesde, 'DD/MM/YYYY')"
-        :rules="[val => !!val || 'Campo obligatorio']">
-        <template v-slot:append>
-            <q-icon name="event" class="cursos-pointer">
-              <q-popup-proxy ref="qFechaDesde">
-                <wgDate 
-                  @input="$refs.qFechaDesde.hide()"
-                  v-model="permisoToAdd.fechaDesde" />
-              </q-popup-proxy>
-            </q-icon>
-        </template>
-      </q-input>
-      <q-input 
-        outlined 
-        clearable 
-        label="Fecha Hasta" 
-        stack-label 
-        :value="formatDate(permisoToAdd.fechaHasta, 'DD/MM/YYYY')"
-        :rules="[val => !!val || 'Campo obligatorio']">
-        <template v-slot:append>
-            <q-icon name="event" class="cursos-pointer">
-              <q-popup-proxy ref="qFechaHasta">
-                <wgDate 
-                  @input="{ $refs.qFechaHasta.hide(); calcDiasEfectivos()}"
-                  v-model="permisoToAdd.fechaHasta"/>
-              </q-popup-proxy>
-            </q-icon>
-        </template>
-      </q-input>
-      <q-select
-        :disable="disableNumJornadas"
-        ref="diasEfectivos"
-        label="N. Jornadas"
-        stack-label
-        outlined
-        clearable
-        v-model="permisoToAdd.diasEfectivos"
-        :options="numJornadas"
-        option-value="id"
-        option-label="desc"
-        emit-value
-        map-options
-        :rules="[val => !!val || 'Campo obligatorio']"
-      />
-      <q-select
-        label="Tipo Jorn. Libre"
-        stack-label
-        outlined
-        clearable
-        v-model="permisoToAdd.tipoDiaLibre"
-        :options="listaTiposDiasLibres"
-        option-value="id"
-        option-label="descripcionDiaLibre"
-        emit-value
-        map-options
-        :rules="[val => !!val || 'Campo obligatorio']"
-      />
-      <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
+        <q-input 
+          outlined 
+          clearable 
+          label="Fecha Desde" 
+          stack-label 
+          :value="formatDate(permisoToAdd.fechaDesde, 'DD/MM/YYYY')"
+          :rules="[val => !!val || 'Campo obligatorio']">
+          <template v-slot:append>
+              <q-icon name="event" class="cursos-pointer">
+                <q-popup-proxy ref="qFechaDesde">
+                  <wgDate 
+                    @input="$refs.qFechaDesde.hide()"
+                    v-model="permisoToAdd.fechaDesde" />
+                </q-popup-proxy>
+              </q-icon>
+          </template>
+        </q-input>
+        <q-input 
+          outlined 
+          clearable 
+          label="Fecha Hasta" 
+          stack-label 
+          :value="formatDate(permisoToAdd.fechaHasta, 'DD/MM/YYYY')"
+          :rules="[val => !!val || 'Campo obligatorio']">
+          <template v-slot:append>
+              <q-icon name="event" class="cursos-pointer">
+                <q-popup-proxy ref="qFechaHasta">
+                  <wgDate 
+                    @input="{ $refs.qFechaHasta.hide(); calcDiasEfectivos()}"
+                    v-model="permisoToAdd.fechaHasta"/>
+                </q-popup-proxy>
+              </q-icon>
+          </template>
+        </q-input>
+        <q-select
+          :disable="disableNumJornadas"
+          ref="diasEfectivos"
+          label="N. Jornadas"
+          stack-label
+          outlined
+          clearable
+          v-model="permisoToAdd.diasEfectivos"
+          :options="numJornadas"
+          option-value="id"
+          option-label="desc"
+          emit-value
+          map-options
+          :rules="[val => !!val || 'Campo obligatorio']"
+        />
+        <q-select
+          label="Tipo Jorn. Libre"
+          stack-label
+          outlined
+          clearable
+          v-model="permisoToAdd.tipoDiaLibre"
+          :options="listaTiposDiasLibres"
+          option-value="id"
+          option-label="descripcionDiaLibre"
+          emit-value
+          map-options
+          :rules="[val => !!val || 'Campo obligatorio']"
+        />
+        <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
 
-      <p>{{permisoToAdd}}</p>
+        <p>{{permisoToAdd}}</p>
 
-      <q-card-actions align="right">
-        <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
-        <q-btn flat type="submit" label="Solicitar" color="primary"/>
-      </q-card-actions>
-    </q-form>
-  </q-card>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
+          <q-btn flat type="submit" label="Solicitar" color="primary"/>
+        </q-card-actions>
+      </q-form>
+    </q-card>
+  </div>
 </template>
 
 <script>
@@ -100,6 +102,7 @@ export default {
       },
       numJornadas: ['1', '0.5', '0.25'],
       disableNumJornadas: false,
+      done: false
     }
   },
   computed: {
@@ -125,7 +128,6 @@ export default {
     ...mapActions('empleados', ['calculaResponsable']),
     ...mapActions('mensajeLog', ['addMensaje']),
     formatDate (pdate, mask) {
-      console.log(pdate);
       return date.formatDate(pdate, mask)
 
     },
@@ -203,7 +205,7 @@ export default {
           this.alerta('Atención',"Sólo se permiten permisos no retribuidos de día completo, considere cambiar por Vacaciones. Por favor corrija la entrada")
           binsertar = false
         } else if ( this.empleadoP.diasPendientes.tdiaslibres >= (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes) ) {
-              this.alerta('Aviso',"Mientras queden suficientes vacaciones la empresa recomienda no tomar permisos no retribuidos. Por favor corrija la entrada si lo considera conveniente");
+          this.alerta('Aviso',"Mientras queden suficientes vacaciones la empresa recomienda no tomar permisos no retribuidos. Por favor corrija la entrada si lo considera conveniente");
         }
       }
 
@@ -215,9 +217,10 @@ export default {
         .then((response) => {
           this.$q.loading.hide()
           if (JSON.parse(response.data).success) {
-            Notify.create('Solcitud registrada correctamente')
+            //Notify.create('Solcitud registrada correctamente')
             this.$emit('close')
             this.$emit('nuevo')
+            this.$emit('ok')
           } else {
             Notify.create('No se ha podido registrar su solicitud')
           }

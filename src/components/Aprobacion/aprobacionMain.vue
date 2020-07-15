@@ -37,6 +37,7 @@
       <aprobacionItemsList
         v-model="listaCambios"
         @deleteCambios="(id) => deleteSolicitud(id)"
+        @refresh="getRecords"
         />
     </div>
 </template>

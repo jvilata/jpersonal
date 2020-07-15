@@ -39,7 +39,7 @@ const actions = {
   aprobarPermiso( { commit }, solicitud) {
     axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        console.log(response);
+        console.log('aprobarPermiso', response);
         this.dispatch('aprobacion/getListaCambios', { empleado: login.state.user.id })
       })
       .catch(error => {
@@ -56,15 +56,18 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'aprobarPermiso' + error, { root: true })
       })
   },
-  addToVacaciones( { commit }, payload) {
-    
-    axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/id&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+  addToVacaciones( { commit }, payload) {         
+    return new Promise((resolve, reject) => {
+      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/id&auth=${login.state.user.auth}`, payload, { withCredentials: true })
       .then((response) => {
-        console.log('response', response)
+        //console.log('response', JSON.parse(response.data))
+        resolve(JSON.parse(response.data).success)
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'addToVacaciones' + error, { root: true })
+        reject(error)
       })
+    })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
   }
 
 }

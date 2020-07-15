@@ -1,3 +1,4 @@
+import { Notify } from "quasar";
 // hemos creado este store para que centralice la escritura de mensajes de log de la aplicación.
 // De momento sólo los escribe en consola y los guarda en un una lista en memoria. En el futuro se podría volcar a BD.
 
@@ -15,6 +16,7 @@ const mutations = {
 const actions = {
   addMensaje ({ commit }, mensaje) {
     commit('addMensaje', mensaje)
+    Notify.create(mensaje)
     console.log('[', new Date(), '] ', mensaje)
   }
 }

@@ -103,7 +103,8 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
-    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable', 'sendMail']),
+    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable']),
+    ...mapActions('tablasAux', ['sendMail']),
     getPermisos(value) {
       //Object.assign(this.filterRecord, value)
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
@@ -157,6 +158,7 @@ export default {
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
     }
+    
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
     console.log('This should come second');
     
