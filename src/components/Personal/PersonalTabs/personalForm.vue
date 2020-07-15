@@ -40,7 +40,10 @@
               <q-input class="col-xs-8 col-sm-5" outlined readonly v-model="user.pers.emailAutorizador" label="Autorizador"/>
               <q-input class="col-xs-4 col-sm-5" outlined readonly v-model="recordToSubmit.consentimientoImagen" label="Consent.Imagen"/>
             </div>
-            <q-input class="row q-mb-sm" outlined readonly v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop />
+            <div class="row q-mb-sm items-baseline">
+              <div class="col-xs-11"><q-input outlined v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop /></div>
+              <div class="col-xs-1"><q-icon name="edit" color="primary" size="30px"/></div>
+            </div>
             <div class="row justify-center text-center q-pt-lg">
               <div class="col-xs-12 justify-center">
                 <q-btn
