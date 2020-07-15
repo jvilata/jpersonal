@@ -1,37 +1,39 @@
 <template>
   <div style="height: 75vh">
-      <!-- <permisosPendientesGrid
+        <div class="text-center q-ma-sm no-pointer-events row justify-center">
+          <q-btn 
+            rounded
+            dense
+            size="md"
+            color="primary"
+            label="Solicitar nuevo permiso"
+            icon="add"
+            @click="nuevoPermiso = !nuevoPermiso"
+            class="col-8 all-pointer-events"/>
+        </div>
+
+
+        <permisosPendientesList
           v-model="permisosPendientes"
-          /> -->
+          class="q-mb-md"
+          @refresh="getPermisos">
+        </permisosPendientesList>
 
-      <q-separator spaced/>
+        <q-separator spaced/>
 
-      <div class="text-center q-ma-sm no-pointer-events row justify-center">
-        <q-btn 
-          rounded
-          dense
-          size="md"
-          color="primary"
-          label="Solicitar nuevo permiso"
-          icon="add"
-          @click="nuevoPermiso = !nuevoPermiso"
-          class="col-8 all-pointer-events"/>
-      </div>
+        <div class="row q-mb-xl">
+          <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Libres" :value="value.empleadoP.diasPendientes.tdiaslibres"/>
+          <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Vacaciones" :value="value.empleadoP.diasPendientes.tdiasvacaciones"/>
+          <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Días Pendientes" :value="value.empleadoP.diasPendientes.tdiaspendientes"/>
 
-      <!-- <q-separator spaced/> -->
-
-      <permisosPendientesList
-      v-model="permisosPendientes"
-      class="q-mb-lg"
-      />
-
+        </div>
 
     <q-dialog v-model="nuevoPermiso"  >
-        <!-- formulario con campos de filtro -->
         <permisosAdd
           @close="nuevoPermiso = !nuevoPermiso"
+          @nuevo="getPermisos"
           :value="value"
-          :filialEmpleado="filialEmpleado"
+          :empleadoP="value.empleadoP"
         />
       </q-dialog>
   </div>
@@ -41,7 +43,7 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
-  props: ['value', 'id', 'keyValue', 'filialEmpleado'],
+  props: ['value', 'id', 'keyValue'],
   data() {
     return {
       nuevoPermiso: false,
@@ -49,18 +51,19 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes']),
+    getPermisos() {
+      this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
+    }
   },
   computed: {
-    ...mapState('permisos', ['permisosPendientes']),
-    ...mapState('login', ['user'])
+    ...mapState('permisos', ['permisosPendientes'])
   },
   components: {
-    // permisosPendientesGrid: require('components/Permisos/permisosPendientesGrid.vue').default,
     permisosAdd: require('components/Permisos/permisosAdd.vue').default,
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   },
   mounted() {
-    this.getPermisosPendientes({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
+    this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
   }
 }
 </script>

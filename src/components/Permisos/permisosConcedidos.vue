@@ -6,6 +6,12 @@
       <permisosConcedidosList
         v-model="permisosConcedidos"
       />
+
+      <div class="row q-mb-lg">
+        <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Baja" :value="value.empleadoP.diasConcedidos.tdiasBaja"/>
+        <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Especiales" :value="value.empleadoP.diasConcedidos.tdiasEspeciales"/>
+        <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Días Vacaciones" :value="value.empleadoP.diasConcedidos.tdiasVacaciones"/>
+      </div>
   </div>
 </template>
 
@@ -30,7 +36,7 @@ export default {
     permisosConcedidosList: require('components/Permisos/PermisosConcedidos/permisosConcedidosList.vue').default
   },
   mounted() {
-    this.getPermisosConcedidos({ solIdEmpleado: this.value.empleado, solejercicio: this.value.ejercicioAplicacion })
+    this.getPermisosConcedidos({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
   }
 }
 </script>

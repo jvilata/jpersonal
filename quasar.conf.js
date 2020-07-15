@@ -97,7 +97,7 @@ cfg.module.rules.push({
       importStrategy: 'auto',
 
       // Quasar plugins
-      plugins: ['Dialog', 'Loading', 'LocalStorage', 'Notify']
+      plugins: ['Dialog', 'Loading', 'LocalStorage', 'Notify', 'BottomSheet']
     },
 
     // animations: 'all', // --- includes all animations
@@ -153,8 +153,8 @@ cfg.module.rules.push({
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
-      // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.cordova.edicom.app'
+      // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

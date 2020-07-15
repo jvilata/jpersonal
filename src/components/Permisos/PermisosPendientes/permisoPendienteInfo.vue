@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['deletePermiso']),
+    ...mapActions('permisos', ['deletePermisoPendiente']),
     deleteP(id) {
       this.$q.dialog({
         title: 'Eliminar permiso',
@@ -51,11 +51,24 @@ export default {
         },
         persistent: true
       }).onOk(() => {
-        this.deletePermiso(id)
+        this.deletePermisoPendiente(this.permiso)
+        .then((response) => {
+          console.log('delete', response);
+          this.$emit('refresh')
+        })
+        .catch(error => {
+          this.dispatch('mensajeLog/addMensaje', 'deletePermisoPendiente' + error, { root: true })
+        })
       })
     },
     formatDate (pdate) {
-      return date.formatDate(pdate, 'DD/MM/YYYY')
+      let dateObj = pdate.split((/[-: T]/g))
+      var YYYY = dateObj[0] + '';
+      var MM = (dateObj[1]) + '';
+      MM = (MM.length === 1) ? '0' + MM : MM;
+      var DD = dateObj[2] + '';
+      DD = (DD.length === 1) ? '0' + DD : DD;
+      return DD + "/" + MM + "/" + YYYY;
     }
   }
 }

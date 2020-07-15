@@ -1,6 +1,6 @@
   <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y Grid -->
   <template>
-    <div style="height: 85vh">
+    <div style="height: 75vh">
       <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
         <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
         <q-item-section avatar>
@@ -26,7 +26,6 @@
       </q-item>
 
       <q-dialog v-model="expanded"  >
-        <!-- formulario con campos de filtro -->
         <aprobacionFilter
           @getRecords="(value) => getRecords(value)"
           :value="filterRecord"
@@ -35,7 +34,6 @@
         />
       </q-dialog>
 
-      <!-- formulario tabla de resultados de busqueda -->
       <aprobacionItemsList
         v-model="listaCambios"
         @deleteCambios="(id) => deleteSolicitud(id)"

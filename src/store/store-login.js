@@ -7,7 +7,7 @@
 */
 import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
 import querystring from 'querystring'
-import { LocalStorage } from 'quasar'
+import { LocalStorage, Loading } from 'quasar'
 // state: accesibles en lectura desde componentes a traves de ...mapState('login', ['user'])
 const state = {
   loggingIn: false,
@@ -48,6 +48,7 @@ const actions = {
         LocalStorage.set('password', loginData.password)
         
         //Aquí cargaremos datos globales a la app
+        Loading.show()
         this.dispatch('tablasAux/loadTablasAux')
         this.dispatch('empleados/loadListaEmpleados')
         this.dispatch('empleados/loadListaPaises')

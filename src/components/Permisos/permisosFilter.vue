@@ -18,11 +18,13 @@
         label="Empleado" 
         stack-label
         v-model="filterP.empleado"
-        :options="listaEmpleados"
-        option-value
+        :options="listaEmpleadosFilter"
+        @filter="filterEmpleados"
+        option-value="id"
         option-label="name"
         emit-value
-        map-options>
+        map-options
+        behavior="menu">
       </q-select>
       
       <q-input
@@ -48,11 +50,12 @@ import { mapState, mapActions } from 'vuex'
 import { openURL } from "quasar";
 
 export default {
-  props: ['value'],
+  props: ['value', 'filialEmp'],
   data() {
     return {
       filterP: {},
-      disable: false
+      disable: false,
+      listaEmpleadosFilter: []
     }
   },
   computed: {
@@ -60,21 +63,33 @@ export default {
   },
   methods: {
     verNormativa() {
+      let emp = this.listaEmpleados.find(record => record.id === this.filterP.empleado)
       let strUrl = 'http://www.edicomgroup.com'
-       if (window.cordova === undefined) { // desktop
-          openURL(strUrl)
-        } else { // estamos en un disp movil
-          window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
-        }
+      console.log('cordova', window.cordova);
+      
+      if (window.cordova === undefined) { // desktop
+        openURL(strUrl)
+      } else { // estamos en un disp movil
+        window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
+      }
     },
     getPermisos() {
       this.$emit('empleadoSelec', this.filterP)
       this.$emit('getPermisos', this.filterP)
       this.$emit('close')
     },
+    filterEmpleados(val, update, abort){
+      update(() =>{
+        const needle = val.toLowerCase()
+        this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
+    }
   },
   mounted() {
+    console.log('filialEmp', this.filialEmp);
+    this.listaEmpleadosFilter = this.listaEmpleados
     this.filterP = Object.assign( {}, this.value)
+    
   },
   destroyed () {
     // guardamos valor en tabs por si despus queremos recuperarlo
