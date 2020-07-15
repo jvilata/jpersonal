@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 80vh">
+  <div style="height: 74vh">
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
       <q-item-section avatar class="q-ml-sm">
@@ -32,7 +32,6 @@
         :filialEmp="empleadoP.filialEmpleado"
         @input="(value) => Object.assign(filterRecord, value)"
         @getPermisos="(value) => getPermisos(value)"
-        @empleadoSelec="(value) => empleadoSelec(value)"
         @close="expanded = !expanded"
       />
     </q-dialog>
@@ -105,15 +104,12 @@ export default {
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
     ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable', 'sendMail']),
-    verNormativa() {
-      // Instalar inAppBrowser para ios
-      openURL('http://www.edicomgroup.com')
-    },
     getPermisos(value) {
       //Object.assign(this.filterRecord, value)
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.getPermisosPendientes(objFilter)
       this.getPermisosConcedidos(objFilter)
+      this.empleadoSelec(value)
     },
     empleadoSelec(value) {
       console.log('valueEmp', value);
@@ -157,11 +153,9 @@ export default {
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getPermisos(this.filterRecord) // refresco la lista por si se han hecho cambios
-      this.empleadoSelec(this.filterRecord)
     } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
-      this.empleadoSelec(this.filterRecord)
     }
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
     console.log('This should come second');

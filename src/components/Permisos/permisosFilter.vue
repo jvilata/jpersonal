@@ -63,12 +63,15 @@ export default {
   },
   methods: {
     verNormativa() {
+      let emp = this.listaEmpleados.find(record => record.id === this.filterP.empleado)
       let strUrl = 'http://www.edicomgroup.com'
-       if (window.cordova === undefined) { // desktop
-          openURL(strUrl)
-        } else { // estamos en un disp movil
-          window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
-        }
+      console.log('cordova', window.cordova);
+      
+      if (window.cordova === undefined) { // desktop
+        openURL(strUrl)
+      } else { // estamos en un disp movil
+        window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
+      }
     },
     getPermisos() {
       this.$emit('empleadoSelec', this.filterP)
