@@ -74,6 +74,7 @@ export default {
     },
     getPermisos() {
       this.$emit('getPermisos', this.filterP)
+      this.$emit('getEmpleado', this.filterP)
       this.$emit('close')
     },
     filterEmpleados(val, update, abort){

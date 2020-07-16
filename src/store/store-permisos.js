@@ -22,6 +22,7 @@ const mutations = {
   loadPermisosPendientes(state, lista) {
     state.permisosPendientes = []
     state.permisosPendientes = lista
+    console.log('This should come first');
   },
   loadPermisosConcedidos(state, lista) {
     state.permisosConcedidos = []

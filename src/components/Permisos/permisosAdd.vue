@@ -219,7 +219,7 @@ export default {
           if (JSON.parse(response.data).success) {
             //Notify.create('Solcitud registrada correctamente')
             this.$emit('close')
-            this.$emit('nuevo')
+            this.$emit('refresh')
             this.$emit('ok')
           } else {
             Notify.create('No se ha podido registrar su solicitud')

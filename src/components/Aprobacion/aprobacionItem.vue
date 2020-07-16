@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item left-color="positive" right-color="negative" @left="aceptar(1)" @right="rechazar(1)">
+  <q-slide-item left-color="positive" right-color="negative" @left="aceptar" @right="rechazar">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -23,17 +23,17 @@
 
           <q-card>
               <q-card-section>
-                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @input="value => permisoModif(value)"/> 
+                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @permiso="value => permisoModif(value)"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item" :keyValue="keyValue"/>
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="red" label="RECHAZAR" @click="rechazar(2)"/>
+                      <q-btn color="red" label="RECHAZAR" @click="rechazar"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn color="primary" label="ACEPTAR" @click="aceptar"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
@@ -68,7 +68,8 @@ import { mapActions } from "vuex";
 export default {
   data(){
     return {
-      aprobacion: {}
+      aprobacion: {},
+      origin: 0
     }
   },
   props: ['item', 'id', 'keyValue'],
@@ -90,6 +91,9 @@ export default {
     },
     permisoModif(value) {
       Object.assign(this.aprobacion, value)
+    },
+    setOrigin(origin) {
+      this.origin = origin
     },
     confirm(){
       this.$q.dialog({
@@ -113,7 +117,8 @@ export default {
         this.$emit('deleteCambios', this.item.id)
       })
     },
-    aceptar({ reset }, origin){
+
+    aceptar({ reset }){
       this.$q.dialog({
       title: 'ACEPTAR SOLICITUD',
       message: '¿Está seguro de que desea aceptar la solicitud?',
@@ -161,15 +166,15 @@ export default {
           }
           this.aprobarPermiso(solicitud)
         }
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
 
-      }).onCancel(() => {
+      }).onDismiss(() => {
         this.$emit('close')
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
       })
     },
 
-     rechazar ({reset}, origin) {
+     rechazar ({reset}) {
       this.$q.dialog({
         title: 'Rechazar permiso',
         message: 'Indique el motivo',
@@ -191,31 +196,24 @@ export default {
           .then(response => {
             if (response.data == "OK") {
               //Bloque borrar
+              console.log('Borrar');
               this.deletePermisoPendiente(this.item)
               .then((response) => {
                 this.$emit('refresh')
               })
               .catch(error => {
-                console.log('deletePermisoPendiente', error);
+                console.log('deletePermisoPendiente', error)
               })  
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
         }
 
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
       }).onDismiss(() => {
-        if (origin === 1) reset()
+        //if (this.origin === 1) 
+        reset()
       })
-    },
-
-    rechazarSol() {
-      let solicitud = {
-        old_fechaDesde: this.item.sfechaDesde,
-        old_fechaHasta: this.item.sfechaHasta,
-        tecnico: this.item.empleadoIdpersonal
-      }
-      this.rechazarPermiso(solicitud)
     }
   }
 }
