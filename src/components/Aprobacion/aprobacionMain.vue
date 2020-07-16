@@ -12,12 +12,12 @@
           </q-item-label>
           <q-item-label>
             <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <!-- ' Estado Solicitud: '+ `${(listaEstadosSolicitudes.find(record => record.id === filterRecord.estadoSolicitud)).valor1}\n` + ' | ' -->
+            <!-- ' Estado Solicitud: '+ `${(listaEstadosSolicitudes.find(record => record.codElemento === filterRecord.estadoSolicitud)).valor1}\n` + ' | ' -->
             <small>{{ (Object.keys(filterRecord).length > 1 ? 
                 (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + 
                 (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + 
                 (filterRecord.estadoSolicitud ? `Estado Solicitud: ${filterRecord.estadoSolicitud}` : '') + 
-                (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRescord.tipoSolicitud : '')  : 'Pulse para definir filtro') }}
+                (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud : '')  : 'Pulse para definir filtro') }}
             </small>
           </q-item-label>
         </q-item-section>
@@ -59,9 +59,13 @@ export default {
     return {
       expanded: false,
       visible: '',
-      filterRecord: {},
-      nomFormulario: 'Aprobación Cambios-Permisos',
-      registrosSeleccionados: []
+      filterRecord: {
+        idEmpleado: 0,
+        persona: '',
+        estadoSolicitud: '',
+        tipoSolicitud: 0
+      },
+      nomFormulario: 'Aprobación Cambios-Permisos'
     }
   },
   computed: {
@@ -77,17 +81,17 @@ export default {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
       var objFilter = Object.assign({}, filter)
-      
-      return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
-        .then(response => {
+
+      // return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
+      //   .then(response => {
           this.getListaCambios(filter)
-          this.registrosSeleccionados = response.data
-          this.expanded = false
-        })
-        .catch(error => {
-          this.$q.dialog({ title: 'Error', message: error.response.statusText })
-          this.desconectarLogin()
-        })
+          // this.registrosSeleccionados = response.data
+          // this.expanded = false
+        // })
+        // .catch(error => {
+        //   this.$q.dialog({ title: 'Error', message: error.response.statusText })
+        //   this.desconectarLogin()
+        // })
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})

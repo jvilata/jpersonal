@@ -68,7 +68,7 @@
 
       <q-card-actions align="right">
         <q-btn  flat label="Cancel" color="primary" @click="$emit('close')"/>
-        <q-btn  flat type="submit" label="Buscar" color="primary"/>
+        <q-btn  flat type="submit" label="Buscar" color="primary" />
       </q-card-actions>
   </q-form>
   </q-card>
@@ -79,7 +79,7 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
-  props: ['value', 'keyValue'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
+  props: ['value', 'keyValue'], // value es el objeto con los campos de filtro que le pasa aprobacionMain (MOUNTED) con v-model
   //keyValue 1-> es el tab de consultar
   //keyValue 2 -> tab de aprobar 
   data () {
@@ -106,6 +106,7 @@ export default {
     ...mapActions('empleados', ['calcularResponsable']),
     getRecords () {
       this.$emit('getRecords', this.filterR) // lo captura aprobacionMain
+      this.$emit('close')
     },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD-MM-YYYY')
@@ -115,24 +116,9 @@ export default {
         const needle = val.toLowerCase()
         this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
-    },
-    filterResponsables(val, update, abort){
-      update(() =>{
-        const needle = val.toLowerCase()
-        this.listaResponsablesFilter = this.listaResponsables.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
-      })
     }
-
-
   },
   mounted () {
-    console.log('this.keyValue', this.keyValue)
-    // this.calcularResponsable({ id: this.value.empleado, tipoSol: 1 }).then(response => {
-    //     this.responsable = JSON.parse(response.data.msg).idResp[0]
-    //   })
-    //   .catch(error => {
-    //     console.log('calcularResponsable', error);
-    //   })
     this.listaEmpleadosFilter = this.listaEmpleados
     this.filterR = Object.assign( {} , this.value) // asignamos valor del parametro por si viene de otro tab
   },

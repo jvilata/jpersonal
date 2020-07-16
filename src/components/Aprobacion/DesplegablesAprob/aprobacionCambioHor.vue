@@ -9,10 +9,10 @@
       <span class="col-4 q-pr-sm text-grey-8" dense>Lunes a Jueves</span>
       <div class="col-4 q-pr-sm" >
         <q-input class="row" :value="horaEnt1" label="Desde" stack-label dense readonly/>
-        <q-input class="row" :value="horaSal1" label="Desde" stack-label dense readonly/>
+        <q-input class="row" :value="horaEnt2" label="Desde" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="horaEnt2" label="Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="horaSal1" label="Hasta" stack-label dense readonly/>
         <q-input class="row" :value="horaSal2" label="Hasta" stack-label dense readonly/>
       </div>
     </div>
@@ -20,10 +20,10 @@
       <span class="col-4 q-pr-sm text-grey-8" dense>Viernes</span>
       <div class="col-4 q-pr-sm" >
         <q-input class="row" :value="horaEnt3" label="Desde" stack-label dense readonly/>
-        <q-input class="row" :value="horaSal3" label="Desde" stack-label dense readonly/>
+        <q-input class="row" :value="horaEnt4" label="Desde" stack-label dense readonly/>
       </div>
       <div class="col-4 q-pr-sm" >
-        <q-input class="row" :value="horaEnt4" label="Hasta" stack-label dense readonly/>
+        <q-input class="row" :value="horaSal3" label="Hasta" stack-label dense readonly/>
         <q-input class="row" :value="horaSal4" label="Hasta" stack-label dense readonly/>
       </div>
     </div>

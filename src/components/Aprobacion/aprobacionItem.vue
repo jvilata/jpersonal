@@ -30,15 +30,15 @@
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="red" label="RECHAZAR" @click="rechazar(2)"/>
+                      <q-btn v-if="keyValue==2" color="red" label="RECHAZAR" @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn v-if="keyValue==2" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
                     <div class="col-xs-12 justify-center q-pt-md">
-                      <q-btn @click="confirm" style="width: 270px" color="indigo-1"> 
+                      <q-btn v-if="keyValue==1" @click="confirm" style="width: 270px" color="indigo-1"> 
                         <q-icon name="delete" color="grey-9" />
                       </q-btn>
                     </div>
@@ -74,10 +74,10 @@ export default {
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
   mounted() {
-    
+   
   },
   methods: {
-    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso']),
+    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
 
     formatDate (pdate) {
@@ -155,6 +155,23 @@ export default {
             esDudoso: false
           }
           this.aprobarPermiso(solicitud)
+
+         //La solicitud es de Cambio Horario o de Teletrabajo  
+        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+            
+          let solicitud = {
+            estadoSolicitud: 4,
+            id: this.item.id,
+            empleado: this.item.empleado,
+            fechaSolicitud: this.item.fechaSolicitud,
+            idAutorizadorOf: this.item.idAutorizadorOf,
+            observaciones: this.item.observaciones,
+            tipoSolicitud: this.item.tipoSolicitud,
+            datosSolicitud: this.item.datosSolicitud,
+            idautArea2: this.item.idautArea2
+          }
+          this.aprobarCambiosEmpleado(solicitud)
+          
         }
         if (origin === 1) reset()
 
@@ -196,21 +213,26 @@ export default {
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
+        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+          let solicitud = {
+            estadoSolicitud: 3,
+            id: this.item.id,
+            empleado: this.item.empleado,
+            fechaSolicitud: this.item.fechaSolicitud,
+            idAutorizadorOf: this.item.idAutorizadorOf,
+            observaciones: this.item.observaciones,
+            tipoSolicitud: this.item.tipoSolicitud,
+            datosSolicitud: this.item.datosSolicitud,
+            idautArea2: this.item.idautArea2
+          }
+          this.aprobarCambiosEmpleado(solicitud)
+          
         }
 
         if (origin === 1) reset()
       }).onDismiss(() => {
         if (origin === 1) reset()
       })
-    },
-
-    rechazarSol() {
-      let solicitud = {
-        old_fechaDesde: this.item.sfechaDesde,
-        old_fechaHasta: this.item.sfechaHasta,
-        tecnico: this.item.empleadoIdpersonal
-      }
-      this.rechazarPermiso(solicitud)
     }
   }
 }

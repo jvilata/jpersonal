@@ -196,7 +196,8 @@ export default {
             dense: false,
             denseOpts: false,
             disabled: false,
-            listaPaisesFilter: []
+            listaPaisesFilter: [],
+            responsable: 0
         }
     }, 
     computed:{
@@ -207,7 +208,7 @@ export default {
         wgDate: wgDate
     },
     methods: {
-        ...mapActions('empleados', ['calculaResponsable', 'loadListaPaises']),
+        ...mapActions('empleados', ['calcularResponsable', 'loadListaPaises']),
       confirm1 () {
       this.$q.dialog({
         title: 'Aceptación conciliación laboral',
@@ -283,7 +284,7 @@ export default {
             fechaDesde: null,
             fechaHasta: null,
             fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
-            idAutorizadorOf: 140,
+            idAutorizadorOf: this.responsable,
             nuevaVersion: true,
             observaciones: '',
             sfechaDesde: null,
@@ -291,6 +292,7 @@ export default {
             tipoDiaLibre: 0,
             tipoSolicitud: 'TELETRABAJO'
         }
+        console.log(data)
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
             //console.log(result.data)
@@ -310,13 +312,19 @@ export default {
   },
   beforeMount(){ 
         this.recordToSubmit.teletrabajoFechaDesde = this.user.pers.teletrabajoFechaDesde //new Date()
-        console.log(this.recordToSubmit.teletrabajoFechaDesde)
         this.recordToSubmit.teletrabajoFechaHasta = this.user.pers.teletrabajoFechaHasta // new Date()
         this.recordToSubmit.paisTeletrabajo = this.user.pers.paisLaboral
         
   },
   mounted(){
       this.listaPaisesFilter = this.listaPaises
+      this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
+       .then(response => {
+        this.responsable = JSON.parse(response.data.msg).idResp[0]
+        })
+      .catch(error => {
+        console.log('calcularResponsable', error);
+      })
   }
 }
 </script>

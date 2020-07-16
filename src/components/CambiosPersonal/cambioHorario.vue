@@ -491,6 +491,7 @@ export default {
     // },
 
     solicitarCambioHorario(){
+        
         var data = { 
             consentimientos: '',
             datosSolicitud: JSON.stringify(this.recordToSubmit),           
@@ -514,7 +515,6 @@ export default {
         
         this.$axios.post(`bd_jpersonal.asp?action=soldias/&auth=${this.user.auth}`, data)
         .then(result => {
-            this.
             this.$q.notify({
             color: 'primary',
             message: `Se ha solicitado un cambio de horario.`
@@ -545,10 +545,6 @@ export default {
         this.recordToSubmit.horaSalida4 = res.horaSalida4 
     }
   },
-
-//   beforeMount() { 
-//       this.cargarHoras()
-//   },
 
   mounted(){
       this.loadDetalleEmpleado(this.user.pers.id)
