@@ -180,8 +180,29 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(data => {
-        //this.rechazarSol()
-        console.log('>>>> OK, received', data)
+        if (this.item.tipoSolicitud === 'PERMISO') {
+          //Bloque Rechazar solicitud
+          let solicitud = {
+            old_fechaDesde: this.item.sfechaDesde,
+            old_fechaHasta: this.item.sfechaHasta,
+            tecnico: this.item.empleadoIdpersonal
+          }
+          this.rechazarPermiso(solicitud)
+          .then(response => {
+            if (response.data == "OK") {
+              //Bloque borrar
+              this.deletePermisoPendiente(this.item)
+              .then((response) => {
+                this.$emit('refresh')
+              })
+              .catch(error => {
+                console.log('deletePermisoPendiente', error);
+              })  
+            }
+          })
+          .catch(error => console.log('rechazarPermiso', error))
+        }
+
         if (origin === 1) reset()
       }).onDismiss(() => {
         if (origin === 1) reset()

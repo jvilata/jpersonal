@@ -1,7 +1,7 @@
  <!-- componente que se llama desde accionesMain y que presenta el formulario de filtro y el boton de busqueda -->
   <template>
   <div>
-    <q-card style="width: 400px;" class="q-pr-xs q-gutter-xs">
+    <q-card style="width: 330px;" class="q-pa-xs q-gutter-xs">
       <q-card-section class="bg-primary text-white">
         <div class="text-h6">Solicitar nuevo permiso</div>
       </q-card-section>
@@ -72,7 +72,7 @@
         />
         <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
 
-        <p>{{permisoToAdd}}</p>
+        <!-- <p>{{permisoToAdd}}</p> -->
 
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
