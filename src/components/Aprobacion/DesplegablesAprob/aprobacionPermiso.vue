@@ -20,6 +20,7 @@
         stack-label
         v-model="permisoAprobar.sustituto"
         :options="listaEmpleadosFilter"
+        @input="$emit('permiso', permisoAprobar)"
         @filter="filterEmpleados"
         option-value="id"
         option-label="name"
@@ -42,7 +43,7 @@
             <q-icon name="event" class="cursos-pointer">
               <q-popup-proxy ref="qSustFechaDesde">
                 <wgDate 
-                  @input="$refs.qSustFechaDesde.hide()"
+                  @input="$refs.qSustFechaDesde.hide(); $emit('permiso', permisoAprobar)"
                   v-model="permisoAprobar.ssustFdesde" />
               </q-popup-proxy>
             </q-icon>
@@ -60,7 +61,7 @@
             <q-icon name="event" class="cursos-pointer">
               <q-popup-proxy ref="qSustFechaHasta">
                 <wgDate 
-                  @input="$refs.qSustFechaHasta.hide()"
+                  @input="$refs.qSustFechaHasta.hide(); $emit('permiso', permisoAprobar)"
                   v-model="permisoAprobar.ssustFhasta"/>
               </q-popup-proxy>
             </q-icon>
@@ -69,7 +70,7 @@
     </div>
 
     <div class="row q-pb-md">
-        <q-input class="col"  v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense/>
+        <q-input class="col"  v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
     </div>
 
   </div>
@@ -85,7 +86,12 @@ export default {
   props: ['item'],
   data () {
     return {
-      permisoAprobar: {},
+      permisoAprobar: {
+        ssustFdesde: null,
+        ssustFhasta: null,
+        sustituto: null,
+        observaciones: ''
+      },
       listaEmpleadosFilter: []
     }
   },
@@ -108,7 +114,7 @@ export default {
   },
   mounted() {
     this.listaEmpleadosFilter = this.listaEmpleados
-    this.permisoAprobar = Object.assign( {}, this.item)
+    this.permisoAprobar.observaciones = this.item.observaciones
   },
   destroyed() {
     this.$emit('input', this.permisoAprobar)

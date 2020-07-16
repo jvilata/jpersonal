@@ -34,7 +34,8 @@
           :keyValue="keyValue"
           :item="item"
           :id="key"
-          @deleteCambios="(id) => $emit('deleteCambios', id)" />
+          @deleteCambios="(id) => $emit('deleteCambios', id)" 
+          @refresh="$emit('refresh')"/>
 
     </q-list>
     

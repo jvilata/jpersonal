@@ -260,8 +260,8 @@
                     <div class="column q-mt-sm" style="max-width: 150px">
                         <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
                     </div>
-                    <q-dialog v-model="dialogMes" @click="$emit('close')">
-                        <q-card class="bg-indigo-1 text-black" style="width: 250px">
+                    <q-dialog v-model="dialogMes" @click="$emit('close')" >
+                        <!-- <q-card class="bg-indigo-1 text-black" style="width: 250px">
                             <q-card-section>
                                 <div class="text-subtitle2">Solicitud registrada con éxito</div>
                             </q-card-section>
@@ -269,9 +269,11 @@
                                 <q-btn icon="done" flat size="lg" color="green" v-close-popup />
                             </q-card-actions>
                         </q-card>
+                        <q-avatar color="green" text-color="green" icon="check_circle_outline" size="100px" /> -->
+                        <q-icon color="green" name="check_circle" size="100px" />
                     </q-dialog>
                     <!-- :disabled="!recordToSubmit.aceptaComer30m || !condiciones || recordToSubmit.aceptaCambioHorario ? !disabled : disabled" -->
-                    <q-btn @click="dialogMes=true">BOTON PRUBEA</q-btn>
+                    <q-btn @click="showLoading">BOTON PRUBEA</q-btn>
                 </div>
             </div>
         </q-card>
@@ -319,6 +321,16 @@ export default {
 
     openForm (link) {
       this.addTab([link.name, link.label, {}, 1])
+    },
+    showLoading () {
+      this.$q.loading.show()
+
+      // hiding in 2s
+      this.timer = setTimeout(() => {
+        this.$q.loading.hide()
+        this.dialogMes = true
+        this.timer = void 0
+      }, 3000)
     },
     //PRUEBA
     // confirm(){

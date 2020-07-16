@@ -76,7 +76,24 @@ const actions = {
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', tabAux.mutation + error, { root: true })
       })
-  } 
+  },
+
+  sendMail({ commit }, datos) {
+    /*
+      to:
+      from: edicom@edicom.es
+      subject:
+      text:
+    */
+    axiosInstance.post(`bd_jpersonal.asp?action=services/sendmail&auth=${login.state.user.auth}`, querystring.stringify(datos), headerFormData)
+    .then((response) => {
+      console.log('response', response)
+    })
+    .catch(error => {
+      this.dispatch('mensajeLog/addMensaje', 'sendMail' + error, { root: true })
+    })
+  }
+  
 }
 
 export default {

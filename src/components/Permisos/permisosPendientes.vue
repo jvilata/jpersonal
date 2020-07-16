@@ -29,13 +29,18 @@
         </div>
 
     <q-dialog v-model="nuevoPermiso"  >
-        <permisosAdd
-          @close="nuevoPermiso = !nuevoPermiso"
-          @nuevo="getPermisos"
-          :value="value"
-          :empleadoP="value.empleadoP"
-        />
-      </q-dialog>
+      <permisosAdd
+        @close="nuevoPermiso = !nuevoPermiso"
+        @nuevo="getPermisos"
+        @ok="done = true"
+        :value="value"
+        :empleadoP="value.empleadoP"
+      />
+    </q-dialog>
+
+    <q-dialog v-model="done">
+      <q-icon name="check_circle_outline" color="green" size="100px"/>
+    </q-dialog>
   </div>
 </template>
 
@@ -47,6 +52,7 @@ export default {
   data() {
     return {
       nuevoPermiso: false,
+      done: false
     }
   },
   methods: {

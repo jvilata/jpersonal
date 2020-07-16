@@ -45,6 +45,7 @@
         v-model="listaCambios"
         :keyValue="keyValue"
         @deleteCambios="(id) => deleteSolicitud(id)"
+        @refresh="getRecords"
         />
     </div>
 </template>
