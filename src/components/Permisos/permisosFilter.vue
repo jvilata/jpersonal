@@ -62,8 +62,10 @@ export default {
     ...mapState('empleados', ['listaEmpleados'])
   },
   methods: {
+    ...mapActions('empleados', ['loadFilialEmpleado']),
     verNormativa() {
-      loadFilialEmpleado(this.filterP.empleado).then(response => {
+      this.loadFilialEmpleado(this.filterP.empleado)
+      .then((response) => {
         let url = response.filial.urlNormativa
         if (window.cordova === undefined) { // desktop
           openURL(url)

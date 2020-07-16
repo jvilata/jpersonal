@@ -117,11 +117,11 @@ const actions = {
   loadDiasPermisos({ commit }, value) {
     return new Promise((resolve, reject) => {
       let objFilterP = { IdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
-      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData)
+      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData) //Dias Concedidos
       .then((response) => {
         let dias = { diasConcedidos: response.data, diasPendientes: {} }
         objFilterP = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
-        axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true })
+        axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true }) //Dias Pendientes
         .then((response) => {
           dias.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
           resolve(dias)

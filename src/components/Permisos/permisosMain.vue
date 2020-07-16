@@ -94,7 +94,7 @@ export default {
         filialEmpleado: {},
         diasPendientes: {},
         diasConcedidos: {},
-        idAutorizadorOf: 0
+        autorizador: {}
       },
     }
   },
@@ -141,15 +141,14 @@ export default {
           }
         }
         this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
-        console.log('diasPendientes', this.empleadoP.diasPendientes);
-        console.log('diasConcedidos', this.empleadoP.diasConcedidos);
         console.log('This should come second');
       })
     },
 
     getResponsable(value) {
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
-        this.empleadoP.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
+        this.empleadoP.autorizador.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
+        this.empleadoP.autorizador.emailAutorizador = JSON.parse(response.data.msg).emailAut[0]
       })
       .catch(error => {
         console.log('calcularResponsable', error);
@@ -171,11 +170,6 @@ export default {
       this.getDiasPermisos(this.filterRecord)
       this.getResponsable(this.filterRecord)
     }
-    
-    /* while(!this.empleadoP.diasPendientes.tdiaslibres) {
-      setTimeout(() => {
-      }, 100)
-    } */
 
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
     

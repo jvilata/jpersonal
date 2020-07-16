@@ -79,12 +79,10 @@ export default {
     itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
-  mounted() {
-    
-  },
   methods: {
     ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
+    ...mapActions('tablasAux', ['sendMail']),
 
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
@@ -149,7 +147,16 @@ export default {
               })
               .catch(error => {
                 console.log('deletePermisoPendiente', error);
-              })  
+              })
+
+              let mail = {
+                to: this.item.empleadoEmailNotif,
+                from: 'edicom@edicom.es',
+                replyto: 'adjuntos@edicom.es',
+                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`,
+                text: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+              } 
+              this.sendMail(mail)
             }
           })
           .catch(error => console.log('addToVacaciones', error))
@@ -196,14 +203,22 @@ export default {
           .then(response => {
             if (response.data == "OK") {
               //Bloque borrar
-              console.log('Borrar');
               this.deletePermisoPendiente(this.item)
               .then((response) => {
                 this.$emit('refresh')
               })
               .catch(error => {
                 console.log('deletePermisoPendiente', error)
-              })  
+              })
+
+              //Send email
+              let mail = {
+                to: this.item.empleadoEmailNotif,
+                from: 'edicom@edicom.es',
+                subject: `Vacaciones/Permiso denegadas: ${data}`,
+                text: `Vacaciones/Permiso denegadas: ${data}. Del ${this.formatDate(solicitud.old_fechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.old_fechaHasta, 'DD/MM/YYYY')}\nConsulta con tu responsable si necesitas más aclaración.`
+              } 
+              this.sendMail(mail)
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
