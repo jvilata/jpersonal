@@ -40,7 +40,10 @@
               <q-input class="col-xs-8 col-sm-5" outlined readonly v-model="user.pers.emailAutorizador" label="Autorizador"/>
               <q-input class="col-xs-4 col-sm-5" outlined readonly v-model="recordToSubmit.consentimientoImagen" label="Consent.Imagen"/>
             </div>
-            <q-input class="row q-mb-sm" outlined readonly v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop />
+            <div class="row q-mb-sm items-center">
+              <div class="col-xs-11"><q-input outlined v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop /></div>
+              <div class="col-xs-1"><q-icon name="edit" @click="editLicensePlate()" color="primary" size="30px"/></div>
+            </div>
             <div class="row justify-center text-center q-pt-lg">
               <div class="col-xs-12 justify-center">
                 <q-btn
@@ -60,6 +63,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { headerFormData, urlFotos } from 'boot/axios.js'
+import querystring from 'querystring'
 
 export default {
   props: ['value', 'id', 'keyValue'],
@@ -71,8 +75,9 @@ export default {
       recordToSubmit: {
         id: -1,
         nombre: '',
-        codPuesto: 0
-      } // inicializamos los campos, sino no funciona bien
+        codPuesto: 0,
+        vehiculo: ''
+      }
     }
   },
   computed: {
@@ -87,14 +92,30 @@ export default {
     openForm (otrosCambios) {
       this.addTab(['otrosCambios', 'Otros Cambios', {}, this.id])
     },
-    
-    calculaAnyosExperiencia(){
-       var fechaActual = (new Date()).getFullYear()
-          var fechaInicio = date.formatDate(extractDate(this.user.pers.fecha_de_alta, 'YYYY-MM-DDTHH:mm:ss'), 'YYYY')
-         return fechaActual - fechaInicio
+    editLicensePlate(){
+      var data = { 
+            id: this.user.pers.id,
+            vehiculo: this.recordToSubmit.vehiculo
+      }
+      if(this.recordToSubmit.vehiculo === null || this.recordToSubmit.vehiculo === '') {
+            this.$q.dialog({
+              color: 'primary',
+              title: 'Faltan Datos',
+              message: `Es obligatorio rellenar el campo del vehículo`
+          })
+      } else { 
+         this.$axios.post(`bd_jpersonal.asp?action=pers_empleados_of/editLicensePlate/&auth=${this.user.auth}`,  querystring.stringify({ id: this.user.pers.id, vehiculo: this.recordToSubmit.vehiculo }), headerFormData )
+        .then(result => {
+          this.$q.dialog({
+            color: 'primary',
+            title: 'Matrícula añadida con éxito' 
+          })
+        })
+        .catch(error => { console.log(error.message) })
+      }  
     }
   },
-  mounted () {
+  mounted() {
       //Llamaremos al BACKEND para pedir datos de este usuario 
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {

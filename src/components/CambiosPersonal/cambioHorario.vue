@@ -311,12 +311,13 @@ export default {
         jornadaEmpl: 0,
         disabled: false,
         condiciones: false,
-        dialogMes: false
+        dialogMes: false,
+        responsable: 0
     }
   },
   methods: {
       ...mapActions('tabs', ['addTab']),
-      ...mapActions('empleados', ['calculaResponsable', 'loadDetalleEmpleado']),
+      ...mapActions('empleados', ['calcularResponsable', 'loadDetalleEmpleado']),
 
     openForm (link) {
       this.addTab([link.name, link.label, {}, 1])
@@ -502,7 +503,7 @@ export default {
             fechaDesde: null,
             fechaHasta: null,
             fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
-            idAutorizadorOf: 140,
+            idAutorizadorOf: this.responsable,
             nuevaVersion: true,
             observaciones: '',
             sfechaDesde: null,
@@ -510,7 +511,7 @@ export default {
             tipoDiaLibre: 0,
             tipoSolicitud: 'CAMBIO HORARIO'
         }
-        // en idAutorizadorOf -> this.calculaResponsable(this.user.pers.id),
+        
         this.$axios.post(`bd_jpersonal.asp?action=soldias/&auth=${this.user.auth}`, data)
         .then(result => {
             this.
@@ -532,7 +533,7 @@ export default {
         d1 = new Date(2008,0,1, d1.getHours(), d1.getMinutes()) // el backend trabaja con 2008-1-1THH:mm
         return date.formatDate(d1, 'YYYY-MM-DDTHH:mm:ss')
     },
-
+    
     cargarHoras(res){
         this.recordToSubmit.horaEntrada1 = res.horaEntrada1
         this.recordToSubmit.horaSalida1 = res.horaSalida1
@@ -556,6 +557,14 @@ export default {
          this.cargarHoras(response.data)
          this.calculoHorasSem()
        })
+        
+       this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
+       .then(response => {
+        this.responsable = JSON.parse(response.data.msg).idResp[0]
+        })
+      .catch(error => {
+        console.log('calcularResponsable', error);
+      })
  },
 
   computed:{

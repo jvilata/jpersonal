@@ -23,10 +23,10 @@
 
           <q-card>
               <q-card-section>
-                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" @permiso="value => permisoModif(value)"/> 
-                  <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item"/>
-                  <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item"/>
-                  <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item"/>
+                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @input="value => permisoModif(value)"/> 
+                  <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
+                  <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
+                  <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item" :keyValue="keyValue"/>
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
@@ -66,12 +66,12 @@ import { date } from 'quasar'
 import { mapActions } from "vuex";
 
 export default {
-  props: ['item', 'id'],
   data(){
     return {
       aprobacion: {}
     }
   },
+  props: ['item', 'id', 'keyValue'],
   components: {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
@@ -79,7 +79,7 @@ export default {
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
   mounted() {
-    console.log('item', this.item);
+    
   },
   methods: {
     ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso']),

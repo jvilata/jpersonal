@@ -12,7 +12,13 @@
           </q-item-label>
           <q-item-label>
             <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + (filterRecord.estadoSolicitud ? ' Estado Solicitud: '+ filterRecord.estadoSolicitud + ' | ': '') + (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRecord.tipoSolicitud  : '') : 'Pulse para definir filtro') }}</small>
+            <!-- ' Estado Solicitud: '+ `${(listaEstadosSolicitudes.find(record => record.id === filterRecord.estadoSolicitud)).valor1}\n` + ' | ' -->
+            <small>{{ (Object.keys(filterRecord).length > 1 ? 
+                (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + 
+                (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + 
+                (filterRecord.estadoSolicitud ? `Estado Solicitud: ${filterRecord.estadoSolicitud}` : '') + 
+                (filterRecord.tipoSolicitud ? ' Tipo Solicitud: '+ filterRescord.tipoSolicitud : '')  : 'Pulse para definir filtro') }}
+            </small>
           </q-item-label>
         </q-item-section>
         <q-item-section side>
@@ -29,6 +35,7 @@
         <aprobacionFilter
           @getRecords="(value) => getRecords(value)"
           :value="filterRecord"
+          :keyValue="keyValue"
           @input="(value) => Object.assign(filterRecord, value)"
           @close="expanded = !expanded"
         />
@@ -36,6 +43,7 @@
 
       <aprobacionItemsList
         v-model="listaCambios"
+        :keyValue="keyValue"
         @deleteCambios="(id) => deleteSolicitud(id)"
         @refresh="getRecords"
         />
@@ -57,8 +65,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('tablasAux', ['listaEstadosSolicitudes']),
     ...mapState('empleados', ['listaEmpleados']),
-    ...mapState('login', ['user']), // importo state.user desde store-login
+    ...mapState('login', ['user']), 
     ...mapState('aprobacion', ['listaCambios'])
   },
   methods: {
@@ -84,8 +93,8 @@ export default {
       this.deleteCambios({id: id , filterR: this.filterRecord})
     }
   },
-  mounted () {
-    
+
+  mounted() {
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
@@ -99,7 +108,6 @@ export default {
         this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1', '2'] }
       }
       this.getRecords(this.filterRecord)
-      
     }
   },
   destroyed () {
