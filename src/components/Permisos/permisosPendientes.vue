@@ -16,7 +16,7 @@
         <permisosPendientesList
           v-model="permisosPendientes"
           class="q-mb-md"
-          @refresh="getPermisos">
+          @refresh="$emit('refresh')">
         </permisosPendientesList>
 
         <q-separator spaced/>
@@ -31,7 +31,7 @@
     <q-dialog v-model="nuevoPermiso"  >
       <permisosAdd
         @close="nuevoPermiso = !nuevoPermiso"
-        @nuevo="getPermisos"
+        @refresh="$emit('refresh')"
         @ok="done = true"
         :value="value"
         :empleadoP="value.empleadoP"

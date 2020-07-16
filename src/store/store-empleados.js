@@ -114,15 +114,22 @@ const actions = {
     })
   },
 
-  loadDiasPendientes({ commit }, objFilterP) {
-    return axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true })
-  },
-
-  loadDiasConcedidos({ commit }, objFilterP) {
+  loadDiasPermisos({ commit }, value) {
     return new Promise((resolve, reject) => {
-      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData)
+      let objFilterP = { IdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
+      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/CuentaDiasAprobados&auth=${login.state.user.auth}`, querystring.stringify(objFilterP), headerFormData) //Dias Concedidos
       .then((response) => {
-        resolve(response)
+        let dias = { diasConcedidos: response.data, diasPendientes: {} }
+        objFilterP = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
+        axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true }) //Dias Pendientes
+        .then((response) => {
+          dias.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
+          resolve(dias)
+        })
+        .catch(error => {
+          this.dispatch('mensajeLog/addMensaje', 'loadDiasPendientes' + error, { root: true })
+          reject(error)
+        })
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'loadDiasConcedidos' + error, { root: true })

@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item left-color="positive" right-color="negative" @left="aceptar(1)" @right="rechazar(1)">
+  <q-slide-item left-color="positive" right-color="negative" @left="aceptar" @right="rechazar">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -23,7 +23,7 @@
 
           <q-card>
               <q-card-section>
-                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @input="value => permisoModif(value)"/> 
+                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @permiso="value => permisoModif(value)"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item" :keyValue="keyValue"/>
@@ -66,6 +66,12 @@ import { date } from 'quasar'
 import { mapActions } from "vuex";
 
 export default {
+  data(){
+    return {
+      aprobacion: {},
+      origin: 0
+    }
+  },
   props: ['item', 'id', 'keyValue'],
   components: {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
@@ -73,19 +79,19 @@ export default {
     itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
-  mounted() {
-   console.log(this.item)
-  },
   methods: {
     ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
-    ...mapActions('tablasAux', 'sendMail'),
+    ...mapActions('tablasAux', ['sendMail']),
 
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
     permisoModif(value) {
       Object.assign(this.aprobacion, value)
+    },
+    setOrigin(origin) {
+      this.origin = origin
     },
     confirm(){
       this.$q.dialog({
@@ -109,7 +115,8 @@ export default {
         this.$emit('deleteCambios', this.item.id)
       })
     },
-    aceptar({ reset }, origin){
+
+    aceptar({ reset }){
       this.$q.dialog({
       title: 'ACEPTAR SOLICITUD',
       message: '¿Está seguro de que desea aceptar la solicitud?',
@@ -140,7 +147,16 @@ export default {
               })
               .catch(error => {
                 console.log('deletePermisoPendiente', error);
-              })  
+              })
+
+              let mail = {
+                to: this.item.empleadoEmailNotif,
+                from: 'edicom@edicom.es',
+                replyto: 'adjuntos@edicom.es',
+                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`,
+                text: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+              } 
+              this.sendMail(mail)
             }
           })
           .catch(error => console.log('addToVacaciones', error))
@@ -195,15 +211,15 @@ export default {
           this.sendMail(datos)
           
         }
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
 
-      }).onCancel(() => {
+      }).onDismiss(() => {
         this.$emit('close')
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
       })
     },
 
-     rechazar ({reset}, origin) {
+     rechazar ({reset}) {
       this.$q.dialog({
         title: 'Rechazar permiso',
         message: 'Indique el motivo',
@@ -230,8 +246,17 @@ export default {
                 this.$emit('refresh')
               })
               .catch(error => {
-                console.log('deletePermisoPendiente', error);
-              })  
+                console.log('deletePermisoPendiente', error)
+              })
+
+              //Send email
+              let mail = {
+                to: this.item.empleadoEmailNotif,
+                from: 'edicom@edicom.es',
+                subject: `Vacaciones/Permiso denegadas: ${data}`,
+                text: `Vacaciones/Permiso denegadas: ${data}. Del ${this.formatDate(solicitud.old_fechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.old_fechaHasta, 'DD/MM/YYYY')}\nConsulta con tu responsable si necesitas más aclaración.`
+              } 
+              this.sendMail(mail)
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
@@ -251,9 +276,10 @@ export default {
           
         }
 
-        if (origin === 1) reset()
+        if (this.origin === 1) reset()
       }).onDismiss(() => {
-        if (origin === 1) reset()
+        //if (this.origin === 1) 
+        reset()
       })
     }
   }

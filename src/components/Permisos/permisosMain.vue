@@ -32,13 +32,18 @@
         :filialEmp="empleadoP.filialEmpleado"
         @input="(value) => Object.assign(filterRecord, value)"
         @getPermisos="(value) => getPermisos(value)"
+        @getEmpleado="(value) => nuevoEmpleado(value)"
         @close="expanded = !expanded"
       />
     </q-dialog>
 
     <q-tab-panels v-model="ltab" animated >
-      <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name" class="q-pa-none">
-        <router-view @close="$emit('close')"/>
+      <q-tab-panel 
+        v-for="(tab, index) in menuItems" 
+        :key="index" 
+        :name="tab.link.name" 
+        class="q-pa-none">
+        <router-view @close="$emit('close')" @refresh="getPermisos(filterRecord); getDiasPermisos(filterRecord)"/>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -89,7 +94,7 @@ export default {
         filialEmpleado: {},
         diasPendientes: {},
         diasConcedidos: {},
-        idAutorizadorOf: 0
+        autorizador: {}
       },
     }
   },
@@ -103,57 +108,69 @@ export default {
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
-    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable']),
+    ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPermisos', 'calcularResponsable']),
     ...mapActions('tablasAux', ['sendMail']),
+
     getPermisos(value) {
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.getPermisosPendientes(objFilter)
       this.getPermisosConcedidos(objFilter)
-      this.empleadoSelec(value)
     },
 
-    empleadoSelec(value) {      
+    nuevoEmpleado(value) {
+      this.getFilialEmpleado(value)
+      this.getDiasPermisos(value)
+      this.getResponsable(value)
+    },
+
+    getFilialEmpleado(value) {     
       this.loadFilialEmpleado(value.empleado).then(response => {
         this.empleadoP.filialEmpleado = response
       })
-      var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
-      this.loadDiasPendientes(objFilter).then((response) => {
-        this.empleadoP.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
+    },
+
+    getDiasPermisos(value) { //Dias pendientes y dias concedidos
+      this.loadDiasPermisos(value).then(response => {
+        this.empleadoP.diasConcedidos = response.diasConcedidos
+        this.empleadoP.diasPendientes = response.diasPendientes
+
         this.empleadoP.diasPendientes.tdiaspendientes = 0
         for(let permiso of this.permisosPendientes) {
           if (permiso.tipoDiaLibre === 1) {
             this.empleadoP.diasPendientes.tdiaspendientes += permiso.diasEfectivos
           }
         }
-      })
-      .catch(error => {
-        console.log('loadDiasPendientes', error);
-      })
-
-      objFilter = { IdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
-      this.loadDiasConcedidos(objFilter).then(response => {
-        this.empleadoP.diasConcedidos = response.data
         this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
+        console.log('This should come second');
       })
+    },
 
+    getResponsable(value) {
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
-        this.empleadoP.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
+        this.empleadoP.autorizador.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
+        this.empleadoP.autorizador.emailAutorizador = JSON.parse(response.data.msg).emailAut[0]
       })
       .catch(error => {
         console.log('calcularResponsable', error);
       })
-    },
+    }
   },
   mounted () {
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
-      this.getPermisos(this.filterRecord) // refresco la lista por si se han hecho cambios
+      this.getPermisos(this.filterRecord)
+      this.getFilialEmpleado(this.filterRecord)
+      this.getDiasPermisos(this.filterRecord)
+      this.getResponsable(this.filterRecord)
     } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
       this.getPermisos(this.filterRecord)
+      this.getFilialEmpleado(this.filterRecord)
+      this.getDiasPermisos(this.filterRecord)
+      this.getResponsable(this.filterRecord)
     }
-    
+
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
     
   }, 

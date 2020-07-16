@@ -3,7 +3,7 @@
 
 // en los stores no se ha cargado todavía this.$axios con nuestra configuracion de boot/axios.js, por eso
 // lo importo y uso la variable especifica exportada en ese modulo axiosInstance
-import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
+import { axiosInstance, headerFormData } from 'boot/axios.js'
 import login from './store-login'
 import querystring from 'querystring'
 
@@ -88,7 +88,7 @@ const actions = {
     */
     axiosInstance.post(`bd_jpersonal.asp?action=services/sendmail&auth=${login.state.user.auth}`, querystring.stringify(datos), headerFormData)
     .then((response) => {
-      console.log('email RESPONSE', response)
+      console.log('mailResponse', response)
     })
     .catch(error => {
       this.dispatch('mensajeLog/addMensaje', 'sendMail' + error, { root: true })

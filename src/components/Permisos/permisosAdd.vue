@@ -108,6 +108,7 @@ export default {
   computed: {
     ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos']),
     ...mapState('tablasAux', ['listaTiposDiasLibres']),
+    ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user'])
   },
   components: {
@@ -127,6 +128,7 @@ export default {
     ...mapActions('permisos', ['addPermisoPendiente']),
     ...mapActions('empleados', ['calculaResponsable']),
     ...mapActions('mensajeLog', ['addMensaje']),
+    ...mapActions('tablasAux', ['sendMail']),
     formatDate (pdate, mask) {
       return date.formatDate(pdate, mask)
 
@@ -153,7 +155,7 @@ export default {
         diasEfectivos: this.permisoToAdd.diasEfectivos,
         tipoDiaLibre: this.permisoToAdd.tipoDiaLibre,
         observaciones: this.permisoToAdd.observaciones,
-        idAutorizadorOf: this.empleadoP.idAutorizadorOf,
+        idAutorizadorOf: this.empleadoP.autorizador.idAutorizadorOf,
         estadoSolicitud: 1,
         tipoSolicitud: 'PERMISO',
         nuevaVersion: true,
@@ -219,8 +221,18 @@ export default {
           if (JSON.parse(response.data).success) {
             //Notify.create('Solcitud registrada correctamente')
             this.$emit('close')
-            this.$emit('nuevo')
+            this.$emit('refresh')
             this.$emit('ok')
+            //Send email
+            let emp = this.listaEmpleados.find(record => record.id == solicitud.empleado)
+            let mail = {
+              to: this.empleadoP.autorizador.emailAutorizador,
+              from: 'edicom@edicom.es',
+              subject: `Nueva solicitud vacaciones/permiso/baja de ${emp.name}`,
+              text: `Del ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}. Observaciones: ${solicitud.observaciones ? solicitud.observaciones : ''}.\nRevísala cuando puedas para su aprobación.\nSaludos.`
+            } 
+            this.sendMail(mail)
+
           } else {
             Notify.create('No se ha podido registrar su solicitud')
           }

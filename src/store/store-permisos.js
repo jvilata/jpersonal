@@ -1,6 +1,5 @@
 import { Notify } from "quasar"
 import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
-import querystring from 'querystring'
 import login from './store-login'
 
 const state = {
@@ -22,6 +21,7 @@ const mutations = {
   loadPermisosPendientes(state, lista) {
     state.permisosPendientes = []
     state.permisosPendientes = lista
+    console.log('This should come first');
   },
   loadPermisosConcedidos(state, lista) {
     state.permisosConcedidos = []
@@ -36,6 +36,7 @@ const actions = {
       .then((response) => {
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
+          commit('loadPermisosPendientes', response.data)
         } else {
           commit('loadPermisosPendientes', response.data)
         }
