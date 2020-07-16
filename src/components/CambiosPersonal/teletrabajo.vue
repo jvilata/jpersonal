@@ -209,6 +209,8 @@ export default {
     },
     methods: {
         ...mapActions('empleados', ['calcularResponsable', 'loadListaPaises']),
+        ...mapActions('tablasAux', ['sendMail']),
+
       confirm1 () {
       this.$q.dialog({
         title: 'Aceptación conciliación laboral',
@@ -292,7 +294,7 @@ export default {
             tipoDiaLibre: 0,
             tipoSolicitud: 'TELETRABAJO'
         }
-        console.log(data)
+        
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
             //console.log(result.data)
@@ -302,6 +304,19 @@ export default {
           })
         })
         .catch(error => { console.log(error.message) })
+
+        let datos = {
+          to: this.user.pers.emailAutorizador,
+          from: 'edicom@edicom.es',
+          subject: 'Nueva Solicitud de TELETRABAJO de ' + this.user.pers.nombre,
+          text: 'Nueva solicitud de TELETRABAJO de: ' + this.user.pers.nombre + '\n\n' + 'Datos de Solicitud: \n Desde: ' + 
+            date.formatDate(date.extractDate(this.recordToSubmit.teletrabajoFechaDesde,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+            '\n Hasta: ' + date.formatDate(date.extractDate(this.recordToSubmit.teletrabajoFechaHasta,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY')+
+            '\n País Teletrabajo: ' + this.recordToSubmit.paisTeletrabajo + '\n Domicilio teletrabajo: ' + this.recordToSubmit.domicilioTeletrabajo +
+            '\n Motivo solicitud teletrabajo: ' + this.recordToSubmit.teletrabajoObservaciones + '\n\nRevísala cuando puedas para su aprobación \nSaludos'
+        }
+        this.sendMail(datos)
+        
     },
     filterPaises(val, update, abort){
       update(() =>{
@@ -317,6 +332,7 @@ export default {
         
   },
   mounted(){
+    
       this.listaPaisesFilter = this.listaPaises
       this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
        .then(response => {

@@ -74,11 +74,12 @@ export default {
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
   mounted() {
-   
+   console.log(this.item)
   },
   methods: {
     ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
+    ...mapActions('tablasAux', 'sendMail'),
 
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
@@ -171,6 +172,27 @@ export default {
             idautArea2: this.item.idautArea2
           }
           this.aprobarCambiosEmpleado(solicitud)
+          let datos = {
+              to: this.item.empleadoEmail,
+              from: 'edicom@edicom.es',
+              subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
+              
+          }
+          if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
+            datos = {
+              text: 'Estimado\n' + this.item.empleadoNombre + '\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+                date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+                '\n\n Observaciones: ' + this.item.observaciones + '\nAprobada por: ' + this.item.nomAutorizadorOf + 'el' + new Date() +
+                '\n Datos Solicitud' + this.item.datosSolicitud
+            }
+          } else {
+            datos = {
+              text: 'Estimado\n' + this.item.empleadoNombre + '\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+                date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+                '\n Observaciones: ' + this.item.observaciones
+            }
+          }
+          this.sendMail(datos)
           
         }
         if (origin === 1) reset()

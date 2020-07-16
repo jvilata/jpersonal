@@ -318,6 +318,7 @@ export default {
   methods: {
       ...mapActions('tabs', ['addTab']),
       ...mapActions('empleados', ['calcularResponsable', 'loadDetalleEmpleado']),
+      ...mapActions('tablasAux', ['sendMail']),
 
     openForm (link) {
       this.addTab([link.name, link.label, {}, 1])
@@ -522,6 +523,24 @@ export default {
         })
         .catch(error => { console.log(error.message) })
         this.dialogMes = true
+
+        let datos = {
+          to: this.user.pers.emailAutorizador,
+          from: 'edicom@edicom.es',
+          subject: 'Nueva Solicitud de CAMBIO HORARIO de ' + this.user.pers.nombre,
+          text: 'Nueva solicitud de CAMBIO HORARIO de: ' + this.user.pers.nombre + '\n\n' + 'Datos de Solicitud: \n Hora Entrada 1: ' + 
+            date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada1,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+            ' Hora Salida 1: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida1,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+            '\n Hora Entrada 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada2,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+            ' Hora Salida 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida2,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+            '\n Hora Entrada 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada3,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+            ' Hora Salida 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida3,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+            '\n Hora Entrada 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada4,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+            ' Hora Salida 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida4,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+            '\n\nRevísala cuando puedas para su aprobación \nSaludos'
+        }
+        this.sendMail(datos)
+        
     },
 
     formatTime(time){
