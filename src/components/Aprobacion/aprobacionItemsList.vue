@@ -31,6 +31,7 @@
         </q-item-label>
         <aprobacionItem v-for="(item, key) in value"
           :key="key"
+          :keyValue="keyValue"
           :item="item"
           :id="key"
           @deleteCambios="(id) => $emit('deleteCambios', id)" />
@@ -49,7 +50,7 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
-  props: ['value'], // en 'value' tenemos la tabla de datos del grid
+  props: ['value', 'keyValue'], // en 'value' tenemos la tabla de datos del grid
   components: {
     aprobacionItem: require('components/Aprobacion/aprobacionItem.vue').default
   }

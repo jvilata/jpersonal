@@ -39,7 +39,7 @@
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
               <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`" />
               <div v-if="col.name==='vigente'">
-                <q-checkbox v-model="col.value" />
+                <q-checkbox v-model="user.pers.vigente" />
               </div>
             </div>
           </q-td>
@@ -71,6 +71,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { urlFotos } from 'boot/axios.js'
+import { date } from 'quasar'
 
 export default {
   props: ['value'], // en 'value' tenemos la tabla de datos del grid
@@ -90,7 +91,7 @@ export default {
         { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'paisLaboral', sortable: true, style: 'width: 30px' },
         { name: 'pais', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },
         { name: 'grupoETM', align: 'left', label: 'GrupoETM', field: 'grupoETM', sortable: true },
-        { name: 'proximaTutorizacion', align: 'left', label: 'Próx.Tutoriz.', field: 'proximaTutorizacion', sortable: true },
+        { name: 'proximaTutorizacion', align: 'left', label: 'Próx.Tutoriz.', field: 'proximaTutorizacion', sortable: true, format: val => ((val !== null) ? date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY'): '')},
         { name: 'vehiculo', align: 'left', label: 'Vehiculo', field: 'vehiculo', sortable: true, style: 'width: 130px; whiteSpace: normal', format: val => val !== null ? val.substring(0, 30) : ''},
         { name: 'vigente', align: 'left', label: 'Vigente', field: 'vigente', sortable: true, format: val => val === 'Verdadero' }
       ],

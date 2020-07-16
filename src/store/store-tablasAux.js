@@ -76,8 +76,7 @@ const actions = {
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', tabAux.mutation + error, { root: true })
       })
-  }
-  
+  } 
 }
 
 export default {

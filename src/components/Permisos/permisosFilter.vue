@@ -86,7 +86,6 @@ export default {
     }
   },
   mounted() {
-    console.log('filialEmp', this.filialEmp);
     this.listaEmpleadosFilter = this.listaEmpleados
     this.filterP = Object.assign( {}, this.value)
     

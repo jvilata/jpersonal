@@ -41,7 +41,7 @@
         <router-view @close="$emit('close')"/>
       </q-tab-panel>
     </q-tab-panels>
-    <!-- podemos poner tabs en el pie para dispositivos moviles pero quita pantalla y no me gusta bg-primary text-white -->
+
     <q-tabs 
       v-model="ltab" 
       dense
@@ -105,19 +105,16 @@ export default {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
     ...mapActions('empleados', ['loadFilialEmpleado', 'loadDiasPendientes', 'loadDiasConcedidos', 'calcularResponsable', 'sendMail']),
     getPermisos(value) {
-      //Object.assign(this.filterRecord, value)
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.getPermisosPendientes(objFilter)
       this.getPermisosConcedidos(objFilter)
       this.empleadoSelec(value)
     },
-    empleadoSelec(value) {
-      console.log('valueEmp', value);
-      
+
+    empleadoSelec(value) {      
       this.loadFilialEmpleado(value.empleado).then(response => {
         this.empleadoP.filialEmpleado = response
       })
-      
       var objFilter = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
       this.loadDiasPendientes(objFilter).then((response) => {
         this.empleadoP.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
@@ -136,7 +133,6 @@ export default {
       this.loadDiasConcedidos(objFilter).then(response => {
         this.empleadoP.diasConcedidos = response.data
         this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
-        console.log('This should come first: diaslib', this.empleadoP.diasPendientes.tdiaslibres);
       })
 
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
@@ -144,7 +140,6 @@ export default {
       })
       .catch(error => {
         console.log('calcularResponsable', error);
-        
       })
     },
   },
@@ -158,7 +153,6 @@ export default {
       this.getPermisos(this.filterRecord)
     }
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
-    console.log('This should come second');
     
   }, 
   destroyed () {

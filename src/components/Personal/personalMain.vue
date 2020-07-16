@@ -12,7 +12,16 @@
           </q-item-label>
           <q-item-label>
             <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
+            <small>{{ (Object.keys(filterRecord).length > 1 ? (filterRecord.query ? `Empleado: ${filterRecord.query}` + ' | ': '' ) + 
+                      (filterRecord.area ? `Area: ${filterRecord.area}`+ ' | ' : '' ) + 
+                      (filterRecord.paisLab ? `País Laboral: ${filterRecord.paisLab}`+ ' | ' : '' ) +
+                      (filterRecord.paisTrab ? `País Laboral: ${filterRecord.paisTrab}`+ ' | ' : '' ) +
+                      (filterRecord.vehiculo ? `Vehículo: ${filterRecord.vehiculo}`+ ' | ' : '' ) +
+                      (filterRecord.equipoETM ? `Equipo ETM: ${filterRecord.equipoETM}`+ ' | ' : '' ) + 
+                      (filterRecord.agrupacionETM ? `Grupo ETM: ${filterRecord.agrupacionETM}`+ ' | ' : '' ) + 
+                      (filterRecord.sfecha_de_alta_desde ? `Fecha Alta Desde: ${filterRecord.sfecha_de_alta_desde}\n` : '' ) +
+                      (filterRecord.sfecha_de_alta_hasta ? `Fecha Alta Hasta: ${date.formatDate(date.extractDate(filterRecord.sfecha_de_alta_hasta,'YYYY-MM-DDTHH:mm:ss'), 'DD/MM/YYYY')}\n` : '' ) +
+                      (filterRecord.teletrabajo==1 ? `Teletrabajo: SÍ` : '' ) : 'Pulse para definir filtro') }}</small>
           </q-item-label>
         </q-item-section>
         <q-item-section side>
@@ -44,8 +53,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { date } from 'quasar'
 import personalFilter from 'components/Personal/personalFilter.vue'
 import personalGrid from 'components/Personal/personalGrid.vue'
+
 export default {
   props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
   data () {
@@ -59,6 +70,7 @@ export default {
   },
   computed: {
     ...mapState('login', ['user']), // importo state.user desde store-login
+    ...mapState('empleados', ['listaEmpleados']),
 
   },
   methods: {
@@ -72,6 +84,7 @@ export default {
       this.loadListaDetalleEmpleados(filter)
         .then(response => {
           this.registrosSeleccionados = response.data.root
+          console.log('filterR', this.filterRecord)
           this.expanded = false
         })
         .catch(error => {

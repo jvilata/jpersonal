@@ -20,12 +20,22 @@
           use-input
           behavior="menu"
         />
-        <q-input 
+
+        <q-select 
+          v-if="keyValue == 2"
           outlined 
           clearable 
           label="Aprobador" 
           stack-label 
-          v-model="filterR.persona" 
+          v-model="filterR.persona"
+           :options="listaEmpleadosFilter"
+          @filter="filterEmpleados"
+          option-value="id"
+          option-label="name"
+          emit-value
+          map-options
+          use-input
+          behavior="menu"
         />
         <q-select
           label="Estado"
@@ -69,14 +79,22 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
-  props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
+  props: ['value', 'keyValue'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
+  //keyValue 1-> es el tab de consultar
+  //keyValue 2 -> tab de aprobar 
   data () {
     return {
       filterR: {
-        idEmpleado: 0
+        idEmpleado: 0,
+        persona: '',
+        estadoSolicitud: '',
+        tipoSolicitud: 0
       },
       disableEmpleado: true,
-      listaEmpleadosFilter: []
+      listaEmpleadosFilter: [],
+      listaResponsablesFilter: [],
+      listaResponsables: [],
+      responsable: ''
     }
   },
   computed: {
@@ -85,6 +103,7 @@ export default {
     ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
   },
   methods: {
+    ...mapActions('empleados', ['calcularResponsable']),
     getRecords () {
       this.$emit('getRecords', this.filterR) // lo captura aprobacionMain
     },
@@ -96,14 +115,28 @@ export default {
         const needle = val.toLowerCase()
         this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    filterResponsables(val, update, abort){
+      update(() =>{
+        const needle = val.toLowerCase()
+        this.listaResponsablesFilter = this.listaResponsables.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
     }
+
+
   },
   mounted () {
+    console.log('this.keyValue', this.keyValue)
+    // this.calcularResponsable({ id: this.value.empleado, tipoSol: 1 }).then(response => {
+    //     this.responsable = JSON.parse(response.data.msg).idResp[0]
+    //   })
+    //   .catch(error => {
+    //     console.log('calcularResponsable', error);
+    //   })
     this.listaEmpleadosFilter = this.listaEmpleados
     this.filterR = Object.assign( {} , this.value) // asignamos valor del parametro por si viene de otro tab
   },
   destroyed () {
-    // guardamos valor en tabs por si despus queremos recuperarlo
     this.$emit('input', this.filterR)
   }
 }

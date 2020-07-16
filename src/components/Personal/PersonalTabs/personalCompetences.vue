@@ -47,7 +47,7 @@ export default {
         },
         { name: 'descripcion', align: 'left', label: 'Descripcion', field: row => row.datosCompetencia.descripcion, sortable: true, style: 'min-width: 200px; whiteSpace: normal' },
         { name: 'tipoCompetencia', align: 'left', label: 'Tipo', field: row => row.datosCompetencia.tipoCompetencia, sortable: true },
-        { name: 'fechaAdquisicion', align: 'left', label: 'F.Adquisición', field: 'fechaAdquisicion', format: val => date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') },
+        { name: 'fechaAdquisicion', align: 'left', label: 'F.Adquisición', field: 'fechaAdquisicion', format: val => ((val !== null) ? date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY'): '') },
         { name: 'fechaCompromiso', align: 'left', label: 'F.Compromiso', field: 'fechaCompromiso', format: val => ((val !== null) ? date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY'): '') },
         { name: 'comentarios', align: 'left', label: 'Comentarios', field: 'comentarios' }
        ],
