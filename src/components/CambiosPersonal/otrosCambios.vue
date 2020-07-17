@@ -32,6 +32,9 @@
           <div class="col-xs-12 q-mt-sm">
               <q-btn @click="solicitarCambios()" :disabled="recordToSubmit.motivoTeletrab.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Otros Cambios" style="height: 60px"/>
           </div>
+        <q-dialog v-model="dialogMes" @click="$emit('close')" >
+          <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
+        </q-dialog>
       </div>
       <div class="justify-bottom text-bottom">
       <span class="text-grey-7">Protección de Datos. </span>
@@ -60,7 +63,8 @@ export default {
       },
       protDatos: 'PROTECCIÓN DE DATOS',
       protMas: '',
-      disabled: false
+      disabled: false,
+      dialogMes: false
   }
   },
   methods: {
@@ -91,14 +95,18 @@ export default {
         solicitante: this.user.pers.idpersonal ,
         delegacion: result.filial.idfilial
         }
+        this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=tareasLaboral/list&auth=${this.user.auth}`, data)
           .then(result => {
-            this.$q.dialog({
-            color: 'primary',
-            message: `Se ha registrado su solicitud de cambio.`
-            }).onOk(() => {
-              this.$emit('close')
-            })
+            this.timer = setTimeout(() => {
+              this.$q.loading.hide()
+              this.dialogMes = true
+              this.timer = void 0
+            }, 1000) 
+          this.$q.notify({
+          color: 'primary',
+          message: `Se ha registrado su solicitud de cambio.`
+          })
           })
           .catch(error => { console.log(error.message) })  
       })

@@ -61,10 +61,15 @@ export default {
   },
   methods: {
     ...mapActions('empleados', ['loadCompetencias']),
+    
     getCompetencias(){
+      
       this.loadCompetencias()
           .then(response => {
-            console.log(response)
+            this.timer = setTimeout(() => {
+              this.$q.loading.hide()
+              this.timer = void 0
+            }, 250) 
             this.data = response.data
           })
           .catch(error => {
@@ -75,6 +80,9 @@ export default {
   },
   mounted(){
     this.getCompetencias()
+  },
+  beforeMount(){
+    this.$q.loading.show() 
   }
    
 }

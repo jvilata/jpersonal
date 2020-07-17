@@ -72,8 +72,6 @@
         />
         <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
 
-        <!-- <p>{{permisoToAdd}}</p> -->
-
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->
           <q-btn flat type="submit" label="Solicitar" color="primary"/>
@@ -115,8 +113,6 @@ export default {
     wgDate: wgDate
   },
   mounted () {
-    console.log('valueAdd', this.value);
-    
     this.permisoToAdd.fechaDesde = new Date ()
     this.permisoToAdd.fechaHasta = new Date ()
     this.calcDiasEfectivos()
@@ -131,7 +127,6 @@ export default {
     ...mapActions('tablasAux', ['sendMail']),
     formatDate (pdate, mask) {
       return date.formatDate(pdate, mask)
-
     },
     calcDiasEfectivos() {
       if (this.permisoToAdd.fechaDesde && this.permisoToAdd.fechaHasta) {

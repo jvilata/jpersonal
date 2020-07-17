@@ -271,9 +271,9 @@
                             </q-card-actions>
                         </q-card>
                         <q-avatar color="green" text-color="green" icon="check_circle_outline" size="100px" /> -->
-                        <q-icon color="green" name="check_circle" size="100px" />
+                        <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
                     </q-dialog>
-                    <!-- :disabled="!recordToSubmit.aceptaComer30m || !condiciones || recordToSubmit.aceptaCambioHorario ? !disabled : disabled" -->
+                    
                     <q-btn @click="showLoading">BOTON PRUBEA</q-btn>
                 </div>
             </div>
@@ -326,7 +326,6 @@ export default {
     },
     showLoading () {
       this.$q.loading.show()
-
       // hiding in 2s
       this.timer = setTimeout(() => {
         this.$q.loading.hide()
@@ -389,7 +388,6 @@ export default {
         let diff = 0;
         this.sumaHoras = 0;
         if (this.recordToSubmit.horaEntrada1 === null || this.recordToSubmit.horaEntrada1 === '') this.recordToSubmit.horaEntrada1 = this.recordToSubmit.horaSalida1
-        console.log(this.recordToSubmit)
         if (this.recordToSubmit.horaSalida1 === null  || this.recordToSubmit.horaSalida1 === '') this.recordToSubmit.horaSalida1 = this.recordToSubmit.horaEntrada1
         if (this.recordToSubmit.horaEntrada2 === null  || this.recordToSubmit.horaEntrada2 === '') this.recordToSubmit.horaEntrada2 = this.recordToSubmit.horaSalida2
         if (this.recordToSubmit.horaSalida2 === null  || this.recordToSubmit.horaSalida2 === '') this.recordToSubmit.horaSalida2 = this.recordToSubmit.horaEntrada2
@@ -399,40 +397,40 @@ export default {
         if (this.recordToSubmit.horaSalida4 === null || this.recordToSubmit.horaSalida4 === '') this.recordToSubmit.horaSalida4 = this.recordToSubmit.horaEntrada4
         var horasArray = [this.recordToSubmit.horaEntrada1, this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, this.recordToSubmit.horaSalida2]
         var i;
-        let unit = 'hours'
+        let unit = 'minutes'
         for( i = 0; i < horasArray.length ; i+=2 ) {
             if(horasArray[i] !== null && horasArray[i] !== '') {
                 if(horasArray[i] > horasArray[i+1]) { 
-                    //si es horario de noche, la hora de entrada será mayor que la de salida -> hay que sumarle un dia para que la diferencia calculada sea correcta
+                    //si es horario de noche, la hora de entrada será mayor que la de salida -> le sumamos un dia
                     horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) 
                 }
-                diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)
+                diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)/60.0
                 this.sumaHoras += Math.abs(diff)
-
             }
         }
+        console.log('sumaHoras', this.sumaHoras)
         this.sumaHoras *= 4 // *4 porque es de Lunes-Jueves con ese horario
         horasArray = [this.recordToSubmit.horaEntrada3, this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, this.recordToSubmit.horaSalida4 ]
         for( i = 0; i < horasArray.length ; i+=2 ) {
             if(horasArray[i] !== null && horasArray[i] !== '') {
                 if(horasArray[i] > horasArray[i+1]) { horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) }
-             diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)
+             diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)/60.0
              this.sumaHoras += Math.abs(diff)
             }
         } 
+        console.log('sumaHoras', this.sumaHoras)
         //aceptar comer en 30 min
         var com1 = 0.0
         var com2 = 0.0
-        unit = 'minutes'
         if (this.recordToSubmit.horaEntrada2 !== null && this.recordToSubmit.horaSalida1 !== null) 
-            console.log(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2)
+            //console.log(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2)
             com1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, unit))
-            console.log(com1, this.recordToSubmit.horaSalida1)
+            //console.log(com1, this.recordToSubmit.horaSalida1)
             // if(com1 <= 0) { this.alerta1('Alerta Descanso Mínimo:', 'No se permite ')} hora entrada 2 tiene que ser posterior a la hora salida (tiene que haber descanso)
         if (this.recordToSubmit.horaEntrada4 !== null && this.recordToSubmit.horaSalida3 !== null)    
             com2 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, unit))
         if ( (com1 > 0 && com1 <= 30) || (com2 > 0 && com2 <= 30)) {
-            console.log(com1)
+            //console.log(com1)
             this.checkComer30 = true
             this.recordToSubmit.aceptaComer30m = false
         }else { this.checkComer30 = false }
@@ -478,9 +476,9 @@ export default {
         } else{
             this.condiciones = true
         }
-        console.log(this.recordToSubmit.aceptaCambioHorario)
-        console.log(this.recordToSubmit.aceptaComer30m)
-        console.log(this.condiciones)
+        // console.log(this.recordToSubmit.aceptaCambioHorario)
+        // console.log(this.recordToSubmit.aceptaComer30m)
+        // console.log(this.condiciones)
         //     if (!acepta) result = false;
         // }
     },
@@ -503,7 +501,7 @@ export default {
     solicitarCambioHorario(){
         if (!this.checkComer30) {
             this.recordToSubmit.aceptaComer30m = false
-            console.log('acepta30', this.recordToSubmit.aceptaComer30m);
+            //console.log('acepta30', this.recordToSubmit.aceptaComer30m);
         }
 
         var data = { 
@@ -527,15 +525,23 @@ export default {
             tipoSolicitud: 'CAMBIO HORARIO'
         }
         
+        this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=soldias/&auth=${this.user.auth}`, data)
         .then(result => {
+            this.timer = setTimeout(() => {
+                this.$q.loading.hide()
+                this.dialogMes = true
+                this.timer = void 0
+            }, 1000) 
             this.$q.notify({
             color: 'primary',
             message: `Se ha solicitado un cambio de horario.`
-      })
+            })
+
+            // this.$emit('close')
         })
         .catch(error => { console.log(error.message) })
-        this.dialogMes = true
+        
 
         let datos = {
           to: this.user.pers.emailAutorizador,

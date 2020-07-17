@@ -31,10 +31,9 @@
     <div class="row q-pb-sm">
       <img :src="justificante" style="height: 50px; max-width: 50px" clickable @click="expanded = true">
       <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
-      <q-input class="col-12" v-model="justificante" label="Justificante" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-      <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
+      <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
     </div>
 
     <q-dialog v-model="expanded"  >
