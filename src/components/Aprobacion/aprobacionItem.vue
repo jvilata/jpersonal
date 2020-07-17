@@ -30,15 +30,15 @@
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="red" label="RECHAZAR" @click="rechazar"/>
+                      <q-btn v-if="keyValue==2" color="red" label="RECHAZAR" @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn color="primary" label="ACEPTAR" @click="aceptar"/>
+                      <q-btn v-if="keyValue==2" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
                     <div class="col-xs-12 justify-center q-pt-md">
-                      <q-btn @click="confirm" style="width: 270px" color="indigo-1"> 
+                      <q-btn v-if="keyValue==1" @click="confirm" style="width: 270px" color="indigo-1"> 
                         <q-icon name="delete" color="grey-9" />
                       </q-btn>
                     </div>
@@ -80,7 +80,7 @@ export default {
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
   methods: {
-    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso']),
+    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
 
@@ -172,6 +172,44 @@ export default {
             esDudoso: false
           }
           this.aprobarPermiso(solicitud)
+
+         //La solicitud es de Cambio Horario o de Teletrabajo  
+        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+            
+          let solicitud = {
+            estadoSolicitud: 4,
+            id: this.item.id,
+            empleado: this.item.empleado,
+            fechaSolicitud: this.item.fechaSolicitud,
+            idAutorizadorOf: this.item.idAutorizadorOf,
+            observaciones: this.item.observaciones,
+            tipoSolicitud: this.item.tipoSolicitud,
+            datosSolicitud: this.item.datosSolicitud,
+            idautArea2: this.item.idautArea2
+          }
+          this.aprobarCambiosEmpleado(solicitud)
+          let datos = {
+              to: this.item.empleadoEmail,
+              from: 'edicom@edicom.es',
+              subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
+              
+          }
+          if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
+            datos = {
+              text: 'Estimado\n' + this.item.empleadoNombre + '\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+                date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+                '\n\n Observaciones: ' + this.item.observaciones + '\nAprobada por: ' + this.item.nomAutorizadorOf + 'el' + new Date() +
+                '\n Datos Solicitud' + this.item.datosSolicitud
+            }
+          } else {
+            datos = {
+              text: 'Estimado\n' + this.item.empleadoNombre + '\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+                date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+                '\n Observaciones: ' + this.item.observaciones
+            }
+          }
+          this.sendMail(datos)
+          
         }
         if (this.origin === 1) reset()
 
@@ -222,6 +260,20 @@ export default {
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
+        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+          let solicitud = {
+            estadoSolicitud: 3,
+            id: this.item.id,
+            empleado: this.item.empleado,
+            fechaSolicitud: this.item.fechaSolicitud,
+            idAutorizadorOf: this.item.idAutorizadorOf,
+            observaciones: this.item.observaciones,
+            tipoSolicitud: this.item.tipoSolicitud,
+            datosSolicitud: this.item.datosSolicitud,
+            idautArea2: this.item.idautArea2
+          }
+          this.aprobarCambiosEmpleado(solicitud)
+          
         }
 
         if (this.origin === 1) reset()
