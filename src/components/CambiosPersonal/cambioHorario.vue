@@ -236,6 +236,7 @@
                             <q-checkbox
                                 v-model="recordToSubmit.aceptaCambioHorario"
                                 color="primary"
+                                @input="checkBut"
                                 />
                             
                         </div>
@@ -246,7 +247,7 @@
                     </div>
                     <div class="row items-baseline q-my-sm" v-if="checkComer30">
                         <div class="col-xs-1">
-                            <q-checkbox v-model="recordToSubmit.aceptaComer30m" />
+                            <q-checkbox v-model="recordToSubmit.aceptaComer30m" @input="checkBut" />
                         </div>
                         <div class="col-xs-11 q-pl-xs">
                             <span>Solicito y acepto, al objeto de conciliar mi vida familiar, que el descanso a mitad de </span>
@@ -258,7 +259,7 @@
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px"/>
+                        <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px" :disable="disableBut"/>
                     </div>
                     <q-dialog v-model="dialogMes" @click="$emit('close')" >
                         <!-- <q-card class="bg-indigo-1 text-black" style="width: 250px">
@@ -300,7 +301,7 @@ export default {
             horaEntrada4: '',
             horaSalida4: '',
             aceptaCambioHorario: false,
-            aceptaComer30m: false
+            aceptaComer30m: true
         },
         hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
         minuteOptions: [ 0, 30 ],
@@ -309,7 +310,7 @@ export default {
         openDialog: false,
         checkComer30: false,
         jornadaEmpl: 0,
-        disabled: false,
+        disableBut: true,
         condiciones: false,
         dialogMes: false,
         responsable: 0
@@ -333,6 +334,15 @@ export default {
         this.timer = void 0
       }, 3000)
     },
+    checkBut() {
+        if (this.recordToSubmit.aceptaCambioHorario) {
+            if (!this.checkComer30) {
+                this.disableBut = false
+            } else if (this.recordToSubmit.aceptaComer30m) {
+                this.disableBut = false
+            } else { this.disableBut = true }
+        } else { this.disableBut = true }
+    },
     //PRUEBA
     // confirm(){
     //   this.$q.dialog({
@@ -355,8 +365,7 @@ export default {
     persistent: true
     }).onOk(() => {
     this.recordToSubmit.aceptaCambioHorario = true
-    }).onOk(() => {
-    this.recordToSubmit.aceptaCambioHorario = true
+    this.checkBut()
     }).onCancel(() => {
     }).onDismiss(() => {
     })
@@ -370,8 +379,7 @@ export default {
     persistent: true
     }).onOk(() => {
     this.recordToSubmit.aceptaComer30m = true
-    }).onOk(() => {
-    this.recordToSubmit.aceptaComer30m = true
+    this.checkBut()
     }).onCancel(() => {
     }).onDismiss(() => {
     })
@@ -426,6 +434,7 @@ export default {
         if ( (com1 > 0 && com1 <= 30) || (com2 > 0 && com2 <= 30)) {
             console.log(com1)
             this.checkComer30 = true
+            this.recordToSubmit.aceptaComer30m = false
         }else { this.checkComer30 = false }
 
         var sum1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada1, 'hours'))
@@ -492,7 +501,11 @@ export default {
     // },
 
     solicitarCambioHorario(){
-        
+        if (!this.checkComer30) {
+            this.recordToSubmit.aceptaComer30m = false
+            console.log('acepta30', this.recordToSubmit.aceptaComer30m);
+        }
+
         var data = { 
             consentimientos: '',
             datosSolicitud: JSON.stringify(this.recordToSubmit),           
