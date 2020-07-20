@@ -54,7 +54,7 @@ export default {
         this.$q.loading.show()
         this.deletePermisoPendiente(this.permiso)
         .then((response) => {
-          console.log('delete', response);
+          //console.log('delete', response);
           this.$emit('refresh')
         })
         .catch(error => {

@@ -45,7 +45,7 @@
         v-model="listaCambios"
         :keyValue="keyValue"
         @deleteCambios="(id) => deleteSolicitud(id)"
-        @refresh="getRecords"
+        @refresh="getRecords(filterRecord)"
         />
     </div>
 </template>
@@ -60,10 +60,8 @@ export default {
       expanded: false,
       visible: '',
       filterRecord: {
-        idEmpleado: 0,
         persona: '',
         estadoSolicitud: '',
-        tipoSolicitud: 0
       },
       nomFormulario: 'Aprobación Cambios-Permisos'
     }
@@ -78,20 +76,9 @@ export default {
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {
-      // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-      var objFilter = Object.assign({}, filter)
-
-      // return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
-      //   .then(response => {
-          this.getListaCambios(filter)
-          // this.registrosSeleccionados = response.data
-          // this.expanded = false
-        // })
-        // .catch(error => {
-        //   this.$q.dialog({ title: 'Error', message: error.response.statusText })
-        //   this.desconectarLogin()
-        // })
+      this.$q.loading.show()
+      this.getListaCambios(this.filterRecord)
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -101,6 +88,7 @@ export default {
   mounted() {
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
+      console.log(this.value.filterRecord);
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
     } else { // es la primera vez que entro, cargo valores po defecto
