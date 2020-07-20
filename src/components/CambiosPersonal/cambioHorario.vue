@@ -503,7 +503,6 @@ export default {
     solicitarCambioHorario(){
         if (!this.checkComer30) {
             this.recordToSubmit.aceptaComer30m = false
-            console.log('acepta30', this.recordToSubmit.aceptaComer30m);
         }
 
         var data = { 

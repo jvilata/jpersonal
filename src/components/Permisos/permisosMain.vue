@@ -126,6 +126,7 @@ export default {
     getFilialEmpleado(value) {     
       this.loadFilialEmpleado(value.empleado).then(response => {
         this.empleadoP.filialEmpleado = response
+        console.log('filialDone');
       })
     },
 
@@ -141,7 +142,7 @@ export default {
           }
         }
         this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
-        console.log('This should come second');
+        console.log('DiasDone');
       })
     },
 
@@ -149,6 +150,7 @@ export default {
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
         this.empleadoP.autorizador.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
         this.empleadoP.autorizador.emailAutorizador = JSON.parse(response.data.msg).emailAut[0]
+        console.log('ResponsableDone');
       })
       .catch(error => {
         console.log('calcularResponsable', error);
@@ -159,18 +161,20 @@ export default {
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
+      this.$q.loading.show()
       this.getPermisos(this.filterRecord)
       this.getFilialEmpleado(this.filterRecord)
       this.getDiasPermisos(this.filterRecord)
       this.getResponsable(this.filterRecord)
     } else { // es la primera vez que entro, cargo valores por defecto
       this.filterRecord = { empleado: this.user.pers.id, ejercicioAplicacion: (new Date()).getFullYear()  }
+      this.$q.loading.show()
       this.getPermisos(this.filterRecord)
       this.getFilialEmpleado(this.filterRecord)
       this.getDiasPermisos(this.filterRecord)
       this.getResponsable(this.filterRecord)
     }
-
+    
     this.$router.replace({ name: this.menuItems[0].link.name, params: { id: this.id, value: { filterRecord: this.filterRecord, empleadoP: this.empleadoP } } })
     
   }, 

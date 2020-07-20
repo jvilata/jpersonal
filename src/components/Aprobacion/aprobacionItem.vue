@@ -126,6 +126,7 @@ export default {
       cancel: true,
       persistent: true
       }).onOk(() => {
+        //this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque añadir a Vacaciones
           let permiso =  {
@@ -190,7 +191,7 @@ export default {
             datosSolicitud: this.item.datosSolicitud,
             idautArea2: this.item.idautArea2
           }
-          //this.aprobarCambiosEmpleado(solicitud)
+          this.aprobarCambiosEmpleado(solicitud)
           if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
             let datos = {
               to: this.item.empleadoEmail,

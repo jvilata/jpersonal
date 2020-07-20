@@ -85,7 +85,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { date, Notify } from 'quasar'
+import { date } from 'quasar'
 import wgDate from 'components/General/wgDate.vue'
 
 export default {
@@ -219,7 +219,10 @@ export default {
         .then((response) => {
           this.$q.loading.hide()
           if (JSON.parse(response.data).success) {
-            //Notify.create('Solcitud registrada correctamente')
+            this.$q.notify({
+              color: 'primary',
+              message: 'Solcitud registrada correctamente'
+            })
             this.$emit('close')
             this.$emit('refresh')
             this.$emit('ok')
