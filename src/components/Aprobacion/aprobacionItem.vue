@@ -226,7 +226,6 @@ export default {
                '\n\n\n' + this.item.empleadoNombre + ' se compromete a cumplir todos los puntos enumerados en el documento "SGSI Procedimiento de Teletrabajo de EDICOM", y tal y como se expresa en el procedimiento, la empresa se reserva el derecho de poner anular dicho permiso por causas imputables a productividad, necesidades de los clientes, de la empresa o de otros compañeros que también lo necesiten y no sea posible reducir los porcentajes de personal en modalidad de trabajo presencial estipulados y/o necesarios en cada momento.' +
               '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
             }
-            
             this.sendMail(datos)
           } 
           

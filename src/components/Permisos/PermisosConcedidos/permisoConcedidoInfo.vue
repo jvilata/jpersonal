@@ -33,7 +33,7 @@
       <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
     </div>
     <div class="row q-pb-sm">
-      <q-btn class="col" color="primary" label="Subir justificante" @click="addJust" dense></q-btn>
+      <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
     </div>
 
     <q-dialog v-model="expanded"  >

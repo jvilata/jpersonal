@@ -165,6 +165,9 @@
                 <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
                     <q-btn @click="solicitarTeletrabajo" :disabled="!val1 || !val2 || !val3 || !val4 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
                 </div>
+                <q-dialog v-model="dialogMes" @click="$emit('close')" >
+                  <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
+                </q-dialog>
             </div>
         </div>
     </q-card>
@@ -197,7 +200,8 @@ export default {
             denseOpts: false,
             disabled: false,
             listaPaisesFilter: [],
-            responsable: 0
+            responsable: 0,
+            dialogMes: false
         }
     }, 
     computed:{
@@ -294,10 +298,14 @@ export default {
             tipoDiaLibre: 0,
             tipoSolicitud: 'TELETRABAJO'
         }
-        
+        this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
-            //console.log(result.data)
+           this.timer = setTimeout(() => {
+                this.$q.loading.hide()
+                this.dialogMes = true
+                this.timer = void 0
+            }, 1000) 
           this.$q.notify({
           color: 'primary',
           message: `Se ha solicitado teletrabajo.`

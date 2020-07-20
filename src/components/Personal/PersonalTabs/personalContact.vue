@@ -51,9 +51,15 @@ export default {
     //Llamaremos al BACKEND para pedir datos de este usuario 
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {
-         //console.log('response.data', response.data)
-         this.recordToSubmit = Object.assign({}, response.data) // v-model: en 'value' podemos leer el valor del v-model
+         this.timer = setTimeout(() => {
+              this.$q.loading.hide()
+              this.timer = void 0
+            }, 250) 
+         this.recordToSubmit = Object.assign({}, response.data) 
        })
-    }
+    },
+    beforeMount(){
+    this.$q.loading.show() 
+  }
 }
 </script>

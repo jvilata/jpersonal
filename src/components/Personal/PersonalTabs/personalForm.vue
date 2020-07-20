@@ -116,14 +116,21 @@ export default {
     }
   },
   mounted() {
-      //Llamaremos al BACKEND para pedir datos de este usuario 
+      //Llamaremos al BACKEND para pedir datos de este usuario
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {
+         this.timer = setTimeout(() => {
+              this.$q.loading.hide()
+              this.timer = void 0
+            }, 500) 
          this.recordToSubmit.codPuesto = response.data.codPuesto
          this.recordToSubmit = Object.assign({}, response.data) // v-model: en 'value' podemos leer el valor del v-model
        })
       if(this.listaPuestos.length === 0) { this.loadListaPuestos()}
     },
+  beforeMount(){
+    this.$q.loading.show() 
+  },
   destroyed () {
     this.$emit('input', this.recordToSubmit) // v-model: para devolver el valor a atributo 'value', evento input
     this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: {}, registrosSeleccionados: Object.assign({}, this.recordToSubmit) }) // para conservar valores cuando vuelva a selec tab
