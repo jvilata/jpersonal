@@ -28,6 +28,7 @@ const actions = {
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'getListaCambios' + error, { root: true })
+        Loading.hide()
       })
   },
   
@@ -41,52 +42,33 @@ const actions = {
       })
   },
   aprobarPermiso( { commit }, solicitud) {
-    axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true }) // tipo acciones
+    return axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
+    /* axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true }) // tipo acciones
       .then((response) => {
         console.log('aprobarPermiso', response);
         this.dispatch('aprobacion/getListaCambios', { empleado: login.state.user.id })
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'aprobarPermiso' + error, { root: true })
-      })
+      }) */
   },
   rechazarPermiso( { commit }, solicitud) {
-    return new Promise((resolve, reject) => {
-      axiosInstance.get(`bd_jpersonal.asp?action=reservas/rechazarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true }) // tipo acciones
-        .then((response) => {
-          console.log(response);
-          resolve(response)
-          //this.dispatch('aprobacion/getListaCambios', { empleado: login.state.user.id })
-        })
-        .catch(error => {
-          this.dispatch('mensajeLog/addMensaje', 'aprobarPermiso' + error, { root: true })
-          reject(error)
-        })
-      })
+    return axiosInstance.get(`bd_jpersonal.asp?action=reservas/rechazarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
   },
-  addToVacaciones( { commit }, payload) {         
-    return new Promise((resolve, reject) => {
-      axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/id&auth=${login.state.user.auth}`, payload, { withCredentials: true })
-      .then((response) => {
-        //console.log('response', JSON.parse(response.data))
-        resolve(JSON.parse(response.data).success)
-      })
-      .catch(error => {
-        this.dispatch('mensajeLog/addMensaje', 'addToVacaciones' + error, { root: true })
-        reject(error)
-      })
-    })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  addToVacaciones( { commit }, payload) {    
+    return axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/id&auth=${login.state.user.auth}`, payload, { withCredentials: true })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
   },
 
   aprobarCambiosEmpleado( { commit }, params) {  
-    axiosInstance.post(`bd_jpersonal.asp?action=pers_empleados_of/aprobacionCambiosEmpleado&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData) // tipo acciones
+    return axiosInstance.post(`bd_jpersonal.asp?action=pers_empleados_of/aprobacionCambiosEmpleado&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData)
+    /* axiosInstance.post(`bd_jpersonal.asp?action=pers_empleados_of/aprobacionCambiosEmpleado&auth=${login.state.user.auth}`, querystring.stringify(params), headerFormData) // tipo acciones
       .then((response) => {
         console.log('aprobarCambiosEmpleado', response);
         this.dispatch('aprobacion/getListaCambios', { empleado: login.state.user.id })
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'aprobarCambiosEmpleado' + error, { root: true })
-      })
+      }) */
   }
 }
 

@@ -126,7 +126,7 @@ export default {
       cancel: true,
       persistent: true
       }).onOk(() => {
-        //this.$q.loading.show()
+        this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque añadir a Vacaciones
           let permiso =  {
@@ -176,6 +176,12 @@ export default {
             esDudoso: false
           }
           this.aprobarPermiso(solicitud)
+          .then((response) => {
+            console.log('aprobarPermiso', response);
+          })
+          .catch(error => {
+            console.log('aprobarPermiso', error);
+          })
 
          //La solicitud es de Cambio Horario o de Teletrabajo  
         } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
@@ -249,6 +255,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(data => {
+        this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque Rechazar solicitud
           let solicitud = {
@@ -292,6 +299,13 @@ export default {
             idautArea2: this.item.idautArea2
           }
           this.aprobarCambiosEmpleado(solicitud)
+          .then((response) => {
+            //console.log('aprobarCambiosEmpleado', response);
+            this.$emit('refresh')
+          })
+          .catch(error => {
+           console.log('aprobarCambiosEmpleado', error);
+          })
         }
         if (this.origin === 1) reset()
       }).onDismiss(() => {

@@ -45,7 +45,7 @@
         v-model="listaCambios"
         :keyValue="keyValue"
         @deleteCambios="(id) => deleteSolicitud(id)"
-        @refresh="getRecords"
+        @refresh="getRecords(filterRecord)"
         />
     </div>
 </template>
@@ -60,10 +60,8 @@ export default {
       expanded: false,
       visible: '',
       filterRecord: {
-        idEmpleado: 0,
         persona: '',
         estadoSolicitud: '',
-        tipoSolicitud: 0
       },
       nomFormulario: 'Aprobación Cambios-Permisos'
     }
@@ -78,11 +76,9 @@ export default {
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {
-      // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-      var objFilter = Object.assign({}, filter)
-
-          this.getListaCambios(filter)
+      this.$q.loading.show()
+      this.getListaCambios(this.filterRecord)
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -96,6 +92,7 @@ export default {
         this.nomFormulario = 'Consultar Solicitudes'
       }
       this.expanded = false
+      console.log(this.value.filterRecord);
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
 
