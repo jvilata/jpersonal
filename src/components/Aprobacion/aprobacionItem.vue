@@ -126,6 +126,7 @@ export default {
       cancel: true,
       persistent: true
       }).onOk(() => {
+        //this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque añadir a Vacaciones
           let permiso =  {

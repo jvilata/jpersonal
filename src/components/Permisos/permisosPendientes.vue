@@ -32,7 +32,7 @@
       <permisosAdd
         @close="nuevoPermiso = !nuevoPermiso"
         @refresh="$emit('refresh')"
-        @ok="done = true"
+        @ok="showDone"
         :value="value"
         :empleadoP="value.empleadoP"
       />
@@ -59,6 +59,12 @@ export default {
     ...mapActions('permisos', ['getPermisosPendientes']),
     getPermisos() {
       this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
+    },
+    showDone() {
+      this.done = true
+      this.timer = setTimeout(() => {
+        this.done = false
+      }, 800)
     }
   },
   computed: {
@@ -67,9 +73,6 @@ export default {
   components: {
     permisosAdd: require('components/Permisos/permisosAdd.vue').default,
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
-  },
-  mounted() {
-    this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
   }
 }
 </script>

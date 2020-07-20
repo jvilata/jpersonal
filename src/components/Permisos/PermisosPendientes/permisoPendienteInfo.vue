@@ -51,6 +51,7 @@ export default {
         },
         persistent: true
       }).onOk(() => {
+        this.$q.loading.show()
         this.deletePermisoPendiente(this.permiso)
         .then((response) => {
           console.log('delete', response);

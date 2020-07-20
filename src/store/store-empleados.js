@@ -123,15 +123,18 @@ const actions = {
         objFilterP = { solIdEmpleado: value.empleado, solejercicio: value.ejercicioAplicacion }
         axiosInstance.get(`bd_jpersonal.asp?action=diasvacaciones&auth=${login.state.user.auth}`, { params: objFilterP }, { withCredentials: true }) //Dias Pendientes
         .then((response) => {
+          Loading.hide()
           dias.diasPendientes.tdiasvacaciones = response.data[0].diasdevacaciones
           resolve(dias)
         })
         .catch(error => {
+          Loading.hide()
           this.dispatch('mensajeLog/addMensaje', 'loadDiasPendientes' + error, { root: true })
           reject(error)
         })
       })
       .catch(error => {
+        Loading.hide()
         this.dispatch('mensajeLog/addMensaje', 'loadDiasConcedidos' + error, { root: true })
         reject(error)
       })

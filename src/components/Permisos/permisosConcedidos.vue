@@ -34,9 +34,6 @@ export default {
   components: {
     // permisosConcedidosGrid: require('components/Permisos/permisosConcedidosGrid.vue').default,
     permisosConcedidosList: require('components/Permisos/PermisosConcedidos/permisosConcedidosList.vue').default
-  },
-  mounted() {
-    this.getPermisosConcedidos({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
   }
 }
 </script>

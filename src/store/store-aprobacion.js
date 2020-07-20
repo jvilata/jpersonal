@@ -1,6 +1,7 @@
 import { axiosInstance, headerFormData } from 'boot/axios.js' // headerFormData
 import login from './store-login'
 import querystring from 'querystring'
+import { Loading } from 'quasar'
 
 const state = {
   listaCambios: []
@@ -22,6 +23,7 @@ const actions = {
         //   this.dispatch('mensajeLog/addMensaje', 'getListaCambios' + 'No existen datos', { root: true })
         // } else {
           commit('loadListaCambios', response.data)
+          Loading.hide()
         //}
       })
       .catch(error => {

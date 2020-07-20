@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { date } from 'quasar'
 import  { Vue }  from 'vue'
 
@@ -64,10 +64,11 @@ export default {
     return {
       justificante: '',
       expanded: false,
-      options: {
-        destinationType: Camera.DestinationType.DATA_URL
-      } 
+      options: {}
     }
+  },
+  computed: {
+    ...mapState('login', ['user'])
   },
   methods: {
     ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
@@ -111,23 +112,50 @@ export default {
           }
         ]
       }).onOk(action => {
-        console.log('Action chosen:', action.id)
-        if (action.id === 'galeria') { this.options.sourceType = Camera.PictureSourceType.SAVEDPHOTOALBUM }
+        //if (window.cordova) {
+          this.options.destinationType = Camera.DestinationType.DATA_URL
+          console.log('Action chosen:', action.id)
+          if (action.id === 'galeria') { this.options.sourceType = Camera.PictureSourceType.SAVEDPHOTOALBUM }
 
-        navigator.camera.getPicture(
-          (data) => { // on success
-            console.log('data', data);
-            //let data64 = btoa(data)
-            this.justificante = `data:image/jpeg;base64,${data}`
-            console.log('justificante', this.justificante);
-            
-            this.options.sourceType = Camera.PictureSourceType.CAMERA
-          },
-          () => { // on fail
-            this.$q.notify('Could not access device camera.')
-            this.options.sourceType = Camera.PictureSourceType.CAMERA
-          },
-          this.options)
+          navigator.camera.getPicture(
+            (data) => { // on success
+              console.log('data', data);
+              //let data64 = btoa(data)
+              this.justificante = `data:image/jpeg;base64,${data}`
+
+              const headerFormDataSinCredentials = {
+                withCredentials: true,
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              }
+              var formData = new FormData()
+              let blob = fetch(this.justificante).then(r => r.blob());
+              var oMyBlob = new Blob(blob, { type: 'image/jpeg' }) // the blob
+              formData.append('file', oMyBlob)
+              formData.append('asunto', `Justificante del permiso J-${this.permiso.id}`)
+              formData.append('tipo', 'Justificante')
+              return this.$axios.post(`bd_jpersonal.asp?action=attach/${this.permiso.id}/J&auth=${this.user.auth}`, formData, headerFormDataSinCredentials)
+                .then(response => {
+                  this.$q.dialog({ title: 'Error', message: response })
+                  console.log('img', response)
+                })
+                .catch(error => {
+                  console.log('imgErr', error)
+                  this.$q.dialog({ title: 'Error', message: error })
+                  // this.desconectarLogin()
+                })
+
+              console.log('justificante', this.justificante);
+              
+              this.options.sourceType = Camera.PictureSourceType.CAMERA
+            },
+            () => { // on fail
+              this.$q.notify('Could not access device camera.')
+              this.options.sourceType = Camera.PictureSourceType.CAMERA
+            },
+            this.options)
+        //}
       })
     },
     formatDate (pdate) {

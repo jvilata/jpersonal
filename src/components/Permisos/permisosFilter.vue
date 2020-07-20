@@ -64,8 +64,10 @@ export default {
   methods: {
     ...mapActions('empleados', ['loadFilialEmpleado']),
     verNormativa() {
+      this.$q.loading.show()
       this.loadFilialEmpleado(this.filterP.empleado)
       .then((response) => {
+        this.$q.loading.hide()
         let url = response.filial.urlNormativa
         if (window.cordova === undefined) { // desktop
           openURL(url)
@@ -75,6 +77,7 @@ export default {
       })
     },
     getPermisos() {
+      this.$q.loading.show()
       this.$emit('getPermisos', this.filterP)
       this.$emit('getEmpleado', this.filterP)
       this.$emit('close')
