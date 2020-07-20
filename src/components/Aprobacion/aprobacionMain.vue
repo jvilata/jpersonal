@@ -92,7 +92,6 @@ export default {
         this.nomFormulario = 'Consultar Solicitudes'
       }
       this.expanded = false
-      console.log(this.value.filterRecord);
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
 

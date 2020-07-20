@@ -30,10 +30,10 @@
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2" color="red" label="RECHAZAR" @click="rechazar(2)"/>
+                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'CONCEDIDA' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="red" label="RECHAZAR" @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'CONCEDIDA' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
