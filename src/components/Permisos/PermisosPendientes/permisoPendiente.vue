@@ -34,9 +34,6 @@ export default {
       var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm:ss.000ZZ')
       return date.formatDate(d1, 'DD/MM/YYYY')
     }
-  },
-  mounted() {
-    console.log('permiso', this.permiso);
   }
 }
 </script>
