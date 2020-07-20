@@ -82,16 +82,7 @@ export default {
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
       var objFilter = Object.assign({}, filter)
 
-      // return this.$axios.get('bd_personal.asp?action=soldias/solicitudesPendientes', { params: objFilter })
-      //   .then(response => {
           this.getListaCambios(filter)
-          // this.registrosSeleccionados = response.data
-          // this.expanded = false
-        // })
-        // .catch(error => {
-        //   this.$q.dialog({ title: 'Error', message: error.response.statusText })
-        //   this.desconectarLogin()
-        // })
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -99,10 +90,15 @@ export default {
   },
 
   mounted() {
+    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
+      if (this.keyValue === 1) { //Es tab de consultar solicitud
+        this.nomFormulario = 'Consultar Solicitudes'
+      }
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
+
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'

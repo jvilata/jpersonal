@@ -123,7 +123,7 @@ export default {
           link: {
             name: 'aprobacionMain',
             opcion: 1,
-            label: 'Aprobación Cambios-Permisos'
+            label: 'Consultar Cambios-Permisos'
           }
         },
         {

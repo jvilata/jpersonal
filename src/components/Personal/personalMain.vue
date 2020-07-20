@@ -84,7 +84,6 @@ export default {
       this.loadListaDetalleEmpleados(filter)
         .then(response => {
           this.registrosSeleccionados = response.data.root
-          console.log('filterR', this.filterRecord)
           this.expanded = false
         })
         .catch(error => {
