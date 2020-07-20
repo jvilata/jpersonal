@@ -86,11 +86,15 @@ export default {
   },
 
   mounted() {
+    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
+      if (this.keyValue === 1) { //Es tab de consultar solicitud
+        this.nomFormulario = 'Consultar Solicitudes'
+      }
       this.expanded = false
-      console.log(this.value.filterRecord);
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
+
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'

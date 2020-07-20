@@ -30,10 +30,10 @@
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2" color="red" label="RECHAZAR" @click="rechazar(2)"/>
+                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'CONCEDIDA' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="red" label="RECHAZAR" @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'CONCEDIDA' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
@@ -198,49 +198,42 @@ export default {
             idautArea2: this.item.idautArea2
           }
           this.aprobarCambiosEmpleado(solicitud)
-          .then((response) => {
-            //console.log('aprobarCambiosEmpleado', response);
-            this.$emit('refresh')
-            if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
-              let datos = {
-                to: this.item.empleadoEmail,
-                from: 'edicom@edicom.es',
-                subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
-                text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
-                  date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-                  '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
-                  '\n\n\n Datos de Solicitud: \n\n Lunes - Jueves: ' +  '\n Hora Entrada 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada1),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-                  ' - Hora Salida 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida1),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-                  '  Hora Entrada 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada2),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-                  ' - Hora Salida 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida2),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-                  '\n\n Viernes: \n Hora Entrada 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada3),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-                  ' - Hora Salida 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida3),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-                  '  Hora Entrada 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada4),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-                  ' - Hora Salida 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida4),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-                  '\n\n\n' + this.item.empleadoNombre + ', acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.' +
-                  '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
-              }
-              this.sendMail(datos)
-            } else {
-              let datos = {
-                to: this.item.empleadoEmail,
-                from: 'edicom@edicom.es',
-                subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
-                text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
-                  date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-                  '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
-                  '\n\n\n Datos de Solicitud: \n\n Fecha Desde: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaDesde),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-                ' - Fecha Hasta: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaHasta),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') +
-                '\n\n País Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).paisTeletrabajo) + ' - Domicilio Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).domicilioTeletrabajo) +
-                '\n\n\n' + this.item.empleadoNombre + ' se compromete a cumplir todos los puntos enumerados en el documento "SGSI Procedimiento de Teletrabajo de EDICOM", y tal y como se expresa en el procedimiento, la empresa se reserva el derecho de poner anular dicho permiso por causas imputables a productividad, necesidades de los clientes, de la empresa o de otros compañeros que también lo necesiten y no sea posible reducir los porcentajes de personal en modalidad de trabajo presencial estipulados y/o necesarios en cada momento.' +
-                '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
-              }
-              this.sendMail(datos)
-            } 
-          })
-          .catch(error => {
-           console.log('aprobarCambiosEmpleado', error);
-          })
+          // if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
+          //   let datos = {
+          //     to: this.item.empleadoEmail,
+          //     from: 'edicom@edicom.es',
+          //     subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
+          //     text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+          //       date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+          //       '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
+          //       '\n\n\n Datos de Solicitud: \n\n Lunes - Jueves: ' +  '\n Hora Entrada 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada1),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+          //       ' - Hora Salida 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida1),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+          //       '  Hora Entrada 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada2),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+          //       ' - Hora Salida 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida2),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+          //       '\n\n Viernes: \n Hora Entrada 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada3),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+          //       ' - Hora Salida 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida3),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+          //       '  Hora Entrada 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada4),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+          //       ' - Hora Salida 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida4),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+          //       '\n\n\n' + this.item.empleadoNombre + ', acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.' +
+          //       '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
+          //   }
+          //   this.sendMail(datos)
+          // } else {
+          //   let datos = {
+          //     to: this.item.empleadoEmail,
+          //     from: 'edicom@edicom.es',
+          //     subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
+          //     text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
+          //       date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+          //       '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
+          //       '\n\n\n Datos de Solicitud: \n\n Fecha Desde: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaDesde),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
+          //     ' - Fecha Hasta: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaHasta),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') +
+          //     '\n\n País Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).paisTeletrabajo) + ' - Domicilio Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).domicilioTeletrabajo) +
+          //      '\n\n\n' + this.item.empleadoNombre + ' se compromete a cumplir todos los puntos enumerados en el documento "SGSI Procedimiento de Teletrabajo de EDICOM", y tal y como se expresa en el procedimiento, la empresa se reserva el derecho de poner anular dicho permiso por causas imputables a productividad, necesidades de los clientes, de la empresa o de otros compañeros que también lo necesiten y no sea posible reducir los porcentajes de personal en modalidad de trabajo presencial estipulados y/o necesarios en cada momento.' +
+          //     '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
+          //   }
+          //   this.sendMail(datos)
+          // } 
           
         }
         if (this.origin === 1) reset()
@@ -251,7 +244,7 @@ export default {
       })
     },
 
-     rechazar ({reset}) {
+    rechazar ({reset}) {
       this.$q.dialog({
         title: 'Rechazar permiso',
         message: 'Indique el motivo',

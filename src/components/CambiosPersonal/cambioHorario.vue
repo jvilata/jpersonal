@@ -273,8 +273,14 @@
                         <q-avatar color="green" text-color="green" icon="check_circle_outline" size="100px" /> -->
                         <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
                     </q-dialog>
-                    
-                    <q-btn @click="showLoading">BOTON PRUBEA</q-btn>
+                    <q-dialog v-model="datosIncorrectos"> 
+                        <q-card>
+                            <q-card-section>
+                                 <q-icon color="orange" name="warning" size="50px" />
+                                <div class="text-subtitle2">Asegúrese de cumplir todas las condiciones de jornada</div>
+                            </q-card-section>
+                        </q-card>
+                    </q-dialog>
                 </div>
             </div>
         </q-card>
@@ -288,320 +294,276 @@ import { date } from 'quasar'
 
 export default {
     props: ['value', 'id', 'keyValue'], 
-  data () {
-    return {
-        nomFormulario: 'CAMBIO HORARIO',
-        recordToSubmit: {
-            horaEntrada1: '',
-            horaSalida1: '',
-            horaEntrada2: '',
-            horaSalida2: '',
-            horaEntrada3: '',
-            horaSalida3: '',
-            horaEntrada4: '',
-            horaSalida4: '',
-            aceptaCambioHorario: false,
-            aceptaComer30m: true
+    data () {
+        return {
+            nomFormulario: 'CAMBIO HORARIO',
+            recordToSubmit: {
+                horaEntrada1: '',
+                horaSalida1: '',
+                horaEntrada2: '',
+                horaSalida2: '',
+                horaEntrada3: '',
+                horaSalida3: '',
+                horaEntrada4: '',
+                horaSalida4: '',
+                aceptaCambioHorario: false,
+                aceptaComer30m: true
+            },
+            hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
+            minuteOptions: [ 0, 30 ],
+            secondOptions: [ 0, 10, 20, 30, 40, 50 ],
+            sumaHoras: 0,
+            openDialog: false,
+            checkComer30: false,
+            jornadaEmpl: 0,
+            disableBut: true,
+            condiciones: true,
+            dialogMes: false,
+            datosIncorrectos: false,
+            responsable: 0
+        }
+    },
+    methods: {
+        ...mapActions('tabs', ['addTab']),
+        ...mapActions('empleados', ['calcularResponsable', 'loadDetalleEmpleado']),
+        ...mapActions('tablasAux', ['sendMail']),
+
+        openForm (link) {
+        this.addTab([link.name, link.label, {}, 1])
         },
-        hourOptions: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 ],
-        minuteOptions: [ 0, 30 ],
-        secondOptions: [ 0, 10, 20, 30, 40, 50 ],
-        sumaHoras: 0,
-        openDialog: false,
-        checkComer30: false,
-        jornadaEmpl: 0,
-        disableBut: true,
-        condiciones: false,
-        dialogMes: false,
-        responsable: 0
-    }
-  },
-  methods: {
-      ...mapActions('tabs', ['addTab']),
-      ...mapActions('empleados', ['calcularResponsable', 'loadDetalleEmpleado']),
-      ...mapActions('tablasAux', ['sendMail']),
 
-    openForm (link) {
-      this.addTab([link.name, link.label, {}, 1])
-    },
-    showLoading () {
-      this.$q.loading.show()
-      // hiding in 2s
-      this.timer = setTimeout(() => {
-        this.$q.loading.hide()
-        this.dialogMes = true
-        this.timer = void 0
-      }, 3000)
-    },
-    checkBut() {
-        if (this.recordToSubmit.aceptaCambioHorario) {
-            if (!this.checkComer30) {
-                this.disableBut = false
-            } else if (this.recordToSubmit.aceptaComer30m) {
-                this.disableBut = false
+        checkBut() {
+            if (this.recordToSubmit.aceptaCambioHorario) {
+                if (!this.checkComer30) {
+                    this.disableBut = false
+                } else if (this.recordToSubmit.aceptaComer30m) {
+                    this.disableBut = false
+                } else { this.disableBut = true }
             } else { this.disableBut = true }
-        } else { this.disableBut = true }
-    },
-    //PRUEBA
-    // confirm(){
-    //   this.$q.dialog({
-    //     transitionShow: 'slide-down',
-    //     transitionHide: 'slide-up',
-    //     color: 'primary',
-    //     message: 'Se ha registrado su solicitud de cambio',
-    //     persistent: true,
-    //   }).onOk(() => {
-    //   }).onOk(() => {
-    //   }).onDismiss(() => {
-    //   })
-    // },//TERMINA LA PRUEBA
+        },
 
-    confirm1 () {
-    this.$q.dialog({
-    title: 'Aceptación conciliación laboral',
-    message: 'Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.',
-    cancel: true,
-    persistent: true
-    }).onOk(() => {
-    this.recordToSubmit.aceptaCambioHorario = true
-    this.checkBut()
-    }).onCancel(() => {
-    }).onDismiss(() => {
-    })
-    },
+        confirm1 () {
+            this.$q.dialog({
+            title: 'Aceptación conciliación laboral',
+            message: 'Acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.',
+            cancel: true,
+            persistent: true
+            }).onOk(() => {
+            this.recordToSubmit.aceptaCambioHorario = true
+            this.checkBut()
+            }).onCancel(() => {
+            }).onDismiss(() => {
+            })
+        },
 
-    confirm2 () {
-    this.$q.dialog({
-    title: 'Descanso de 30 minutos',
-    message: 'Solicito y acepto, al objeto de conciliar mi vida familiar, que la parada de descanso a mitad de jornada sea sólo de 30 minutos en lugar de 1 hora, no reclamando ni solicitando nada adicional a la empresa por este motivo',
-    cancel: true,
-    persistent: true
-    }).onOk(() => {
-    this.recordToSubmit.aceptaComer30m = true
-    this.checkBut()
-    }).onCancel(() => {
-    }).onDismiss(() => {
-    })
-    },
+        confirm2 () {
+            this.$q.dialog({
+            title: 'Descanso de 30 minutos',
+            message: 'Solicito y acepto, al objeto de conciliar mi vida familiar, que la parada de descanso a mitad de jornada sea sólo de 30 minutos en lugar de 1 hora, no reclamando ni solicitando nada adicional a la empresa por este motivo',
+            cancel: true,
+            persistent: true
+            }).onOk(() => {
+            this.recordToSubmit.aceptaComer30m = true
+            this.checkBut()
+            }).onCancel(() => {
+            }).onDismiss(() => {
+            })
+        },
 
-    calculoHorasSem() {
-        let diff = 0;
-        this.sumaHoras = 0;
-        if (this.recordToSubmit.horaEntrada1 === null || this.recordToSubmit.horaEntrada1 === '') this.recordToSubmit.horaEntrada1 = this.recordToSubmit.horaSalida1
-        if (this.recordToSubmit.horaSalida1 === null  || this.recordToSubmit.horaSalida1 === '') this.recordToSubmit.horaSalida1 = this.recordToSubmit.horaEntrada1
-        if (this.recordToSubmit.horaEntrada2 === null  || this.recordToSubmit.horaEntrada2 === '') this.recordToSubmit.horaEntrada2 = this.recordToSubmit.horaSalida2
-        if (this.recordToSubmit.horaSalida2 === null  || this.recordToSubmit.horaSalida2 === '') this.recordToSubmit.horaSalida2 = this.recordToSubmit.horaEntrada2
-        if (this.recordToSubmit.horaEntrada3 === null || this.recordToSubmit.horaEntrada3 === '') this.recordToSubmit.horaEntrada3 = this.recordToSubmit.horaSalida3
-        if (this.recordToSubmit.horaSalida3 === null || this.recordToSubmit.horaSalida3 === '') this.recordToSubmit.horaSalida3 = this.recordToSubmit.horaEntrada3
-        if (this.recordToSubmit.horaEntrada4 === null || this.recordToSubmit.horaEntrada4 === '') this.recordToSubmit.horaEntrada4 = this.recordToSubmit.horaSalida4
-        if (this.recordToSubmit.horaSalida4 === null || this.recordToSubmit.horaSalida4 === '') this.recordToSubmit.horaSalida4 = this.recordToSubmit.horaEntrada4
-        var horasArray = [this.recordToSubmit.horaEntrada1, this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, this.recordToSubmit.horaSalida2]
-        var i;
-        let unit = 'minutes'
-        for( i = 0; i < horasArray.length ; i+=2 ) {
-            if(horasArray[i] !== null && horasArray[i] !== '') {
-                if(horasArray[i] > horasArray[i+1]) { 
-                    //si es horario de noche, la hora de entrada será mayor que la de salida -> le sumamos un dia
-                    horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) 
+        calculoHorasSem() {
+            this.datosIncorrectos = false;
+            let diff = 0;
+            this.sumaHoras = 0;
+            this.condiciones = true;
+            if (this.recordToSubmit.horaEntrada1 === null || this.recordToSubmit.horaEntrada1 === '') this.recordToSubmit.horaEntrada1 = this.recordToSubmit.horaSalida1
+            if (this.recordToSubmit.horaSalida1 === null  || this.recordToSubmit.horaSalida1 === '') this.recordToSubmit.horaSalida1 = this.recordToSubmit.horaEntrada1
+            if (this.recordToSubmit.horaEntrada2 === null  || this.recordToSubmit.horaEntrada2 === '') this.recordToSubmit.horaEntrada2 = this.recordToSubmit.horaSalida2
+            if (this.recordToSubmit.horaSalida2 === null  || this.recordToSubmit.horaSalida2 === '') this.recordToSubmit.horaSalida2 = this.recordToSubmit.horaEntrada2
+            if (this.recordToSubmit.horaEntrada3 === null || this.recordToSubmit.horaEntrada3 === '') this.recordToSubmit.horaEntrada3 = this.recordToSubmit.horaSalida3
+            if (this.recordToSubmit.horaSalida3 === null || this.recordToSubmit.horaSalida3 === '') this.recordToSubmit.horaSalida3 = this.recordToSubmit.horaEntrada3
+            if (this.recordToSubmit.horaEntrada4 === null || this.recordToSubmit.horaEntrada4 === '') this.recordToSubmit.horaEntrada4 = this.recordToSubmit.horaSalida4
+            if (this.recordToSubmit.horaSalida4 === null || this.recordToSubmit.horaSalida4 === '') this.recordToSubmit.horaSalida4 = this.recordToSubmit.horaEntrada4
+            var horasArray = [this.recordToSubmit.horaEntrada1, this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, this.recordToSubmit.horaSalida2]
+            var i;
+            let unit = 'minutes'
+            for( i = 0; i < horasArray.length ; i+=2 ) {
+                if(horasArray[i] !== null && horasArray[i] !== '') {
+                    if(horasArray[i] > horasArray[i+1]) { 
+                        //si es horario de noche, la hora de entrada será mayor que la de salida -> le sumamos un dia
+                        horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) 
+                    }
+                    diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)/60.0
+                    this.sumaHoras += Math.abs(diff)
                 }
+            }
+            this.sumaHoras *= 4 // *4 porque es de Lunes-Jueves con ese horario
+            horasArray = [this.recordToSubmit.horaEntrada3, this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, this.recordToSubmit.horaSalida4 ]
+            for( i = 0; i < horasArray.length ; i+=2 ) {
+                if(horasArray[i] !== null && horasArray[i] !== '') {
+                    if(horasArray[i] > horasArray[i+1]) { horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) }
                 diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)/60.0
                 this.sumaHoras += Math.abs(diff)
-            }
-        }
-        console.log('sumaHoras', this.sumaHoras)
-        this.sumaHoras *= 4 // *4 porque es de Lunes-Jueves con ese horario
-        horasArray = [this.recordToSubmit.horaEntrada3, this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, this.recordToSubmit.horaSalida4 ]
-        for( i = 0; i < horasArray.length ; i+=2 ) {
-            if(horasArray[i] !== null && horasArray[i] !== '') {
-                if(horasArray[i] > horasArray[i+1]) { horasArray[i+1] = date.addToDate(horasArray[i+1], { days: 1}) }
-             diff = date.getDateDiff(horasArray[i+1], horasArray[i], unit)/60.0
-             this.sumaHoras += Math.abs(diff)
-            }
-        } 
-        console.log('sumaHoras', this.sumaHoras)
-        //aceptar comer en 30 min
-        var com1 = 0.0
-        var com2 = 0.0
-        if (this.recordToSubmit.horaEntrada2 !== null && this.recordToSubmit.horaSalida1 !== null) 
-            //console.log(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2)
-            com1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, unit))
-            //console.log(com1, this.recordToSubmit.horaSalida1)
-            // if(com1 <= 0) { this.alerta1('Alerta Descanso Mínimo:', 'No se permite ')} hora entrada 2 tiene que ser posterior a la hora salida (tiene que haber descanso)
-        if (this.recordToSubmit.horaEntrada4 !== null && this.recordToSubmit.horaSalida3 !== null)    
-            com2 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, unit))
-        if ( (com1 > 0 && com1 <= 30) || (com2 > 0 && com2 <= 30)) {
-            //console.log(com1)
-            this.checkComer30 = true
-            this.recordToSubmit.aceptaComer30m = false
-        }else { this.checkComer30 = false }
+                }
+            } 
+            //aceptar comer en 30 min
+            var com1 = 0.0
+            var com2 = 0.0
+            if (this.recordToSubmit.horaEntrada2 !== null && this.recordToSubmit.horaSalida1 !== null) 
+                com1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, unit))
+                // if(com1 <= 0) { this.alerta1('Alerta Descanso Mínimo:', 'No se permite ')} hora entrada 2 tiene que ser posterior a la hora salida (tiene que haber descanso)
+            if (this.recordToSubmit.horaEntrada4 !== null && this.recordToSubmit.horaSalida3 !== null)    
+                com2 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, unit))
+            if ( (com1 > 0 && com1 <= 30) || (com2 > 0 && com2 <= 30)) {
+                this.checkComer30 = true
+                this.recordToSubmit.aceptaComer30m = false
+            }else { this.checkComer30 = false }
 
-        var sum1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada1, 'hours'))
-        if(sum1 > 24) sum1 = 0
-        var sum2 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida2, this.recordToSubmit.horaEntrada2, 'hours'))
-        if(sum2 > 24) sum2 = 0
-        var sum3 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada3, 'hours'))
-        if(sum3 > 24) sum3 = 0
-        var sum4 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida4, this.recordToSubmit.horaEntrada4, 'hours'))
-        if(sum4 > 24) sum4 = 0
+            var sum1 = (Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada1, unit)))/60.0
+            if(sum1 > 24) sum1 = 0
+            var sum2 = (Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida2, this.recordToSubmit.horaEntrada2, unit)))/60.0
+            if(sum2 > 24) sum2 = 0
+            var sum3 = (Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada3, unit)))/60.0
+            if(sum3 > 24) sum3 = 0
+            var sum4 = (Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida4, this.recordToSubmit.horaEntrada4, 'hours')))/60.0
+            if(sum4 > 24) sum4 = 0
 
-        if(this.jornadaEmpl >= ''){ //DEBERIA DE SER this.jornadaEmpl >= 100
-            if (sum1 === 0 || sum2 === 0 || sum3 === 0) { 
-                this.condiciones = false
-            }
-            else {
-                // if (!acepta) result = false; 
-
-                if (sum1 + sum2 > 9 || sum1 + sum2 < 8) {
-                    this.alerta1('Atención: Jornada', 'No se permite una jornada laboral de Lunes a Jueves inferior a 8h ni superior a 9h');
+            if(this.jornadaEmpl >= 100){ 
+                if (sum1 === 0 || sum2 === 0 || sum3 === 0) { 
                     this.condiciones = false
-                } else
-                    if (sum3 + sum4 > 9 || sum1 + sum2 < 5) {
-                        this.alerta1('Atención: Jornada', 'No se permite una jornada laboral de Viernes inferior a 5h ni superior a 9h')
+                }
+                else {
+                    if (sum1 + sum2 > 9 || sum1 + sum2 < 8) {
+                        this.alerta1('Atención: Jornada', 'No se permite una jornada laboral de Lunes a Jueves inferior a 8h ni superior a 9h');
                         this.condiciones = false
                     } else
-                        if ((sum1 + sum2)*4 + sum3 + sum4 > 40 || (sum1 + sum2)*4 + sum3 + sum4 < 30) {
-                            this.alerta1('Atención: Jornada', 'No se permite jornada laboral semanal superior a 40h o inferior a 30h.')
+                        if (sum3 + sum4 > 9 || sum1 + sum2 < 5) {
+                            this.alerta1('Atención: Jornada', 'No se permite una jornada laboral de Viernes inferior a 5h ni superior a 9h')
                             this.condiciones = false
-                        } else {
-                            if (sum1 > 6 || sum2 > 6 || sum3 > 6 ||sum4 > 6) {
-                                this.alerta1('Atención: Jornada', 'Para jornadas superiores a 6h hay que estipular una parada de al menos 15m. Consulta con tu responsable')
+                        } else
+                            if ((sum1 + sum2)*4 + sum3 + sum4 > 40 || (sum1 + sum2)*4 + sum3 + sum4 < 30) {
+                                this.alerta1('Atención: Jornada', 'No se permite jornada laboral semanal superior a 40h o inferior a 30h.')
                                 this.condiciones = false
-                            }  
-                            if ( (sum1 + sum2)*4 + sum3 + sum4 < 40) {
-                                this.alerta1('Atención: Jornada', 'La jornada laboral es inferior a 40h. Comprueba que es correcto.')
-                                this.condiciones = false
-                            } else this.condiciones = true
-                        }
-            }
-        } else{
-            this.condiciones = true
-        }
-        // console.log(this.recordToSubmit.aceptaCambioHorario)
-        // console.log(this.recordToSubmit.aceptaComer30m)
-        // console.log(this.condiciones)
-        //     if (!acepta) result = false;
-        // }
-    },
+                            } else {
+                                if (sum1 > 6 || sum2 > 6 || sum3 > 6 ||sum4 > 6) {
+                                    this.condiciones = true
+                                    this.alerta1('Atención: Jornada', 'Para jornadas superiores a 6h hay que estipular una parada de al menos 15m. Consulta con tu responsable')
+                                    
+                                }  
+                                if ( (sum1 + sum2)*4 + sum3 + sum4 < 40) {
+                                    this.alerta1('Atención: Jornada', 'La jornada laboral es inferior a 40h. Comprueba que es correcto.')
+                                    this.condiciones = true
+                                } 
+                            }
+                }
+            } 
+        },
 
-    alerta1(tit, mens) {
-        this.$q.dialog({
-            title: tit,
-            message: mens
-        })
-    },
-
-    // comer30(){
-    //     this.recordToSubmit.aceptaCambioHorario = false
-    //     if(this.recordToSubmit.aceptaComer30m) {
-    //         this.recordToSubmit.aceptaCambioHorario = true
-    //         this.recordToSubmit.aceptaComer30m = true
-    //     }
-    // },
-
-    solicitarCambioHorario(){
-        if (!this.checkComer30) {
-            this.recordToSubmit.aceptaComer30m = false
-        }
-
-        var data = { 
-            consentimientos: '',
-            datosSolicitud: JSON.stringify(this.recordToSubmit),           
-            denegada: false,
-            diasEfectivos: 0,
-            ejercicioAplicacion: 0,
-            empleado: this.user.pers.id,
-            estadoSolicitud: 1,
-            estadoSolicitudDesc: '',
-            fechaDesde: null,
-            fechaHasta: null,
-            fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
-            idAutorizadorOf: this.responsable,
-            nuevaVersion: true,
-            observaciones: '',
-            sfechaDesde: null,
-            sfechaHasta: null,
-            tipoDiaLibre: 0,
-            tipoSolicitud: 'CAMBIO HORARIO'
-        }
-        
-        this.$q.loading.show()
-        this.$axios.post(`bd_jpersonal.asp?action=soldias/&auth=${this.user.auth}`, data)
-        .then(result => {
-            this.timer = setTimeout(() => {
-                this.$q.loading.hide()
-                this.dialogMes = true
-                this.timer = void 0
-            }, 1000) 
-            this.$q.notify({
-            color: 'primary',
-            message: `Se ha solicitado un cambio de horario.`
+        alerta1(tit, mens) {
+            this.$q.dialog({
+                title: tit,
+                message: mens
             })
+        },
 
-            // this.$emit('close')
-        })
-        .catch(error => { console.log(error.message) })
-        
+        solicitarCambioHorario(){
+            if (!this.checkComer30) {
+                this.recordToSubmit.aceptaComer30m = false
+            }
+            var data = { 
+                consentimientos: '',
+                datosSolicitud: JSON.stringify(this.recordToSubmit),           
+                denegada: false,
+                diasEfectivos: 0,
+                ejercicioAplicacion: 0,
+                empleado: this.user.pers.id,
+                estadoSolicitud: 1,
+                estadoSolicitudDesc: '',
+                fechaDesde: null,
+                fechaHasta: null,
+                fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
+                idAutorizadorOf: this.responsable,
+                nuevaVersion: true,
+                observaciones: '',
+                sfechaDesde: null,
+                sfechaHasta: null,
+                tipoDiaLibre: 0,
+                tipoSolicitud: 'CAMBIO HORARIO'
+            }
+            if(this.condiciones) {
+                this.$q.loading.show()
+                this.$axios.post(`bd_jpersonal.asp?action=soldias/&auth=${this.user.auth}`, data)
+                .then(result => {
+                    this.timer = setTimeout(() => {
+                        this.$q.loading.hide()
+                        this.dialogMes = true
+                        this.timer = void 0
+                    }, 1000) 
+                    this.$q.notify({
+                    color: 'primary',
+                    message: `Se ha solicitado un cambio de horario.`
+                    })
+                })
+                .catch(error => { console.log(error.message) })
+            } else { this.datosIncorrectos = true }
+            
+            let datos = {
+            to: this.user.pers.emailAutorizador,
+            from: 'edicom@edicom.es',
+            subject: 'Nueva Solicitud de CAMBIO HORARIO de ' + this.user.pers.nombre,
+            text: 'Nueva solicitud de CAMBIO HORARIO de: ' + this.user.pers.nombre + '\n\n' + 'Datos de Solicitud: \n Hora Entrada 1: ' + 
+                date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada1,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+                ' Hora Salida 1: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida1,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+                '\n Hora Entrada 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada2,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+                ' Hora Salida 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida2,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+                '\n Hora Entrada 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada3,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+                ' Hora Salida 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida3,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+                '\n Hora Entrada 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada4,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
+                ' Hora Salida 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida4,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
+                '\n\nRevísala cuando puedas para su aprobación \nSaludos'
+            }
+            this.sendMail(datos)
+        },
 
-        let datos = {
-          to: this.user.pers.emailAutorizador,
-          from: 'edicom@edicom.es',
-          subject: 'Nueva Solicitud de CAMBIO HORARIO de ' + this.user.pers.nombre,
-          text: 'Nueva solicitud de CAMBIO HORARIO de: ' + this.user.pers.nombre + '\n\n' + 'Datos de Solicitud: \n Hora Entrada 1: ' + 
-            date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada1,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-            ' Hora Salida 1: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida1,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-            '\n Hora Entrada 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada2,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-            ' Hora Salida 2: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida2,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-            '\n Hora Entrada 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada3,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-            ' Hora Salida 3: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida3,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-            '\n Hora Entrada 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaEntrada4,'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-            ' Hora Salida 4: ' + date.formatDate(date.extractDate(this.recordToSubmit.horaSalida4,'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-            '\n\nRevísala cuando puedas para su aprobación \nSaludos'
-        }
-        this.sendMail(datos)
-        
-    },
+        formatTime(time){
+            if(time !== null && time !== '') return date.formatDate(date.extractDate(time,'YYYY-MM-DDTHH:mm'), 'HH:mm')
+        },
 
-    formatTime(time){
-        if(time !== null && time !== '') return date.formatDate(date.extractDate(time,'YYYY-MM-DDTHH:mm'), 'HH:mm')
-    },
-
-    ajustarFechaHora(pdate){
-        var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm')
-        d1 = new Date(2008,0,1, d1.getHours(), d1.getMinutes()) // el backend trabaja con 2008-1-1THH:mm
-        return date.formatDate(d1, 'YYYY-MM-DDTHH:mm:ss')
-    },
+        ajustarFechaHora(pdate){
+            var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm')
+            d1 = new Date(2008,0,1, d1.getHours(), d1.getMinutes()) // el backend trabaja con 2008-1-1THH:mm
+            return date.formatDate(d1, 'YYYY-MM-DDTHH:mm:ss')
+        },
     
-    cargarHoras(res){
-        this.recordToSubmit.horaEntrada1 = res.horaEntrada1
-        this.recordToSubmit.horaSalida1 = res.horaSalida1
-        this.recordToSubmit.horaEntrada2 = res.horaEntrada2 
-        this.recordToSubmit.horaSalida2 = res.horaSalida2
-        this.recordToSubmit.horaEntrada3 = res.horaEntrada3 
-        this.recordToSubmit.horaSalida3 = res.horaSalida3
-        this.recordToSubmit.horaEntrada4 = res.horaEntrada4
-        this.recordToSubmit.horaSalida4 = res.horaSalida4 
-    }
-  },
+        cargarHoras(res){
+            this.recordToSubmit.horaEntrada1 = res.horaEntrada1
+            this.recordToSubmit.horaSalida1 = res.horaSalida1
+            this.recordToSubmit.horaEntrada2 = res.horaEntrada2 
+            this.recordToSubmit.horaSalida2 = res.horaSalida2
+            this.recordToSubmit.horaEntrada3 = res.horaEntrada3 
+            this.recordToSubmit.horaSalida3 = res.horaSalida3
+            this.recordToSubmit.horaEntrada4 = res.horaEntrada4
+            this.recordToSubmit.horaSalida4 = res.horaSalida4 
+        }
+    },
 
-  mounted(){
-      this.loadDetalleEmpleado(this.user.pers.id)
-       .then(response => {
-         this.jornadaEmpl = Object.assign({}, response.data.jornada) 
-         this.cargarHoras(response.data)
-         this.calculoHorasSem()
-       })
-        
-       this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
-       .then(response => {
-        this.responsable = JSON.parse(response.data.msg).idResp[0]
+    mounted(){
+        this.loadDetalleEmpleado(this.user.pers.id)
+        .then(response => {
+            this.jornadaEmpl = response.data.jornada 
+            this.cargarHoras(response.data)
+            this.calculoHorasSem()
         })
-      .catch(error => {
-        console.log('calcularResponsable', error);
-      })
- },
-
-  computed:{
-    ...mapState('login', ['user'])
-  }
+            
+        this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
+        .then(response => {
+            this.responsable = JSON.parse(response.data.msg).idResp[0]
+            })
+        .catch(error => {
+            console.log('calcularResponsable', error);
+        })
+    },
+    computed:{
+        ...mapState('login', ['user'])
+    }
 }
 </script>
