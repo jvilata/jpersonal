@@ -88,7 +88,6 @@ const actions = {
     */
     axiosInstance.post(`bd_jpersonal.asp?action=services/sendmail&auth=${login.state.user.auth}`, querystring.stringify(datos), headerFormData)
     .then((response) => {
-      console.log('mailResponse', response)
     })
     .catch(error => {
       this.dispatch('mensajeLog/addMensaje', 'sendMail' + error, { root: true })

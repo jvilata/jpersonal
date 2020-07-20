@@ -126,7 +126,6 @@ export default {
     getFilialEmpleado(value) {     
       this.loadFilialEmpleado(value.empleado).then(response => {
         this.empleadoP.filialEmpleado = response
-        console.log('filialDone');
       })
     },
 
@@ -142,7 +141,6 @@ export default {
           }
         }
         this.empleadoP.diasPendientes.tdiaslibres = this.empleadoP.diasPendientes.tdiasvacaciones - this.empleadoP.diasPendientes.tdiaspendientes - this.empleadoP.diasConcedidos.tdiasVacaciones
-        console.log('DiasDone');
       })
     },
 
@@ -150,10 +148,9 @@ export default {
       this.calcularResponsable({ id: value.empleado, tipoSol: 1 }).then(response => {
         this.empleadoP.autorizador.idAutorizadorOf = JSON.parse(response.data.msg).idResp[0]
         this.empleadoP.autorizador.emailAutorizador = JSON.parse(response.data.msg).emailAut[0]
-        console.log('ResponsableDone');
       })
       .catch(error => {
-        console.log('calcularResponsable', error);
+        
       })
     }
   },

@@ -193,10 +193,6 @@ export default {
         }
       }
       if ( (solicitud.tipoDiaLibre >= 10) && (solicitud.tipoDiaLibre <= 15) || solicitud.tipoDiaLibre === 17) { //Permiso NO Retribuido
-
-        console.log('tdiaslibres', this.empleadoP.diasPendientes.tdiaslibres);
-        console.log('diasefectivos', solicitud.diasEfectivos);
-        console.log('suma', (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes));
         
         if ( solicitud.diasEfectivos < 1 ) { //Solo permito dias completos
           this.alerta('Atención',"Sólo se permiten permisos no retribuidos de día completo, considere cambiar por Vacaciones. Por favor corrija la entrada")
@@ -208,7 +204,6 @@ export default {
 
       //LLAMADA BACKEND
       if (binsertar) {
-        console.log('solicitud', solicitud);
         this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, solicitud, this.$axios.headerFormData)
         .then((response) => {

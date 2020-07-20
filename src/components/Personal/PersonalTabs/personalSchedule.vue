@@ -70,7 +70,7 @@ export default {
               this.$q.loading.hide()
               this.timer = void 0
             }, 250) 
-         this.recordToSubmit = Object.assign({}, response.data) // v-model: en 'value' podemos leer el valor del v-model
+         this.recordToSubmit = Object.assign({}, response.data) 
        })
   },
   beforeMount(){

@@ -31,9 +31,6 @@
     <div class="row q-pb-sm">
         <q-input class="col-12 q-pr-sm"  v-model="item.nomAutorizadorOf" label="Autorizador 1" stack-label dense readonly/>
     </div>
-    <!-- <div class="row q-pb-sm">
-        <q-input class="col-12 q-pr-sm"  v-model="item.id" label="Autorizador 1" stack-label dense readonly/>
-    </div> -->
     
   </div>
 </template>

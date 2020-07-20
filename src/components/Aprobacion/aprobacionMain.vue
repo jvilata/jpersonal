@@ -1,4 +1,4 @@
-  <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y Grid -->
+  <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y ItemsList -->
   <template>
     <div style="height: 75vh">
       <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
@@ -11,8 +11,6 @@
             {{ nomFormulario }}
           </q-item-label>
           <q-item-label>
-            <!-- poner un campo de fiterRecord que exista en este filtro -->
-            <!-- ' Estado Solicitud: '+ `${(listaEstadosSolicitudes.find(record => record.codElemento === filterRecord.estadoSolicitud)).valor1}\n` + ' | ' -->
             <small>{{ (Object.keys(filterRecord).length > 1 ? 
                 (filterRecord.empleado ? `Empleado: ${(listaEmpleados.find(record => record.id === filterRecord.empleado)).name}\n` + ' | ': '') + 
                 (filterRecord.persona ? `Autorizador: ${(listaEmpleados.find(record => record.id === filterRecord.persona)).name}` + ' | ' : '') + 
@@ -54,7 +52,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
+  props: ['value', 'id', 'keyValue'], 
   data () {
     return {
       expanded: false,

@@ -93,7 +93,6 @@ export default {
     }
   },
   mounted () {
-    // if (this.listaEntidades.length <= 0) this.loadEntidades() // carga store listaEntidades
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)

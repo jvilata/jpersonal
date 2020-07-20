@@ -19,9 +19,6 @@
     <div class="row q-pb-sm">
         <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="item.nomAutorizadorOf" label="Autorizador 1" stack-label dense readonly/>
     </div>
-    <!-- <div class="row q-pb-sm">
-        <q-input class="col-12 q-pr-sm"  v-model="item.autorizador2" label="Autorizador 1" stack-label dense readonly/>
-    </div> -->
     
   </div>  
 </template>
@@ -50,7 +47,6 @@ export default {
     addJust() {
       if (this.justificante)
         this.addJustificante([this.item.id, this.justificante])
-        //this.$forceUpdate()
     },
     delJust () {
       this.$q.dialog({
@@ -68,7 +64,6 @@ export default {
         persistent: true
       }).onOk(() => {
         this.deleteJustificante(this.item.id)
-        //this.$forceUpdate()
       })
     },
     formatDate (pdate) {

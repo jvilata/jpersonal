@@ -19,11 +19,9 @@ const mutations = {
   },
   loadFilialEmpleado(state, filial) {
     state.filialEmpleado= filial    
-    console.log('FilialEmpleado', state.filialEmpleado);
   },
   loadBloquesFilialEmpleado(state, bloques) {
     state.bloqueFilialEmpleado= bloques
-    console.log('bloqueFilialEmpleado', state.bloqueFilialEmpleado);
   },
   loadListaPuestos(state, lista) {
     state.listaPuestos= lista
