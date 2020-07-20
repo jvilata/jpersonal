@@ -5,7 +5,7 @@
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
     </author>
-    <content src="index.html" />
+    <content src="http://192.168.164.206:8080" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -32,4 +32,5 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
         <string>Se necesita acceso a la libreria para guardar los documentos escaneados</string>
     </edit-config>
+    <allow-navigation href="http://192.168.164.206:8080" />
 </widget>

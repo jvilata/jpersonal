@@ -8,12 +8,6 @@
           <div class="text-caption">{{ user.nomEmpresa }}</div>
         </div>
         <div class="q-gutter-sm q-pr-md row items-center no-wrap absolute-right">
-          <!--q-btn round dense flat color="grey-8" icon="notifications" @click="openForm({ name: 'Acciones', label: 'Acciones' })">
-            <q-badge v-if="accionesPendientes>0" color="red" text-color="white" floating >
-              {{ accionesPendientes }}
-            </q-badge>
-            <q-tooltip>Acciones Pendientes</q-tooltip>
-          </q-btn-->
           <q-btn round flat class="bg-red-9 text-weight-light">
             <q-avatar size="40px">
               {{ user.pers.email ? user.pers.email.substring(0,2) : '' }}

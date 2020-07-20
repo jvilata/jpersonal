@@ -262,24 +262,7 @@
                         <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px" :disable="disableBut"/>
                     </div>
                     <q-dialog v-model="dialogMes" @click="$emit('close')" >
-                        <!-- <q-card class="bg-indigo-1 text-black" style="width: 250px">
-                            <q-card-section>
-                                <div class="text-subtitle2">Solicitud registrada con éxito</div>
-                            </q-card-section>
-                            <q-card-actions align="center" class="bg-white">
-                                <q-btn icon="done" flat size="lg" color="green" v-close-popup />
-                            </q-card-actions>
-                        </q-card>
-                        <q-avatar color="green" text-color="green" icon="check_circle_outline" size="100px" /> -->
                         <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
-                    </q-dialog>
-                    <q-dialog v-model="datosIncorrectos"> 
-                        <q-card>
-                            <q-card-section>
-                                 <q-icon color="orange" name="warning" size="50px" />
-                                <div class="text-subtitle2">Asegúrese de cumplir todas las condiciones de jornada</div>
-                            </q-card-section>
-                        </q-card>
                     </q-dialog>
                 </div>
             </div>
@@ -313,13 +296,11 @@ export default {
             minuteOptions: [ 0, 30 ],
             secondOptions: [ 0, 10, 20, 30, 40, 50 ],
             sumaHoras: 0,
-            openDialog: false,
             checkComer30: false,
             jornadaEmpl: 0,
             disableBut: true,
             condiciones: true,
             dialogMes: false,
-            datosIncorrectos: false,
             responsable: 0
         }
     },
@@ -504,7 +485,9 @@ export default {
                     })
                 })
                 .catch(error => { console.log(error.message) })
-            } else { this.datosIncorrectos = true }
+            } else { 
+                this.alerta1('Atención:' , 'Asegúrese de cumplir todas las condiciones de jornada')
+            }
             
             let datos = {
             to: this.user.pers.emailAutorizador,

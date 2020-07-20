@@ -33,7 +33,6 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)  
     axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        console.log('PendientesDone');
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
           commit('loadPermisosPendientes', response.data)
@@ -49,7 +48,6 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
     axiosInstance.get(`bd_jpersonal.asp?action=vacaciones/todas&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        console.log('ConcedidosDone');
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + 'No existen datos', { root: true })
         } else {

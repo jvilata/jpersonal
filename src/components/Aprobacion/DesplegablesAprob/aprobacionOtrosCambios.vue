@@ -60,7 +60,6 @@ export default {
     addJust() {
       if (this.justificante)
         this.addJustificante([this.item.id, this.justificante])
-        //this.$forceUpdate()
     },
     delJust () {
       this.$q.dialog({
@@ -78,7 +77,6 @@ export default {
         persistent: true
       }).onOk(() => {
         this.deleteJustificante(this.item.id)
-        //this.$forceUpdate()
       })
     },
     formatDate (pdate) {

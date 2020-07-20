@@ -1,4 +1,4 @@
-  <!-- componente que se llama desde accionesMain y que presenta el formulario de filtro y el boton de busqueda -->
+  <!-- componente que se llama desde personalMain y que presenta el formulario de filtro y el boton de busqueda -->
   <template>
   <q-card style="width: 400px;" class="q-pr-xs q-gutter-xs">
     <q-card-section class="bg-primary text-white">
@@ -19,7 +19,6 @@
         <q-input outlined clearable label="Vehiculo" stack-label v-model="filterR.vehiculo" />
       </q-tab-panel>
       <q-tab-panel name="Avanzada">
-        <!--q-input outlined clearable label="Agrupación ETM" stack-label v-model="filterR.agrupacionETM" /-->
         <q-input outlined clearable label="Equipo ETM" stack-label v-model="filterR.equipoETM" />
         <q-input outlined clearable label="Grupo ETM" stack-label v-model="filterR.agrupacionETM" />
         <q-input outlined clearable label="Fecha Alta Desde" stack-label :value="formatDate(filterR.sfecha_de_alta_desde)" @input="val => filterR.fechaAltaDesde=val" >

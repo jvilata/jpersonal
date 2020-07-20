@@ -4,7 +4,6 @@
       dense
       class="personalGrid-header-table"
       virtual-scroll
-      :pagination.sync="pagination"
       :rows-per-page-options="[0]"
       :virtual-scroll-sticky-size-start="48"
       row-key="name"

@@ -43,7 +43,7 @@
         <router-view @close="$emit('close')"/>
       </q-tab-panel>
     </q-tab-panels>
-    <!-- podemos poner tabs en el pie para dispositivos moviles pero quita pantalla y no me gusta bg-primary text-white -->
+  
     <q-tabs 
       v-model="ltab" 
       dense
