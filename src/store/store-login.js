@@ -35,21 +35,17 @@ const mutations = {
   },
   esTMoPM: (state, res) => {
     state.user.esTMoPM = (res === 1 ? true : false)
-    console.log('esTMoPM', state.user.esTMoPM)
   },
   esSuperUsuarioPersonal: (state, res) => { 
     if(res === 1) state.user.esSuperUsuarioPersonal = true
     else state.user.esSuperUsuarioPersonal = false
-    console.log('esSuperUsuarioPersonal', state.user.esSuperUsuarioPersonal)
   },
   esUsuarioPersonal: (state, res) => { 
     if(state.user.esSuperUsuarioPersonal) state.user.esUsuarioPersonal = true
     else state.user.esUsuarioPersonal = (res === 1 ? true : false)
-    console.log('esUsuarioPersonal', state.user.esUsuarioPersonal)
   },
   esUsuarioResponsable: (state, res) => { 
     state.user.esUsuarioResponsable = (res === 1 ? true : false)
-    console.log('esUsuarioResponsable', state.user.esUsuarioResponsable)
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('login', ['doLogin'])
