@@ -51,6 +51,7 @@ const actions = {
         Loading.show()
         this.dispatch('tablasAux/loadTablasAux')
         this.dispatch('empleados/loadListaEmpleados')
+        this.dispatch('empleados/loadListaEmpleadosRestringido')
         this.dispatch('empleados/loadListaPaises')
 
         this.$router.push('/sinTabs')
