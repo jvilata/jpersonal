@@ -5,6 +5,7 @@ import login from './store-login'
 
 const state = {
   listaEmpleados: [],
+  listaEmpleadosRestringido: [],
   listaPaises: [],
   idautorizador: 0,
   listaPuestos: []
@@ -12,7 +13,10 @@ const state = {
 
 const mutations = {
   loadListaEmpleados(state, lista) {
-    state.listaEmpleados= lista
+    state.listaEmpleados = lista
+  },
+  loadListaEmpleadosRestringido(state, lista) {
+    state.listaEmpleadosRestringido = lista
   },
   loadListaPaises(state, lista) {
     state.listaPaises= lista
@@ -50,6 +54,21 @@ const actions = {
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleados' + error, { root: true })
+      })
+  },
+
+  loadListaEmpleadosRestringido({ commit }, objFilter) {
+    axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/combo/res&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        //Loading.hide()
+        if (response.data.length === 0) {
+          this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleadosRestingido' + 'No existen datos', { root: true })
+        } else {
+          commit('loadListaEmpleadosRestringido', response.data)
+        }
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleadosRestringido' + error, { root: true })
       })
   },
 

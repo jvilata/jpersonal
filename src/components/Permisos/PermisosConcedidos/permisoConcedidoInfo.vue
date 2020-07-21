@@ -28,12 +28,13 @@
         <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
         <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
-      <img :src="justificante" style="height: 50px; max-width: 50px" clickable @click="expanded = true">
-      <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
-    </div>
-    <div class="row q-pb-sm">
-      <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
+    <div v-if="permiso.tipoDiaLibre == 9">
+      <div class="row q-pb-sm">
+        <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
+      </div>
+      <div class="row q-pb-sm">
+        <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
+      </div>
     </div>
 
     <q-dialog v-model="expanded"  >
@@ -119,9 +120,17 @@ export default {
 
           navigator.camera.getPicture(
             (data) => { // on success
-              console.log('data', data);
+              //console.log('data', data);
               //let data64 = btoa(data)
-              this.justificante = `data:image/jpeg;base64,${data}`
+              //this.justificante = `data:image/jpeg;base64,${data}`
+              var contentType = 'image/jpeg' // 'application/pdf'
+              var raw = atob(data)
+              var rawLength = raw.length;
+              var uInt8Array = new Uint8Array(rawLength)
+              for (var i = 0; i < rawLength; ++i) {
+                  uInt8Array[i] = raw.charCodeAt(i)
+              }
+              var oMyBlob = new Blob([uInt8Array], {type: contentType})
 
               const headerFormDataSinCredentials = {
                 withCredentials: true,
@@ -130,9 +139,7 @@ export default {
                 }
               }
               var formData = new FormData()
-              let blob = fetch(this.justificante).then(r => r.blob());
-              var oMyBlob = new Blob(blob, { type: 'image/jpeg' }) // the blob
-              formData.append('file', oMyBlob)
+              formData.append('file', oMyBlob, `Justificante J-${this.permiso.id}.jpeg`)
               formData.append('asunto', `Justificante del permiso J-${this.permiso.id}`)
               formData.append('tipo', 'Justificante')
               return this.$axios.post(`bd_jpersonal.asp?action=attach/${this.permiso.id}/J&auth=${this.user.auth}`, formData, headerFormDataSinCredentials)
@@ -145,8 +152,6 @@ export default {
                   this.$q.dialog({ title: 'Error', message: error })
                   // this.desconectarLogin()
                 })
-
-              console.log('justificante', this.justificante);
               
               this.options.sourceType = Camera.PictureSourceType.CAMERA
             },
@@ -165,6 +170,7 @@ export default {
   },
   mounted() {
     this.justificante = this.permiso.justificante
+    console.log('permiso', this.permiso);
   }
 }
 </script>

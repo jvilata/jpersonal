@@ -46,13 +46,13 @@
               </q-card-section>
           </q-card>
     </q-expansion-item>
-    <template v-slot:left>
+    <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
       <div class="row items-center">
         <q-icon name="done"/>
         APROBAR
       </div>
     </template>
-    <template v-slot:right>
+    <template v-slot:right v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
       <div class="row items-center">
         RECHAZAR
         <q-icon name="close"/>

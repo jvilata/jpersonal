@@ -69,6 +69,7 @@ const actions = {
         Loading.show()
         this.dispatch('tablasAux/loadTablasAux')
         this.dispatch('empleados/loadListaEmpleados')
+        this.dispatch('empleados/loadListaEmpleadosRestringido')
         this.dispatch('empleados/loadListaPaises')
         this.dispatch('login/esTMoPM')
         this.dispatch('login/esUsuarioPersonaltmp', 24).then(res => { 

@@ -59,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('empleados', ['listaEmpleados'])
+    ...mapState('empleados', ['listaEmpleadosRestringido'])
   },
   methods: {
     ...mapActions('empleados', ['loadFilialEmpleado']),
@@ -85,12 +85,12 @@ export default {
     filterEmpleados(val, update, abort){
       update(() =>{
         const needle = val.toLowerCase()
-        this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+        this.listaEmpleadosFilter = this.listaEmpleadosRestringido.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
     }
   },
   mounted() {
-    this.listaEmpleadosFilter = this.listaEmpleados
+    this.listaEmpleadosFilter = this.listaEmpleadosRestringido
     this.filterP = Object.assign( {}, this.value)
     
   },
