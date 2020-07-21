@@ -120,9 +120,6 @@ export default {
 
           navigator.camera.getPicture(
             (data) => { // on success
-              //console.log('data', data);
-              //let data64 = btoa(data)
-              //this.justificante = `data:image/jpeg;base64,${data}`
               var contentType = 'image/jpeg' // 'application/pdf'
 
               const img = new Image()
