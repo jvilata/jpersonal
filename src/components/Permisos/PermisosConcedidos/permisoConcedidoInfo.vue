@@ -28,7 +28,7 @@
         <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
         <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
     </div>
-    <div v-if="permiso.tipoDiaLibre == 9">
+    <div>
       <div class="row q-pb-sm">
         <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
       </div>
@@ -124,35 +124,54 @@ export default {
               //let data64 = btoa(data)
               //this.justificante = `data:image/jpeg;base64,${data}`
               var contentType = 'image/jpeg' // 'application/pdf'
-              var raw = atob(data)
-              var rawLength = raw.length;
-              var uInt8Array = new Uint8Array(rawLength)
-              for (var i = 0; i < rawLength; ++i) {
-                  uInt8Array[i] = raw.charCodeAt(i)
-              }
-              var oMyBlob = new Blob([uInt8Array], {type: contentType})
 
-              const headerFormDataSinCredentials = {
-                withCredentials: true,
-                headers: {
-                  'Content-Type': 'multipart/form-data'
+              const img = new Image()
+              img.src = 'data:' + contentType + ';base64,' + data
+              img.onload = () => {
+                const scaleFactor = 1
+                // ( img.width > 600 ? 600.0 / img.width : 1)
+                const width = img.width * scaleFactor
+                const height = img.height * scaleFactor
+                const elem = document.createElement('canvas')
+                elem.width = width
+                elem.height = height
+                const ctx = elem.getContext('2d')
+                // img.width and img.height will contain the original dimensions
+                ctx.drawImage(img, 0, 0, width, height)
+                var data = ctx.canvas.toDataURL(contentType, 0.1)
+                data = data.substring('data:image/jpeg;base64,'.length)
+
+                var raw = atob(data)
+                var rawLength = raw.length;
+                var uInt8Array = new Uint8Array(rawLength)
+                for (var i = 0; i < rawLength; ++i) {
+                    uInt8Array[i] = raw.charCodeAt(i)
                 }
+                var oMyBlob = new Blob([uInt8Array], {type: contentType})
+
+                const headerFormDataSinCredentials = {
+                  withCredentials: true,
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }
+                var formData = new FormData()
+                formData.append('file', oMyBlob, `Justificante J-${this.permiso.id}.jpeg`)
+                formData.append('asunto', `Justificante del permiso J-${this.permiso.id}`)
+                formData.append('tipo', '')
+                return this.$axios.post(`bd_jpersonal.asp?action=attach/${this.permiso.id}/J&auth=${this.user.auth}`, formData, headerFormDataSinCredentials)
+                  .then(response => {
+                    if (response.data.success) {
+                      this.$q.dialog({ title: 'OK', message: 'Justificante subido correctamente' })
+                    } else {
+                      this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })
+                    }
+                  })
+                  .catch(error => {
+                    this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })
+                  })
               }
-              var formData = new FormData()
-              formData.append('file', oMyBlob, `Justificante J-${this.permiso.id}.jpeg`)
-              formData.append('asunto', `Justificante del permiso J-${this.permiso.id}`)
-              formData.append('tipo', 'Justificante')
-              return this.$axios.post(`bd_jpersonal.asp?action=attach/${this.permiso.id}/J&auth=${this.user.auth}`, formData, headerFormDataSinCredentials)
-                .then(response => {
-                  this.$q.dialog({ title: 'Error', message: response })
-                  console.log('img', response)
-                })
-                .catch(error => {
-                  console.log('imgErr', error)
-                  this.$q.dialog({ title: 'Error', message: error })
-                  // this.desconectarLogin()
-                })
-              
+
               this.options.sourceType = Camera.PictureSourceType.CAMERA
             },
             () => { // on fail
