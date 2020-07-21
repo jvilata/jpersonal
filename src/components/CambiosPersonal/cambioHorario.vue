@@ -391,7 +391,9 @@ export default {
             var com2 = 0.0
             if (this.recordToSubmit.horaEntrada2 !== null && this.recordToSubmit.horaSalida1 !== null) 
                 com1 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida1, this.recordToSubmit.horaEntrada2, unit))
-                // if(com1 <= 0) { this.alerta1('Alerta Descanso Mínimo:', 'No se permite ')} hora entrada 2 tiene que ser posterior a la hora salida (tiene que haber descanso)
+                if(com1 <= 0) { 
+                    //this.alerta1('Alerta Descanso Mínimo:', 'El descanso es oblDescanso necesariohora entrada 2 tiene que ser posterior a la hora salida (tiene que haber descanso)')
+                } 
             if (this.recordToSubmit.horaEntrada4 !== null && this.recordToSubmit.horaSalida3 !== null)    
                 com2 = Math.abs(date.getDateDiff(this.recordToSubmit.horaSalida3, this.recordToSubmit.horaEntrada4, unit))
             if ( (com1 > 0 && com1 <= 30) || (com2 > 0 && com2 <= 30)) {

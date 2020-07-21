@@ -15,11 +15,9 @@ const mutations = {
   loadListaEmpleados(state, lista) {
     state.listaEmpleados = lista
   },
-
   loadListaEmpleadosRestringido(state, lista) {
     state.listaEmpleadosRestringido = lista
   },
-  
   loadListaPaises(state, lista) {
     state.listaPaises= lista
   },

@@ -19,12 +19,12 @@ const mutations = {
     Notify.create('Justificante eliminado')
   },
   loadPermisosPendientes(state, lista) {
-    state.permisosPendientes = []
-    state.permisosPendientes = lista
+    if(!lista.length) state.permisosPendientes = []
+    else state.permisosPendientes = lista
   },
   loadPermisosConcedidos(state, lista) {
-    state.permisosConcedidos = []
-    state.permisosConcedidos = lista
+    if(!lista.length) state.permisosConcedidos = []
+    else state.permisosConcedidos = lista
   }
 }
 
@@ -33,12 +33,7 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)  
     axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
           commit('loadPermisosPendientes', response.data)
-        } else {
-          commit('loadPermisosPendientes', response.data)
-        }
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + error, { root: true })
@@ -48,11 +43,7 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
     axiosInstance.get(`bd_jpersonal.asp?action=vacaciones/todas&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + 'No existen datos', { root: true })
-        } else {
           commit('loadPermisosConcedidos', response.data)
-        }
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + error, { root: true })
