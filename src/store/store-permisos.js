@@ -4,27 +4,29 @@ import login from './store-login'
 
 const state = {
   permisosPendientes: [],
-  permisosConcedidos: []
+  permisosConcedidos: [],
+  justPorPresentar: 0
 }
 
 const mutations = {
-  addJustificante (state, [id, justificante]) {
-    let index = state.permisosConcedidos.findIndex(perm => perm.id == id);
-    state.permisosConcedidos[index].justificante = justificante
-    Notify.create('Justificante añadido')
-  },
-  deleteJustificante (state, id) {
-    let index = state.permisosConcedidos.findIndex(perm => perm.id == id);
-    state.permisosConcedidos[index].justificante = undefined
-    Notify.create('Justificante eliminado')
-  },
   loadPermisosPendientes(state, lista) {
     state.permisosPendientes = []
     state.permisosPendientes = lista
   },
   loadPermisosConcedidos(state, lista) {
     state.permisosConcedidos = []
-    state.permisosConcedidos = lista
+    state.permisosConcedidos = lista.sort((a, b) => { return (a.justificantesNoValidados + a.justificantesValidados) - (b.justificantesNoValidados + b.justificantesValidados) })
+  },
+  loadContJustificantesPorPresentar(state, lista) {
+    function justificantesCont (acum, permiso) {
+      if ((permiso.tipoDiaLibre === 9 || permiso.tipoDiaLibre === 19)) {
+        if ((permiso.justificantesNoValidados === 0 || permiso.justificantesValidados === 0)) {
+          acum++
+        }
+      }
+      return acum;
+    }
+    state.justPorPresentar = lista.reduce(justificantesCont, 0)
   }
 }
 
@@ -35,7 +37,6 @@ const actions = {
       .then((response) => {
         if (response.data.length === 0) {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
-          commit('loadPermisosPendientes', response.data)
         } else {
           commit('loadPermisosPendientes', response.data)
         }
@@ -52,6 +53,7 @@ const actions = {
           this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + 'No existen datos', { root: true })
         } else {
           commit('loadPermisosConcedidos', response.data)
+          commit('loadContJustificantesPorPresentar', response.data)
         }
       })
       .catch(error => {
@@ -60,15 +62,6 @@ const actions = {
   },
   deletePermisoPendiente({ commit }, payload){
     return axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}`, payload, { withCredentials: true })
-  },
-
-
-
-  addJustificante ({ commit }, [id, justificante]) {
-    commit('addJustificante',[id, justificante] )
-  },
-  deleteJustificante ({ commit }, id) {
-    commit('deleteJustificante', id)
   }
 }
 

@@ -64,6 +64,7 @@
         :name="tab.link.name"
         :to="{ name: tab.link.name, params: { id: id, value: value } }"
         exact>
+        <q-badge v-if="tab.title === 'Permisos concedidos' && justPorPresentar > 0" floating transparent color="red" text-color="white" :label="justPorPresentar"/>
       </q-route-tab>
     </q-tabs>
   </div>
@@ -104,7 +105,7 @@ export default {
     permisosFilter: require('components/Permisos/permisosFilter.vue').default
   },
   computed: {
-    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos']),
+    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos', 'justPorPresentar']),
     ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user'])
   },

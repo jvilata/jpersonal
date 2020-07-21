@@ -23,17 +23,14 @@
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
-        <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
-        <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
-    </div>
-    <div>
+    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19">
       <div class="row q-pb-sm">
-        <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
+          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
+          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
+          <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
       </div>
       <div class="row q-pb-sm">
-        <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
+        <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
       </div>
     </div>
 
@@ -72,31 +69,6 @@ export default {
     ...mapState('login', ['user'])
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
-    addJust() {
-      if (this.justificante)
-        this.addJustificante([this.permiso.id, this.justificante])
-        //this.$forceUpdate()
-    },
-    delJust () {
-      this.$q.dialog({
-        title: 'Eliminar justificante',
-        message: '¿Desea eliminar el justificante?',
-        cancel: {
-          color: 'primary',
-          flat: true
-        },
-        ok: {
-          label: 'Eliminar',
-          flat: true,
-          color: 'negative'
-        },
-        persistent: true
-      }).onOk(() => {
-        this.deleteJustificante(this.permiso.id)
-        //this.$forceUpdate()
-      })
-    },
     addPhoto() {
       this.$q.bottomSheet({ 
         message: 'Seleccionar Justificante',
@@ -183,10 +155,6 @@ export default {
       var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm:ss.000ZZ')
       return date.formatDate(d1, 'DD/MM/YYYY')
     },
-  },
-  mounted() {
-    this.justificante = this.permiso.justificante
-    console.log('permiso', this.permiso);
   }
 }
 </script>

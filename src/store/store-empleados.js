@@ -62,7 +62,7 @@ const actions = {
       .then((response) => {
         //Loading.hide()
         if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleadosRestingido' + 'No existen datos', { root: true })
+          this.dispatch('mensajeLog/addMensaje', 'loadListaEmpleadosRestringido' + 'No existen datos', { root: true })
         } else {
           commit('loadListaEmpleadosRestringido', response.data)
         }
