@@ -1,8 +1,7 @@
 <template>
-  <div style="height: 75vh">
-      <!-- <permisosConcedidosGrid
-        v-model="permisosConcedidos"
-      /> -->
+  <q-layout>
+    <q-page-container>
+  <!-- <div style="height: 75vh"> -->
       <permisosConcedidosList
         v-model="permisosConcedidos"
       />
@@ -12,7 +11,9 @@
         <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Especiales" :value="value.empleadoP.diasConcedidos.tdiasEspeciales"/>
         <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Días Vacaciones" :value="value.empleadoP.diasConcedidos.tdiasVacaciones"/>
       </div>
-  </div>
+  <!-- </div> -->
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
