@@ -10,11 +10,10 @@ const state = {
 
 const mutations = {
   loadPermisosPendientes(state, lista) {
-    state.permisosPendientes = []
-    state.permisosPendientes = lista
+    if(!lista.length) state.permisosPendientes = []
+    else state.permisosPendientes = lista
   },
   loadPermisosConcedidos(state, lista) {
-    state.permisosConcedidos = []
     state.permisosConcedidos = lista.sort((a, b) => { return (a.justificantesNoValidados + a.justificantesValidados) - (b.justificantesNoValidados + b.justificantesValidados) })
   },
   loadContJustificantesPorPresentar(state, lista) {
@@ -27,6 +26,8 @@ const mutations = {
       return acum;
     }
     state.justPorPresentar = lista.reduce(justificantesCont, 0)
+    if(!lista.length) state.permisosConcedidos = []
+    else state.permisosConcedidos = lista
   }
 }
 
@@ -35,11 +36,7 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)  
     axiosInstance.get(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + 'No existen datos', { root: true })
-        } else {
           commit('loadPermisosPendientes', response.data)
-        }
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosPendientes' + error, { root: true })
@@ -49,12 +46,8 @@ const actions = {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
     axiosInstance.get(`bd_jpersonal.asp?action=vacaciones/todas&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
-        if (response.data.length === 0) {
-          this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + 'No existen datos', { root: true })
-        } else {
           commit('loadPermisosConcedidos', response.data)
           commit('loadContJustificantesPorPresentar', response.data)
-        }
       })
       .catch(error => {
         this.dispatch('mensajeLog/addMensaje', 'getPermisosConcedidos' + error, { root: true })

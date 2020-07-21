@@ -41,8 +41,19 @@
               <q-input class="col-xs-4 col-sm-5" outlined readonly v-model="recordToSubmit.consentimientoImagen" label="Consent.Imagen"/>
             </div>
             <div class="row q-mb-sm items-center">
-              <div class="col-xs-11"><q-input outlined v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop /></div>
-              <div class="col-xs-1"><q-icon name="edit" @click="editLicensePlate()" color="primary" size="30px"/></div>
+              <div class="col-xs-8">
+                <q-input outlined clearable v-model="recordToSubmit.vehiculo" label="Vehiculo" autogrow @keyup.enter.stop> 
+                </q-input>
+              </div>
+              <div class="col-xs-4">
+                <!-- <div class="row"> -->
+                <!-- <q-icon name="edit" @click="editLicensePlate()" color="primary" size="20px"/> -->
+                <!-- </div>
+                <div class="row"> -->
+                  <q-btn outline color="primary" label="Editar Mat" @click="editLicensePlate()" icon="edit" />
+                  <!-- <span>Editar Mat.</span> -->
+                <!-- </div> -->
+              </div>
             </div>
             <div class="row justify-center text-center q-pt-lg">
               <div class="col-xs-12 justify-center">

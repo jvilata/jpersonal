@@ -16,7 +16,6 @@ const mutations = {
 const actions = {
   addMensaje ({ commit }, mensaje) {
     commit('addMensaje', mensaje)
-    Notify.create(mensaje)
     console.log('[', new Date(), '] ', mensaje)
   }
 }
