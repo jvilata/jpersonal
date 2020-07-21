@@ -32,6 +32,24 @@ const mutations = {
   },
   guardarToken: (state, ptoken) => {
     Object.assign(state.token, ptoken)
+  },
+  esTMoPM: (state, res) => {
+    state.user.esTMoPM = (res === 1 ? true : false)
+    console.log('esTMoPM', state.user.esTMoPM)
+  },
+  esSuperUsuarioPersonal: (state, res) => { 
+    if(res === 1) state.user.esSuperUsuarioPersonal = true
+    else state.user.esSuperUsuarioPersonal = false
+    console.log('esSuperUsuarioPersonal', state.user.esSuperUsuarioPersonal)
+  },
+  esUsuarioPersonal: (state, res) => { 
+    if(state.user.esSuperUsuarioPersonal) state.user.esUsuarioPersonal = true
+    else state.user.esUsuarioPersonal = (res === 1 ? true : false)
+    console.log('esUsuarioPersonal', state.user.esUsuarioPersonal)
+  },
+  esUsuarioResponsable: (state, res) => { 
+    state.user.esUsuarioResponsable = (res === 1 ? true : false)
+    console.log('esUsuarioResponsable', state.user.esUsuarioResponsable)
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('login', ['doLogin'])
@@ -53,6 +71,14 @@ const actions = {
         this.dispatch('empleados/loadListaEmpleados')
         this.dispatch('empleados/loadListaEmpleadosRestringido')
         this.dispatch('empleados/loadListaPaises')
+        this.dispatch('login/esTMoPM')
+        this.dispatch('login/esUsuarioPersonaltmp', 24).then(res => { 
+          commit('esSuperUsuarioPersonal', res.data)
+          this.dispatch('login/esUsuarioPersonaltmp', 21).then(res => { 
+            commit('esUsuarioPersonal', res.data)
+          })
+        })
+        this.dispatch('login/esUsuarioResponsable')
 
         this.$router.push('/sinTabs')
       })
@@ -70,8 +96,43 @@ const actions = {
   },
   guardarToken ({ commit }, ptoken) {
     commit('guardarToken', ptoken)
+  },
+
+  esTMoPM({ commit }){
+    axiosInstance.post(`bd_jpersonal.asp?action=equiposETM/esTMoPM&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
+      .then((response) => {
+        commit('esTMoPM', JSON.parse(response.data).resultado)
+      })
+      .catch(error => {
+        console.log('esTMoPM', response.data)
+      })
+  },
+
+  esUsuarioPersonaltmp({ commit }, tabla){
+    return axiosInstance.post(`bd_jpersonal.asp?action=tablaAuxiliar/existe&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal, idtabla: tabla }), headerFormData )
+  },
+  
+  esUsuarioResponsable({ commit }){
+    axiosInstance.post(`bd_jpersonal.asp?action=tablaAuxiliar/15&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
+      .then((response) => {
+        if(response.data === 0) { 
+          axiosInstance.post(`bd_jpersonal.asp?action=areaspersonal/count&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
+            .then((response) => {
+              commit('esUsuarioResponsable', JSON.parse(response.data).resultado)
+            })
+            .catch(error => {
+              console.log('esUsuarioResponsable', response.data)
+            })
+        } else { 
+          commit('esUsuarioResponsable', 1) 
+        }
+      })
+      .catch(error => {
+        console.log('esUsuarioResponsable', response.data)
+      })
   }
 }
+
 
 export default {
   namespaced: true,
