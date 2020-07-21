@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <q-layout>
+  <q-page-container>
     <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
           <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
       <q-item-section avatar>
@@ -36,7 +37,7 @@
           <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
         </q-dialog>
       </div>
-      <div class="justify-bottom text-bottom">
+      <q-page-sticky position="bottom" class="justify-bottom text-bottom">
       <span class="text-grey-7">Protección de Datos. </span>
       <div class="row items-end q-my-sm">
         <div class="col-xs-9">
@@ -47,8 +48,9 @@
             <span @click="confirm" class="text-primary text-align-right q-pl-sm">Leer Más</span>
         </div>
       </div>
-      </div>
-  </div>
+      </q-page-sticky>
+  </q-page-container>
+  </q-layout>
 </template>
 
 <script>

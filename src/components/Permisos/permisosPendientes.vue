@@ -1,5 +1,6 @@
 <template>
-  <div style="height: 75vh">
+  <q-layout>
+  <q-page-container>
         <div class="text-center q-ma-sm no-pointer-events row justify-center">
           <q-btn 
             rounded
@@ -41,7 +42,8 @@
     <q-dialog v-model="done">
       <q-icon name="check_circle_outline" color="green" size="100px"/>
     </q-dialog>
-  </div>
+  </q-page-container>
+  </q-layout>
 </template>
 
 <script>
