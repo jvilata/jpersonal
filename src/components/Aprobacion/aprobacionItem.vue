@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item :left-color="provisional ? 'warning' : 'positive'" right-color="negative" @left="provisional ? aceptarProvisional() : aceptar()" @right="rechazar">
+  <q-slide-item :left-color="provisional ? 'warning' : 'positive'" right-color="negative" @left="(reset) => provisional ? aceptarProvisional(reset, 1) : aceptar(reset, 1)" @right="(reset) => rechazar(reset, 1)">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -34,14 +34,14 @@
                         v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
                         color="red" 
                         label="RECHAZAR" 
-                        @click="rechazar(2)"/>
+                        @click="rechazar({}, 2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
                       <q-btn 
                       v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
                       color="primary" 
                       :label="provisional ? 'APROBAR PROVISIONAL' : 'APROBAR'" 
-                      @click="provisional ? aceptarProvisional() : aceptar()"/>
+                      @click="provisional ? aceptarProvisional({}, 2) : aceptar({}, 2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
@@ -113,8 +113,8 @@ export default {
     permisoModif(value) {
       Object.assign(this.aprobacion, value)
     },
-    setOrigin(origin) {
-      this.origin = origin
+    posInicial(reset) {
+      reset()
     },
 
     confirm(){
@@ -140,7 +140,7 @@ export default {
       })
     },
 
-    aceptarProvisional() {
+    aceptarProvisional({reset}, origin) {
       this.$q.dialog({
       title: 'ACEPTAR PROVISIONALMENTE',
       message: '¿Está seguro de que desea ACEPTAR PROVISIONALMENTE la solicitud?',
@@ -188,10 +188,15 @@ export default {
             console.log('generarReservasVacaciones', error);
           })
         }
+        
+       if (origin === 1) this.posInicial(reset)
+      }).onDismiss(() => {
+        this.$emit('close')
+        if (origin === 1) this.posInicial(reset)
       })
     },
 
-    aceptar(){
+    aceptar({reset}, origin){
       this.$q.dialog({
       title: 'ACEPTAR SOLICITUD',
       message: '¿Está seguro de que desea ACEPTAR la solicitud?',
@@ -323,15 +328,15 @@ export default {
           // } 
           
         }
-        //if (this.origin === 1) reset()
+        if (this.origin === 1) this.posInicial(reset)
 
       }).onDismiss(() => {
         this.$emit('close')
-        //if (this.origin === 1) reset()
+        if (this.origin === 1) this.posInicial(reset)
       })
     },
 
-    rechazar ({reset}) {
+    rechazar ({reset}, origin) {
       this.$q.dialog({
         title: 'RECHAZAR SOLICITUD',
         message: 'Indique el motivo',
@@ -393,9 +398,9 @@ export default {
            console.log('aprobarCambiosEmpleado', error);
           })
         }
-        if (this.origin === 1) reset()
+        if (this.origin === 1) this.posInicial(reset)
       }).onDismiss(() => {
-        reset()
+        if (this.origin === 1) this.posInicial(reset)
       })
     }
   }
