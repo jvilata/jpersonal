@@ -37,7 +37,7 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'deleteCambios' + error, { root: true })
       })
   },
-  aprobarPermiso( { commit }, solicitud) {
+  generarReservasVacaciones( { commit }, solicitud) {
     return axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
   },
   rechazarPermiso( { commit }, solicitud) {

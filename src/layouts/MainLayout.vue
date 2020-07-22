@@ -8,6 +8,12 @@
           <div class="text-caption">{{ user.nomEmpresa }}</div>
         </div>
         <div class="q-gutter-sm q-pr-md row items-center no-wrap absolute-right">
+          <q-btn round dense flat color="grey-8" icon="notifications" @click="openForm({ name: 'permisosMain', label: 'Solicitud de permisos' })">
+            <q-badge v-if="justPorPresentar>0" color="red" text-color="white" floating >
+              {{ justPorPresentar }}
+            </q-badge>
+            <q-tooltip>Justificantes Pendientes</q-tooltip>
+          </q-btn>
           <q-btn round flat class="bg-red-9 text-weight-light">
             <q-avatar size="40px">
               {{ user.pers.email ? user.pers.email.substring(0,2) : '' }}
@@ -133,17 +139,23 @@ export default {
     }
   },
   computed: {
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user']),
+    ...mapState('permisos', ['justPorPresentar'])
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
     ...mapActions('login', ['desconectarLogin']),
+    ...mapActions('permisos', ['getPermisosConcedidos']),
     openForm (link) {
       this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
     },
     desconectar () {
       this.desconectarLogin()
     }
+  },
+  mounted() {
+    var objFilter = { solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() }
+    this.getPermisosConcedidos(objFilter)
   }
 }
 </script>
@@ -155,15 +167,11 @@ export default {
     }
   }
 
-  .platform-ios {
-    .q-header {
-    padding-top: constant(safe-area-inset-top); // for iOS 11.0
-    padding-top: env(safe-area-inset-top); // for iOS 11.2 +
-    }
-    .q-footer {
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    }
+  .q-header {
+  padding-top: 20px;
+  }
+  .q-footer {
+  padding-bottom: 33px; 
   }
 
   .q-drawer .q-router-link--exact-active {

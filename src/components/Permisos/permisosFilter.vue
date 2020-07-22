@@ -38,7 +38,7 @@
         v-model.number="filterP.ejercicioAplicacion"
         type="number"
         :rules="[val => !!val || 'Campo obligatorio',
-                 val => val <= (year + 10) || `Ejercicio límite: ${year + 10}`,
+                 val => val <= (year + 1) || `Ejercicio límite: ${year + 1}`,
                  val => val >= (year - 10) || `Ejercicio límite: ${year - 10}`]"
         lazy-rules>
       </q-input>

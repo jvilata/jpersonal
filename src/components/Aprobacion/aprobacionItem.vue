@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item left-color="positive" right-color="negative" @left="aceptar" @right="rechazar">
+  <q-slide-item :left-color="provisional ? 'warning' : 'positive'" right-color="negative" @left="provisional ? aceptarProvisional() : aceptar()" @right="rechazar">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -14,26 +14,34 @@
                 <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
             </q-item-section>
             <q-item-section side top>
-              <q-badge outline :color="item.estadoSolicitudDesc === 'CONCEDIDA' ? 'positive' : 
-                item.estadoSolicitudDesc === 'DENEGADA' ? 'negative' : 
-                item.estadoSolicitudDesc === 'CONC.PROVISIONAL' ? 'warning' : 'primary'" 
+              <q-badge outline :color="item.estadoSolicitud === 4 ? 'positive' : 
+                item.estadoSolicitud === 3 ? 'negative' : 
+                item.estadoSolicitud === 2 ? 'warning' : 'primary'" 
                 :label="item.estadoSolicitudDesc" />
             </q-item-section>
           </template>
 
           <q-card>
               <q-card-section>
-                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" @permiso="value => permisoModif(value)"/> 
+                  <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" :provisional="provisional" @permiso="value => permisoModif(value)"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
                   <itemOtrosCambios v-if="item.tipoSolicitud == 'OTROS CAMBIOS'" :item="item" :keyValue="keyValue"/>
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="red" label="RECHAZAR" @click="rechazar(2)"/>
+                      <q-btn 
+                        v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
+                        color="red" 
+                        label="RECHAZAR" 
+                        @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn 
+                      v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
+                      color="primary" 
+                      :label="provisional ? 'APROBAR PROVISIONAL' : 'APROBAR'" 
+                      @click="provisional ? aceptarProvisional() : aceptar()"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
@@ -47,7 +55,11 @@
           </q-card>
     </q-expansion-item>
     <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
-      <div class="row items-center">
+      <div v-if="provisional" class="row items-center">
+        <q-icon name="query_builder"/>
+        APROBAR PROVISIONAL
+      </div>
+      <div v-else class="row items-center">
         <q-icon name="done"/>
         APROBAR
       </div>
@@ -69,7 +81,8 @@ export default {
   data(){
     return {
       aprobacion: {},
-      origin: 0
+      origin: 0,
+      provisional: false
     }
   },
   props: ['item', 'id', 'keyValue'],
@@ -80,11 +93,18 @@ export default {
     itemOtrosCambios: require('components/Aprobacion/DesplegablesAprob/aprobacionOtrosCambios.vue').default
   },
   computed: { 
-     ...mapState('login', ['user'])
+     ...mapState('login', ['user']),
+     ...mapState('tablasAux', ['listaEstadosSolicitudes'])
+  },
+  mounted() {
+    if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
+    else this.provisional = false
+
+    console.log('item', this.item);
   },
   methods: {
-    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
-    ...mapActions('permisos', ['deletePermisoPendiente']),
+    ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
+    ...mapActions('permisos', ['addPermisoPendiente', 'deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
 
     formatDate (pdate) {
@@ -96,6 +116,7 @@ export default {
     setOrigin(origin) {
       this.origin = origin
     },
+
     confirm(){
       this.$q.dialog({
       title: 'Eliminar Solicitud',
@@ -119,10 +140,61 @@ export default {
       })
     },
 
-    aceptar({ reset }){
+    aceptarProvisional() {
+      this.$q.dialog({
+      title: 'ACEPTAR PROVISIONALMENTE',
+      message: '¿Está seguro de que desea ACEPTAR PROVISIONALMENTE la solicitud?',
+      cancel: true,
+      persistent: true
+      }).onOk(() => {
+        if (this.item.tipoDiaLibre != 9 && this.item.tipoDiaLibre != 18 && this.provisional) {
+          //Bloque actualizar estado solicitud a Conc.Provisional
+          let permisoProv = Object.assign({}, this.item)
+          permisoProv.estadoSolicitud = 2
+          permisoProv.estadoSolicitudDesc = this.listaEstadosSolicitudes.find(record => record.codElemento == permisoProv.estadoSolicitud).valor1
+          permisoProv.observaciones = this.aprobacion.observaciones
+
+          console.log(permisoProv);
+          this.addPermisoPendiente(permisoProv)
+          .then((response) => {
+            console.log('response', response.data);
+            this.$emit('refresh')
+
+            let email = {
+              to: this.item.empleadoEmailNotif,
+              from: 'edicom@edicom.es',
+              subject: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`,
+              text: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`
+            }
+            this.sendMail()
+          })
+          .catch(error => console.log('addPermisoPendiente', error))
+
+          //Bloque generar reservas vacaciones
+          let solicitud = {
+            old_fechaDesde: this.item.sfechaDesde,
+            old_fechaHasta: this.item.sfechaHasta,
+            tecnico: this.item.empleadoIdpersonal,
+            new_fechaDesde: this.item.sfechaDesde,
+            new_fechaHasta: this.item.sfechaHasta,
+            diasEfectivos: this.item.diasEfectivos,
+            esDudoso: this.provisional
+          }
+          this.generarReservasVacaciones(solicitud)
+          .then((response) => {
+            console.log('generarReservasVacaciones', response);
+          })
+          .catch(error => {
+            console.log('generarReservasVacaciones', error);
+          })
+        }
+      })
+    },
+
+    aceptar(){
       this.$q.dialog({
       title: 'ACEPTAR SOLICITUD',
-      message: '¿Está seguro de que desea aceptar la solicitud?',
+      message: '¿Está seguro de que desea ACEPTAR la solicitud?',
       cancel: true,
       persistent: true
       }).onOk(() => {
@@ -152,35 +224,50 @@ export default {
               .catch(error => {
                 console.log('deletePermisoPendiente', error);
               })
-
+              //Bloque mandar correo-notificación
               let mail = {
-                to: this.item.empleadoEmailNotif,
+                to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
-                replyto: 'adjuntos@edicom.es',
-                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`,
-                text: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
-              } 
+                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+              }
+              if (this.item.tipoDiaLibre === 9) {
+                mail.text = `Hola,\nEsperamos que te recuperes lo antes posible de tu baja y para que podamos tramitar adecuadamente ante los organismos oficiales tu situación, cumpliendo la legislación vigente,  
+                             necesitamos que en el momento efectivo de la baja que te sea posible, nos remitas el justificante de la misma. Puedes adjuntarlo enviando un email a: adjuntos@edicom.es, incluyendo como parte del asunto el texto '#J-${this.item.id}#'.
+                             También puedes subirlo directamente desde la Aplicación móvil, al permiso correspondiente de la lista de Permisos Concedidos.
+                            \n\nPor orden de la Seguridad Social, si te ausentas más de 3 días es necesario una baja médica expedida por tu médico de cabecera y para las ausencias médicas de menos de 3 días requerimos que el P10 de justificante haga la indicación de reposo.
+                            \n\nGracias por tu comprensión y que mejores. No dudes en consultarnos cualquier duda.
+                            \n\nEDICOM\nDepto. Administración`
+                mail.replyto = 'adjuntos@edicom.es'
+              } else if (this.item.tipoDiaLibre != 1 && this.item.tipoDiaLibre != 18) {
+                mail.text = `\n\nHola,\n Perdona que te molestemos un momento para recordarte que para que podamos tramitar adecuadamente tu permiso, necesitamos que en el momento efectivo del mismo que te sea posible, nos remitas el justificante del mismo.
+                             Puedes adjuntarlo enviando un email a: adjuntos@edicom.es, incluyendo como parte del asunto el texto '#J-${this.item.id}#'. También puedes subirlo directamente desde la Aplicación móvil, al permiso correspondiente de la lista de Permisos Concedidos. 
+                             \n\nGracias por tu comprensión. No dudes en consultarnos cualquier duda.\n\nEDICOM\nDepto. Administración`
+                mail.replyto = 'adjuntos@edicom.es'
+              } else {
+                mail.text = `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+              }
+            
               this.sendMail(mail)
             }
           })
           .catch(error => console.log('addToVacaciones', error))
 
-          //Bloque aprobar Solicitud
+          //Bloque generar reservas vacaciones
           let solicitud = {
             old_fechaDesde: this.item.sfechaDesde,
             old_fechaHasta: this.item.sfechaHasta,
             tecnico: this.item.empleadoIdpersonal,
-            new_fechaDesde: this.item.sfechaDesde,
-            new_fechaHasta: this.item.sfechaHasta,
+            new_fechaDesde: this.aprobacion.ssustFdesde ? this.aprobacion.ssustFdesde : this.item.sfechaDesde,
+            new_fechaHasta: this.aprobacion.ssustFhasta ? this.aprobacion.ssustFhasta : this.item.sfechaHasta,
             diasEfectivos: this.item.diasEfectivos,
-            esDudoso: false
+            esDudoso: this.provisional
           }
-          this.aprobarPermiso(solicitud)
+          this.generarReservasVacaciones(solicitud)
           .then((response) => {
-            console.log('aprobarPermiso', response);
+            console.log('generarReservasVacaciones', response);
           })
           .catch(error => {
-            console.log('aprobarPermiso', error);
+            console.log('generarReservasVacaciones', error);
           })
 
          //La solicitud es de Cambio Horario o de Teletrabajo  
@@ -236,17 +323,17 @@ export default {
           // } 
           
         }
-        if (this.origin === 1) reset()
+        //if (this.origin === 1) reset()
 
       }).onDismiss(() => {
         this.$emit('close')
-        if (this.origin === 1) reset()
+        //if (this.origin === 1) reset()
       })
     },
 
     rechazar ({reset}) {
       this.$q.dialog({
-        title: 'Rechazar permiso',
+        title: 'RECHAZAR SOLICITUD',
         message: 'Indique el motivo',
         prompt: {
           model: '',

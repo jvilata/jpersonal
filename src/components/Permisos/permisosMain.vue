@@ -1,6 +1,6 @@
 <template>
 
-      <div style="height: 80vh">
+  <div style="height: 76.7vh">
   <!-- <div style="height: 85vh"> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->

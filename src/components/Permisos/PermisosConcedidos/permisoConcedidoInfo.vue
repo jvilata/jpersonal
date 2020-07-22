@@ -92,6 +92,7 @@ export default {
 
           navigator.camera.getPicture(
             (data) => { // on success
+              this.$q.loading.show()
               var contentType = 'image/jpeg' // 'application/pdf'
 
               const img = new Image()
@@ -132,6 +133,7 @@ export default {
                   .then(response => {
                     if (response.data.success) {
                       this.$q.dialog({ title: 'OK', message: 'Justificante subido correctamente' })
+                      this.$emit('refresh')
                     } else {
                       this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })
                     }

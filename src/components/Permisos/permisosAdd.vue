@@ -170,14 +170,6 @@ export default {
           tdiasBaja: this.empleadoP.diasConcedidos.tdiasBaja,
           tdiasEspeciales: this.empleadoP.diasConcedidos.tdiasEspeciales 
           })
-
-        /*
-        consentimientos
-        denegada
-        estadoSolicitudDesc
-        fechaDesde
-        fechaHasta
-        */
        }
 
       //Comprobaciones
@@ -205,13 +197,13 @@ export default {
       //LLAMADA BACKEND
       if (binsertar) {
         this.$q.loading.show()
-        this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, solicitud, this.$axios.headerFormData)
+        this.addPermisoPendiente(solicitud)
         .then((response) => {
           this.$q.loading.hide()
           if (JSON.parse(response.data).success) {
             this.$q.notify({
               color: 'primary',
-              message: 'Solcitud registrada correctamente'
+              message: 'Solicitud registrada correctamente'
             })
             this.$emit('close')
             this.$emit('refresh')
