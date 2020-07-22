@@ -1,5 +1,5 @@
 <template>
-  <q-layout>
+  <q-layout style="min-height: 0px">
   <q-page-container>
         <div class="text-center q-ma-sm no-pointer-events row justify-center">
           <q-btn 

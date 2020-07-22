@@ -6,9 +6,13 @@
           class="q-pa-xs full-width column"
           group="porAprobar">
           <template v-slot:header>
-            <q-item-section avatar>
-              <q-avatar icon="person" color="primary" text-color="white" />
-            </q-item-section>
+            <q-avatar rounded size="30px">
+              <!-- <q-avatar icon="person" color="primary" text-color="white" /> -->
+              <q-img :src="`${urlF}${item.empleadoFoto}`" />
+            </q-avatar>
+
+        
+                  
             <q-item-section>
                 <q-item-label lines="2">{{item.empleadoNombre}}</q-item-label>
                 <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
@@ -33,15 +37,11 @@
                       <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="red" label="RECHAZAR" @click="rechazar(2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
-                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="primary" label="ACEPTAR" @click="aceptar(2)"/>
+                      <q-btn v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" color="primary" label="APROBAR" @click="aceptar(2)"/>
                     </div>
                   </div>
                   <div class="row justify-center text-center">
-                    <div class="col-xs-12 justify-center q-pt-md">
-                      <q-btn v-if="keyValue==1" @click="confirm" style="width: 270px" color="indigo-1"> 
-                        <q-icon name="delete" color="grey-9" />
-                      </q-btn>
-                    </div>
+                      <q-btn v-if="keyValue==1 && (item.estadoSolicitudDesc === 'PENDIENTE')" @click="confirm" style="width: 270px" color="negative">Eliminar Solicitud</q-btn>
                   </div>
               </q-card-section>
           </q-card>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 import { mapActions, mapState } from "vuex";
 
@@ -69,10 +70,12 @@ export default {
   data(){
     return {
       aprobacion: {},
-      origin: 0
+      origin: 0,
+      regper: {},
+      urlF: urlFotos,
     }
   },
-  props: ['item', 'id', 'keyValue'],
+  props: ['item', 'id', 'keyValue', 'idPersonalEmpl'],
   components: {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
@@ -86,7 +89,7 @@ export default {
     ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
-
+    
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
@@ -187,7 +190,7 @@ export default {
         } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
             
           let solicitud = {
-            estadoSolicitud: 4,
+            estadoSolicitud: 4, // APROBADA
             id: this.item.id,
             empleado: this.item.empleado,
             fechaSolicitud: this.item.fechaSolicitud,
@@ -198,42 +201,7 @@ export default {
             idautArea2: this.item.idautArea2
           }
           this.aprobarCambiosEmpleado(solicitud)
-          // if(this.item.tipoSolicitud === 'CAMBIO HORARIO') {
-          //   let datos = {
-          //     to: this.item.empleadoEmail,
-          //     from: 'edicom@edicom.es',
-          //     subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
-          //     text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
-          //       date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-          //       '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
-          //       '\n\n\n Datos de Solicitud: \n\n Lunes - Jueves: ' +  '\n Hora Entrada 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada1),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-          //       ' - Hora Salida 1: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida1),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-          //       '  Hora Entrada 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada2),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-          //       ' - Hora Salida 2: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida2),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-          //       '\n\n Viernes: \n Hora Entrada 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada3),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-          //       ' - Hora Salida 3: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida3),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-          //       '  Hora Entrada 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaEntrada4),'YYYY-MM-DDTHH:mm'), 'HH:mm') + 
-          //       ' - Hora Salida 4: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).horaSalida4),'YYYY-MM-DDTHH:mm'), 'HH:mm') +
-          //       '\n\n\n' + this.item.empleadoNombre + ', acepto que la conciliación laboral siempre se encuentra supeditada a las necesidades del departamento, y para que surta efecto es indispensable obtener la correspondiente autorización de su responsable. Acepto que por la misma razón, también es el responsable del departamento quien puede establecer los límites de aplicación con carácter general en su ámbito, así como modificar, revocar o suspender las autorizaciones existentes cuando así lo considere con la debida antelación.' +
-          //       '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
-          //   }
-          //   this.sendMail(datos)
-          // } else {
-          //   let datos = {
-          //     to: this.item.empleadoEmail,
-          //     from: 'edicom@edicom.es',
-          //     subject: 'Se ha APROBADO tu solicitud de ' + this.item.tipoSolicitud,
-          //     text: 'Estimado ' + this.item.empleadoNombre + '\n\n\n Se ha aprobado tu solicitud de ' + this.item.tipoSolicitud + ' de fecha ' +
-          //       date.formatDate(date.extractDate(this.item.fechaSolicitud,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-          //       '\n\n Observaciones: ' + this.item.observaciones + ' - Aprobado por ' + this.user.pers.nombre + ' el '+ date.formatDate(new Date(), 'DD/MM/YYYY') +
-          //       '\n\n\n Datos de Solicitud: \n\n Fecha Desde: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaDesde),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') + 
-          //     ' - Fecha Hasta: ' + date.formatDate(date.extractDate((JSON.parse(this.item.datosSolicitud).teletrabajoFechaHasta),'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY') +
-          //     '\n\n País Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).paisTeletrabajo) + ' - Domicilio Teletrabajo: ' + (JSON.parse(this.item.datosSolicitud).domicilioTeletrabajo) +
-          //      '\n\n\n' + this.item.empleadoNombre + ' se compromete a cumplir todos los puntos enumerados en el documento "SGSI Procedimiento de Teletrabajo de EDICOM", y tal y como se expresa en el procedimiento, la empresa se reserva el derecho de poner anular dicho permiso por causas imputables a productividad, necesidades de los clientes, de la empresa o de otros compañeros que también lo necesiten y no sea posible reducir los porcentajes de personal en modalidad de trabajo presencial estipulados y/o necesarios en cada momento.' +
-          //     '\n\n\n\n\n Gracias por tu colaboración \n\n\n EDICOM \n MAIL: rrhh@edicomgroup.com'
-          //   }
-          //   this.sendMail(datos)
-          // } 
+          //No envíamos email desde aqui porque ya lo hace el backend
           
         }
         if (this.origin === 1) reset()
@@ -288,7 +256,7 @@ export default {
           .catch(error => console.log('rechazarPermiso', error))
         } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
           let solicitud = {
-            estadoSolicitud: 3,
+            estadoSolicitud: 3, //estadoSolicitud 3 es DENEGADA
             id: this.item.id,
             empleado: this.item.empleado,
             fechaSolicitud: this.item.fechaSolicitud,
@@ -298,7 +266,7 @@ export default {
             datosSolicitud: this.item.datosSolicitud,
             idautArea2: this.item.idautArea2
           }
-          this.aprobarCambiosEmpleado(solicitud)
+          this.aprobarCambiosEmpleado(solicitud) //Misma llamada que aprobar pero con estadoSol != (por eso tmpoco envíamos email)
           .then((response) => {
             this.$emit('refresh')
           })
@@ -312,5 +280,6 @@ export default {
       })
     }
   }
+    
 }
-</script>
+</script> 

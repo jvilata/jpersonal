@@ -40,7 +40,7 @@
     </q-card>
     <q-tab-panels v-model="ltab" animated >
       <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name"  class="q-pa-none">
-        <router-view @close="$emit('close')"/>
+        <router-view @close="$emit('close')" @ok="showDone"/>
       </q-tab-panel>
     </q-tab-panels>
   
@@ -73,6 +73,7 @@ export default {
   data () {
     return {
       ltab: '',
+      done: false,
       title: 'Personal',
       cambios: [
         {
@@ -133,6 +134,12 @@ export default {
     ...mapActions('tabs', ['addTab']),
     openForm (link) {
       this.addTab([link.name, link.label, {}, this.id])
+    },
+    showDone() {
+      this.done = true
+      this.timer = setTimeout(() => {
+        this.done = false
+      }, 800)
     }
   },
   mounted () {

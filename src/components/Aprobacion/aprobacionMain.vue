@@ -42,6 +42,7 @@
       <aprobacionItemsList
         v-model="listaCambios"
         :keyValue="keyValue"
+        @idPersonalEmpl="idPersonalEmpl"
         @deleteCambios="(id) => deleteSolicitud(id)"
         @refresh="getRecords(filterRecord)"
         />
@@ -50,6 +51,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
 
 export default {
   props: ['value', 'id', 'keyValue'], 
@@ -61,7 +63,9 @@ export default {
         persona: '',
         estadoSolicitud: '',
       },
-      nomFormulario: 'Aprobación Cambios-Permisos'
+      nomFormulario: 'Aprobación Cambios-Permisos',
+      fotoEmpleado: '',
+      idPersonalEmpl: 0
     }
   },
   computed: {
@@ -71,6 +75,7 @@ export default {
     ...mapState('aprobacion', ['listaCambios'])
   },
   methods: {
+    ...mapActions('empleados', ['loadDetalleEmpleado']),
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {
@@ -84,7 +89,6 @@ export default {
   },
 
   mounted() {
-    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
@@ -103,6 +107,11 @@ export default {
       }
       this.getRecords(this.filterRecord)
     }
+    this.loadDetalleEmpleado(this.filterRecord.empleado)
+       .then(response => {
+         this.idPersonalEmpl = response.data.idPersonal
+        //  this.fotoEmpleado = response.data.foto
+       })
   },
   destroyed () {
     this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })

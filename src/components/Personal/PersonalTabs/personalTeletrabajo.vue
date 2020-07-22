@@ -4,29 +4,13 @@
       <div class="row q-pa-sm items-baseline" style="max-width: 380px">
           <div class="col-xs-4">Fecha Desde</div>
           <div class="col-xs-8">
-              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaDesde)">
-              <template v-slot:prepend>
-                  <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="recordToSubmit.teletrabajoFechaDesde" @input="() => $refs.qDateProxy.hide()" />
-                  </q-popup-proxy>
-                  </q-icon>  
-              </template>
-              </q-input>
+              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaDesde)" />
           </div>
       </div>
       <div class="row q-pa-sm items-baseline" style="max-width: 380px">
             <div class="col-xs-4">Fecha Hasta</div>
             <div class="col-xs-8">
-              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaHasta)">
-              <template v-slot:prepend>
-                  <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                      <q-date v-model="recordToSubmit.teletrabajoFechaHasta" @input="() => $refs.qDateProxy.hide()" />
-                  </q-popup-proxy>
-                  </q-icon>
-              </template>
-              </q-input>
+              <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaHasta)" />
             </div>
       </div>
       <div class="col-xs-12 q-pa-sm" style="max-width: 380px">

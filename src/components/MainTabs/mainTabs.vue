@@ -1,4 +1,5 @@
   <template>
+    <div>
     <q-card class="flat">
         <q-tabs
           v-model="ltab"
@@ -22,6 +23,7 @@
           </q-tab-panel>
         </q-tab-panels>
     </q-card>
+    </div>
 </template>
 
 <script>
@@ -29,7 +31,8 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
-      ltab: ''
+      ltab: '',
+      done: false
     }
   },
   computed: {
@@ -38,7 +41,7 @@ export default {
   },
   methods: {
     ...mapActions('tabs', ['addTab', 'updateTabData', 'removeTab']),
-    ...mapActions('tablasAux', ['loadTablasAux'])
+    ...mapActions('tablasAux', ['loadTablasAux']),
   }
 }
 </script>

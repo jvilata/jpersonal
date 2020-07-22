@@ -30,7 +30,7 @@
                         :value="formatDate(recordToSubmit.teletrabajoFechaDesde)"
                         @blur="fechasCorrectas()"
                         :rules="[val => !!val || 'Campo obligatorio']">
-                    <template v-slot:prepend>
+                    <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qFechaDesde">
                             <wgDate 
@@ -52,7 +52,7 @@
                         @blur="fechasCorrectas()"
                         :value="formatDate(recordToSubmit.teletrabajoFechaHasta)"
                         :rules="[val => !!val || 'Campo obligatorio']">
-                    <template v-slot:prepend>
+                    <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qFechaHasta">
                             <wgDate 
@@ -70,7 +70,6 @@
                  <div class="col-xs-8">
                     <q-select 
                         outlined
-                        clearable
                         :value="recordToSubmit.paisTeletrabajo" 
                         @input="v => recordToSubmit.paisTeletrabajo = v"
                         :rules="[val => !!val || 'Campo obligatorio']"
@@ -81,7 +80,7 @@
                         emit-value
                         map-options
                         behavior="menu">
-                        <template v-slot:prepend>
+                        <template v-slot:append>
                         <q-icon name="place" @click.stop />
                         </template>
                     </q-select>
@@ -187,11 +186,10 @@ export default {
                 teletrabajoFechaDesde: '',
                 teletrabajoFechaHasta: '',
                 paisTeletrabajo: '',
-                aceptaTeletrabajo: true,
+                aceptaTeletrabajo: false,
                 domicilioTeletrabajo: '',
                 teletrabajoObservaciones: ''
             },
-            model: null,
             val1: false,
             val2: false,
             val3: false,
@@ -224,12 +222,9 @@ export default {
       }).onOk(() => {
        this.val3 = true
       }).onOk(() => {
-        // console.log('>>>> second OK catcher')
         this.val3 = true
       }).onCancel(() => {
-        // console.log('>>>> Cancel')
       }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
       })
     },
 
@@ -242,12 +237,9 @@ export default {
       }).onOk(() => {
        this.val4 = true
       }).onOk(() => {
-        // console.log('>>>> second OK catcher')
         this.val4 = true
       }).onCancel(() => {
-        // console.log('>>>> Cancel')
       }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
       })
     },
 
@@ -278,6 +270,7 @@ export default {
     },
 
     solicitarTeletrabajo(){
+      if(this.val1 && this.val2 && this.val3 && this.val4) {this.recordToSubmit.aceptaTeletrabajo = true}
         var data = {
             consentimientos: '',
             datosSolicitud: JSON.stringify(this.recordToSubmit),
@@ -301,15 +294,15 @@ export default {
         this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
         .then(result => {
-           this.timer = setTimeout(() => {
-                this.$q.loading.hide()
-                this.dialogMes = true
-                this.timer = void 0
-            }, 1000) 
+          this.$q.loading.hide()
+          this.dialogMes = true
           this.$q.notify({
-          color: 'primary',
           message: `Se ha solicitado teletrabajo.`
           })
+          this.timer = setTimeout(() => {
+            this.$emit('close')
+          }, 1000)
+          
         })
         .catch(error => { console.log(error.message) })
 

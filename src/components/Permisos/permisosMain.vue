@@ -1,6 +1,6 @@
 <template>
-
-      <div style="height: 80vh">
+  <q-layout style="min-height: 0px ">
+      <!-- <div style="min-height: 0px"> -->
   <!-- <div style="height: 85vh"> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
@@ -66,7 +66,8 @@
         exact>
       </q-route-tab>
     </q-tabs>
-  </div>
+  <!-- </div> -->
+  </q-layout>
 </template>
 
 <script>
