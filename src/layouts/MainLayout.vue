@@ -86,6 +86,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
+document.addEventListener('deviceready', onDeviceReady, false);
+function onDeviceReady() {
+    console.log('device', device.cordova);
+}
+
 export default {
   name: 'MainLayout',
 

@@ -16,6 +16,7 @@
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-inappbrowser": "^4.0.0"
   },
   "devDependencies": {
@@ -25,7 +26,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-camera": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-device": {}
     },
     "platforms": [
       "android",

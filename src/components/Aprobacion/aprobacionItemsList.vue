@@ -29,7 +29,7 @@
           </div>
         </q-item-label>
         <div>
-          <q-scroll-area style="height: 450px; max-width: 100vw;">
+          <q-scroll-area style="height: calc(100vh - 300px); max-width: 100vw;">
             <div>
               <aprobacionItem v-for="(item, key) in value"
                 :key="key"
