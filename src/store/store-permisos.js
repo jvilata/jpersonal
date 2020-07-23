@@ -4,7 +4,8 @@ import login from './store-login'
 const state = {
   permisosPendientes: [],
   permisosConcedidos: [],
-  justPorPresentar: 0
+  justPorPresentar: 0,
+  listaJustificantes: []
 }
 
 const mutations = {
@@ -29,6 +30,10 @@ const mutations = {
       }
       state.justPorPresentar = lista.reduce(justificantesCont, 0)
     }
+  },
+  loadJustificantes(state, lista) {
+    if(!lista.length) state.listaJustificantes = []
+    else state.listaJustificantes = lista
   }
 }
 
@@ -60,6 +65,18 @@ const actions = {
   },
   deletePermisoPendiente({ commit }, payload){
     return axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+  },
+
+  getJustificantes({ commit }, payload) {
+    axiosInstance.get(`bd_jpersonal.asp?action=attach/J&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    .then((response) => {
+      console.log(response)
+      commit('loadJustificantes', response.data)
+    })
+    .catch(error => {
+      this.dispatch('mensajeLog/addMensaje', 'getJustificantes' + error, { root: true })
+    })
+    
   }
 }
 

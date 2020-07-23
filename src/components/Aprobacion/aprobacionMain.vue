@@ -74,9 +74,18 @@ export default {
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {
-      Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
+      console.log('filterRecord', this.filterRecord)
+      console.log('filter', filter)
+      Object.assign(this.filterRecord, filter)
+      
+      console.log('estado2', this.filterRecord)
+
       this.$q.loading.show()
       this.getListaCambios(this.filterRecord)
+
+      this.filterRecord.estadoSolicitud = this.filterRecord.estadoSolicitud.split(",")
+      console.log('estado3', this.filterRecord.estadoSolicitud)
+      console.log('estado4', this.filterRecord)
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -84,22 +93,24 @@ export default {
   },
 
   mounted() {
-    
     if (this.value.filterRecord) { // si ya hemos cargado previamente los recargo al volver a este tab
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
       }
       this.expanded = false
       Object.assign(this.filterRecord, this.value.filterRecord)
+      this.filterRecord.estadoSolicitud = this.filterRecord.estadoSolicitud.toString()
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
 
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
-        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: "1,2" }
+        console.log('filterMounted', this.filterRecord)
       } else {
         //Es aprobador
-        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: "1,2" }
+        console.log('filterMounted', this.filterRecord)
       }
       this.getRecords(this.filterRecord)
     }

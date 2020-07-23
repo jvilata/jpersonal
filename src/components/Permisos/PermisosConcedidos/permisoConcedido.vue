@@ -28,8 +28,9 @@ export default {
   data () {
     return {
       expanded: false,
+      permisoAct: {},
       icon: '',
-      color: '',
+      color: ''
     }
   },
   components: {
@@ -42,11 +43,13 @@ export default {
     },
   },
   mounted() {
-    if (this.permiso.tipoDiaLibre == 9 || this.permiso.tipoDiaLibre == 19) {
-      if (this.permiso.justificantesValidados > 0) {
+    Object.assign(this.permisoAct, this.permiso)
+
+    if (this.permisoAct.tipoDiaLibre == 9 || this.permisoAct.tipoDiaLibre == 19) {
+      if (this.permisoAct.justificantesValidados > 0) {
         this.icon = "check"
         this.color = "positive"
-      } else if (this.permiso.justificantesNoValidados > 0) {
+      } else if (this.permisoAct.justificantesNoValidados > 0) {
         this.icon = "policy"
         this.color = "warning"
       } else {
