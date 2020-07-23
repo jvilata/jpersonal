@@ -124,7 +124,7 @@ export default {
       filterR: {
         idEmpleado: 0,
         persona: '',
-        estadoSolicitud: '',
+        estadoSolicitud: [],
         tipoSolicitud: 0
       },
       disableEmpleado: true,
@@ -143,6 +143,7 @@ export default {
   methods: {
     ...mapActions('empleados', ['calcularResponsable']),
     getRecords () {
+      this.filterR.estadoSolicitud = this.filterR.estadoSolicitud.toString()
       this.$emit('getRecords', this.filterR) // lo captura aprobacionMain
       this.$emit('close')
     },

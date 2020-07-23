@@ -1,6 +1,5 @@
 <template>
-  <q-layout style="min-height: 0px">
-  <q-page-container>
+  <div style="height: 75vh">
         <div class="text-center q-ma-sm no-pointer-events row justify-center">
           <q-btn 
             rounded
@@ -42,8 +41,7 @@
     <q-dialog v-model="done">
       <q-icon name="check_circle_outline" color="green" size="100px"/>
     </q-dialog>
-  </q-page-container>
-  </q-layout>
+  </div>
 </template>
 
 <script>
@@ -58,10 +56,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['getPermisosPendientes']),
-    getPermisos() {
-      this.getPermisosPendientes({ solIdEmpleado: this.value.filterRecord.empleado, solejercicio: this.value.filterRecord.ejercicioAplicacion })
-    },
     showDone() {
       this.done = true
       this.timer = setTimeout(() => {

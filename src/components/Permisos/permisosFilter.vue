@@ -24,7 +24,9 @@
         option-label="name"
         emit-value
         map-options
-        behavior="menu">
+        behavior="menu"
+        :rules="[val => !!val || 'Campo obligatorio']"
+        lazy-rules>
       </q-select>
       
       <q-input
@@ -34,7 +36,11 @@
         label="Ejercicio" 
         stack-label
         v-model.number="filterP.ejercicioAplicacion"
-        type="number">
+        type="number"
+        :rules="[val => !!val || 'Campo obligatorio',
+                 val => val <= (year + 1) || `Ejercicio límite: ${year + 1}`,
+                 val => val >= (year - 10) || `Ejercicio límite: ${year - 10}`]"
+        lazy-rules>
       </q-input>
 
       <q-card-actions align="right">
@@ -55,7 +61,8 @@ export default {
     return {
       filterP: {},
       disable: false,
-      listaEmpleadosFilter: []
+      listaEmpleadosFilter: [],
+      year: (new Date()).getFullYear()
     }
   },
   computed: {

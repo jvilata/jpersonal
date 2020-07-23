@@ -2,8 +2,8 @@
   <div class="container">    
     <div class="row q-pb-sm">
         <q-input class="col-5 q-pr-sm"  :value="fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
-        <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
-        <q-input class="col-4"  v-model="item.grupoEtm" label="ETM" stack-label dense readonly/>
+        <q-input class="col-3 q-pr-sm"  :value="item.id" label="ID" stack-label dense readonly/>
+        <q-input class="col-4"  :value="item.grupoEtm" label="ETM" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
       <span class="col-4 q-pr-sm text-grey-8" dense>Lunes a Jueves</span>

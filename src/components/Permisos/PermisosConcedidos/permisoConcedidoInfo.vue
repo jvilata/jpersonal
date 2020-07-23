@@ -23,21 +23,22 @@
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
-        <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
-        <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
-    </div>
-    <div>
+    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19">
+      <q-separator spaced/>
       <div class="row q-pb-sm">
-        <q-btn outline class="col" label='Seleccionar Justificante' dense @click="addPhoto"/>
+          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
+          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
+          <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
       </div>
       <div class="row q-pb-sm">
-        <q-btn class="col" color="primary" label="SUBIR" @click="addJust" dense></q-btn>
+        <q-btn color="primary" icon="cloud_upload" class="col" label='Subir Justificante' dense @click="addPhoto"/>
+      </div>
+      <div class="row q-pb-sm">
+        <q-btn outline icon="visibility" class="col" label='Visualizar Justificantes' dense />
       </div>
     </div>
 
-    <q-dialog v-model="expanded"  >
+    <!-- <q-dialog v-model="expanded"  >
       <q-card style="width: 80vw">
         <q-card-section class="row items-center q-pb-none">
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
@@ -46,7 +47,7 @@
           <q-img :src="justificante" />
         </q-card-section>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
 
   </div>
 
@@ -63,7 +64,6 @@ export default {
   props: ['permiso'],
   data () {
     return {
-      justificante: '',
       expanded: false,
       options: {}
     }
@@ -72,30 +72,9 @@ export default {
     ...mapState('login', ['user'])
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
-    addJust() {
-      if (this.justificante)
-        this.addJustificante([this.permiso.id, this.justificante])
-        //this.$forceUpdate()
-    },
-    delJust () {
-      this.$q.dialog({
-        title: 'Eliminar justificante',
-        message: '¿Desea eliminar el justificante?',
-        cancel: {
-          color: 'primary',
-          flat: true
-        },
-        ok: {
-          label: 'Eliminar',
-          flat: true,
-          color: 'negative'
-        },
-        persistent: true
-      }).onOk(() => {
-        this.deleteJustificante(this.permiso.id)
-        //this.$forceUpdate()
-      })
+    ...mapActions('tabs', ['addTab']),
+    openForm (link) {
+      this.addTab([link, 'Teletrabajo', {}, 1])
     },
     addPhoto() {
       this.$q.bottomSheet({ 
@@ -120,6 +99,7 @@ export default {
 
           navigator.camera.getPicture(
             (data) => { // on success
+              this.$q.loading.show()
               var contentType = 'image/jpeg' // 'application/pdf'
 
               const img = new Image()
@@ -160,6 +140,7 @@ export default {
                   .then(response => {
                     if (response.data.success) {
                       this.$q.dialog({ title: 'OK', message: 'Justificante subido correctamente' })
+                      this.$emit('refresh')
                     } else {
                       this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })
                     }
@@ -183,10 +164,6 @@ export default {
       var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm:ss.000ZZ')
       return date.formatDate(d1, 'DD/MM/YYYY')
     },
-  },
-  mounted() {
-    this.justificante = this.permiso.justificante
-    console.log('permiso', this.permiso);
   }
 }
 </script>

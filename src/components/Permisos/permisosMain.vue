@@ -1,6 +1,6 @@
 <template>
-  <q-layout style="min-height: 0px ">
-      <!-- <div style="min-height: 0px"> -->
+
+  <div style="height: 76.7vh">
   <!-- <div style="height: 85vh"> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
@@ -64,6 +64,7 @@
         :name="tab.link.name"
         :to="{ name: tab.link.name, params: { id: id, value: value } }"
         exact>
+        <q-badge v-if="tab.title === 'Permisos concedidos' && justPorPresentar > 0" floating transparent color="red" text-color="white" :label="justPorPresentar"/>
       </q-route-tab>
     </q-tabs>
   <!-- </div> -->
@@ -105,7 +106,7 @@ export default {
     permisosFilter: require('components/Permisos/permisosFilter.vue').default
   },
   computed: {
-    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos']),
+    ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos', 'justPorPresentar']),
     ...mapState('empleados', ['listaEmpleados']),
     ...mapState('login', ['user'])
   },

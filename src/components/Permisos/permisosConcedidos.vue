@@ -4,6 +4,7 @@
   <!-- <div style="height: 75vh"> -->
       <permisosConcedidosList
         v-model="permisosConcedidos"
+        @refresh="$emit('refresh')"
       />
 
       <div class="row q-mb-lg">

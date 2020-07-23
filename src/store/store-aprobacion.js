@@ -16,6 +16,7 @@ const mutations = {
 
 const actions = {
   getListaCambios({ commit }, objFilter) {
+    console.log('objFilter', objFilter);
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
     axiosInstance.get(`bd_jpersonal.asp?action=soldias/solicitudesPendientes&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
@@ -37,7 +38,7 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'deleteCambios' + error, { root: true })
       })
   },
-  aprobarPermiso( { commit }, solicitud) {
+  generarReservasVacaciones( { commit }, solicitud) {
     return axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
   },
   rechazarPermiso( { commit }, solicitud) {
