@@ -68,7 +68,6 @@
       </q-route-tab>
     </q-tabs>
   </div>
-
 </template>
 
 <script>

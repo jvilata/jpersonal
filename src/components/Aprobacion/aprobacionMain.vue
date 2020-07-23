@@ -1,6 +1,6 @@
   <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y ItemsList -->
   <template>
-    <div style="height: 75vh">
+    <div style="max-height: calc(100vh - 190px)">
       <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
         <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
         <q-item-section avatar>
@@ -44,7 +44,7 @@
         :keyValue="keyValue"
         @deleteCambios="(id) => deleteSolicitud(id)"
         @refresh="getRecords(filterRecord)"
-        />
+      />
     </div>
 </template>
 
@@ -106,10 +106,12 @@ export default {
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
-        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1','2'] }
+        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: "1,2" }
+        console.log('filterMounted', this.filterRecord)
       } else {
         //Es aprobador
-        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1','2'] }
+        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: "1,2" }
+        console.log('filterMounted', this.filterRecord)
       }
       this.getRecords(this.filterRecord)
     }
