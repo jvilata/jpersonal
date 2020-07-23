@@ -1,7 +1,6 @@
 <template>
-  <q-item class="row q-ma-xs q-pa-xs">
-
-    <q-list v-if="value.length>0" bordered separator class="rounded-borders col">
+  <q-item class="row q-ma-xs q-pa-xs" >
+    <q-list v-if="value.length>0" bordered separator class="rounded-borders col" style="max-height: calc(100vh - 200px)">
       <q-separator/>
         <q-item-label header dense class="row bg-indigo-1">
           <q-btn-dropdown class="col-1" dropdown-icon="more_vert" size="md" unelevated dense no-icon-animation>
@@ -29,13 +28,19 @@
             <b>({{value.length}}) Cambios pendientes de aprobación</b>
           </div>
         </q-item-label>
-        <aprobacionItem v-for="(item, key) in value"
-          :key="key"
-          :keyValue="keyValue"
-          :item="item"
-          :id="key"
-          @deleteCambios="(id) => $emit('deleteCambios', id)" 
-          @refresh="$emit('refresh')"/>
+        <div>
+          <q-scroll-area style="height: 450px; max-width: 100vw;">
+            <div>
+              <aprobacionItem v-for="(item, key) in value"
+                :key="key"
+                :keyValue="keyValue"
+                :item="item"
+                :id="key"
+                @deleteCambios="(id) => $emit('deleteCambios', id)" 
+                @refresh="$emit('refresh')"/>
+            </div>
+          </q-scroll-area>
+        </div>
 
     </q-list>
     

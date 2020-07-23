@@ -67,8 +67,7 @@
         <q-badge v-if="tab.title === 'Permisos concedidos' && justPorPresentar > 0" floating transparent color="red" text-color="white" :label="justPorPresentar"/>
       </q-route-tab>
     </q-tabs>
-  <!-- </div> -->
-  </q-layout>
+  </div>
 </template>
 
 <script>
