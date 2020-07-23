@@ -105,29 +105,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
-    addJust() {
-      if (this.justificante)
-        this.addJustificante([this.item.id, this.justificante])
-    },
-    delJust () {
-      this.$q.dialog({
-        title: 'Eliminar justificante',
-        message: '¿Desea eliminar el justificante?',
-        cancel: {
-          color: 'primary',
-          flat: true
-        },
-        ok: {
-          label: 'Eliminar',
-          flat: true,
-          color: 'negative'
-        },
-        persistent: true
-      }).onOk(() => {
-        this.deleteJustificante(this.item.id)
-      })
-    },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },

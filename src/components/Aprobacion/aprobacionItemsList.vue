@@ -34,7 +34,6 @@
           :keyValue="keyValue"
           :item="item"
           :id="key"
-          :idPersonalEmpl="idPersonalEmpl"
           @deleteCambios="(id) => $emit('deleteCambios', id)" 
           @refresh="$emit('refresh')"/>
 
@@ -52,7 +51,7 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 
 export default {
-  props: ['value', 'keyValue', 'idPersonalEmpl'], // en 'value' tenemos la tabla de datos del grid
+  props: ['value', 'keyValue'], // en 'value' tenemos la tabla de datos del grid
   components: {
     aprobacionItem: require('components/Aprobacion/aprobacionItem.vue').default
   }

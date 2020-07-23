@@ -42,7 +42,6 @@
       <aprobacionItemsList
         v-model="listaCambios"
         :keyValue="keyValue"
-        @idPersonalEmpl="idPersonalEmpl"
         @deleteCambios="(id) => deleteSolicitud(id)"
         @refresh="getRecords(filterRecord)"
         />
@@ -63,9 +62,7 @@ export default {
         persona: '',
         estadoSolicitud: '',
       },
-      nomFormulario: 'Aprobación Cambios-Permisos',
-      fotoEmpleado: '',
-      idPersonalEmpl: 0
+      nomFormulario: 'Aprobación Cambios-Permisos'
     }
   },
   computed: {
@@ -100,18 +97,13 @@ export default {
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
-        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+        this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: ['1','2'] }
       } else {
         //Es aprobador
-        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1', '2'] }
+        this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: ['1','2'] }
       }
       this.getRecords(this.filterRecord)
     }
-    this.loadDetalleEmpleado(this.filterRecord.empleado)
-       .then(response => {
-         this.idPersonalEmpl = response.data.idPersonal
-        //  this.fotoEmpleado = response.data.foto
-       })
   },
   destroyed () {
     this.$emit('changeTab', { idTab: this.value.idTab, filterRecord: this.filterRecord })

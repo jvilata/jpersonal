@@ -75,7 +75,7 @@ export default {
       urlF: urlFotos,
     }
   },
-  props: ['item', 'id', 'keyValue', 'idPersonalEmpl'],
+  props: ['item', 'id', 'keyValue'],
   components: {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
@@ -86,9 +86,10 @@ export default {
      ...mapState('login', ['user'])
   },
   methods: {
-    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
+    ...mapActions('aprobacion', ['aprobarPermiso', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado', 'getListaCambios']),
     ...mapActions('permisos', ['deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
+    
     
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
@@ -201,6 +202,12 @@ export default {
             idautArea2: this.item.idautArea2
           }
           this.aprobarCambiosEmpleado(solicitud)
+          .then((response) => {
+            this.$emit('refresh')
+          })
+          .catch(error => {
+           console.log('aprobarCambiosEmpleado', error);
+          })
           //No envíamos email desde aqui porque ya lo hace el backend
           
         }

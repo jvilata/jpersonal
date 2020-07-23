@@ -1,7 +1,7 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm"  :value="fechaSolicitud" label="Fecha Solicitud" stack-label dense readonly/>
         <q-input class="col-3 q-pr-sm"  v-model="item.id" label="ID" stack-label dense readonly/>
         <q-input class="col-4"  v-model="item.grupoEtm" label="ETM" stack-label dense readonly/>
     </div>
@@ -56,31 +56,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
-    addJust() {
-      if (this.justificante)
-        this.addJustificante([this.item.id, this.justificante])
-        //this.$forceUpdate()
-    },
-    delJust () {
-      this.$q.dialog({
-        title: 'Eliminar justificante',
-        message: '¿Desea eliminar el justificante?',
-        cancel: {
-          color: 'primary',
-          flat: true
-        },
-        ok: {
-          label: 'Eliminar',
-          flat: true,
-          color: 'negative'
-        },
-        persistent: true
-      }).onOk(() => {
-        this.deleteJustificante(this.item.id)
-        //this.$forceUpdate()
-      })
-    },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },

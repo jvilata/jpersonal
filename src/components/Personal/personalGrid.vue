@@ -91,7 +91,7 @@ export default {
         { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'paisLaboral', sortable: true, style: 'width: 30px' },
         { name: 'pais', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },
         { name: 'grupoETM', align: 'left', label: 'GrupoETM', field: 'grupoETM', sortable: true },
-        { name: 'agrupacionETM', align: 'left', label: 'EquipoETM', field: 'agrupacionETM', sortable: true },
+        { name: 'miemboGrupo', align: 'left', label: 'EquipoETM', field: 'miemboGrupo', sortable: true },
         { name: 'proximaTutorizacion', align: 'left', label: 'Próx.Tutoriz.', field: 'proximaTutorizacion', sortable: true, format: val => ((val !== null) ? date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY'): '')},
         { name: 'vehiculo', align: 'left', label: 'Vehiculo', field: 'vehiculo', sortable: true, style: 'width: 130px; whiteSpace: normal', format: val => val !== null ? val.substring(0, 30) : ''},
         { name: 'vigente', align: 'left', label: 'Vigente', field: 'vigente', sortable: true, format: val => val === 'Verdadero' }
@@ -107,6 +107,7 @@ export default {
     ampliarImagen (record) {
       this.regper = record
       this.expanded = true
+      console.log('value', this.value)
     },
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'
