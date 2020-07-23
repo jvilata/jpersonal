@@ -62,7 +62,7 @@ export default {
         persona: '',
         estadoSolicitud: '',
       },
-      nomFormulario: 'Aprobación Cambios-Permisos'
+      nomFormulario: 'Aprobación Solicitudes'
     }
   },
   computed: {
@@ -103,7 +103,6 @@ export default {
       Object.assign(this.filterRecord, this.value.filterRecord)
       this.filterRecord.estadoSolicitud = this.filterRecord.estadoSolicitud.toString()
       this.getRecords(this.filterRecord) // refresco la lista por si se han hecho cambios
-
     } else { // es la primera vez que entro, cargo valores po defecto
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
