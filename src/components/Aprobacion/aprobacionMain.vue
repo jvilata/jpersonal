@@ -51,6 +51,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
+
 export default {
   props: ['value', 'id', 'keyValue'], 
   data () {
@@ -71,6 +72,7 @@ export default {
     ...mapState('aprobacion', ['listaCambios'])
   },
   methods: {
+    ...mapActions('empleados', ['loadDetalleEmpleado']),
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {

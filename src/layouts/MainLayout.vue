@@ -58,12 +58,15 @@
               exact
               class="text-grey-8"  >
               <q-item-section v-if="link.icon" avatar>
-                <q-icon :name="link.icon" />
+                <q-icon :name="link.icon"  v-if="link.title !== 'Aprobación de cambios-permisos'" />
+                <q-icon :name="link.icon"  v-if="link.title === 'Aprobación de cambios-permisos' && (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal) " />
               </q-item-section>
 
               <q-item-section>
-                <q-item-label>{{ link.title }}</q-item-label>
+                <q-item-label v-if="link.title !== 'Aprobación de cambios-permisos'">{{ link.title  }}</q-item-label>
+                <q-item-label v-if="link.title === 'Aprobación de cambios-permisos'">{{ (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal ? `${link.title}` : '')  }}</q-item-label>
                 <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
+                <q-item-label v-if="link.title === 'Aprobación de cambios-permisos'">{{ (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal ? `${link.caption}` : '')  }}</q-item-label>
               </q-item-section>
             </q-item>
           </div>
@@ -76,7 +79,7 @@
     </q-footer>
 
     <q-page-container>
-      <router-view  @contadorAcciones="(value) => accionesPendientes = value"/>
+      <router-view  @contadorAcciones="(value) => accionesPendientes = value" />
     </q-page-container>
   </q-layout>
 </template>
@@ -119,7 +122,7 @@ export default {
         },
         {
           title: 'Consultar cambios-permisos',
-          icon: 'how_to_reg',
+          icon: 'assignment',
           link: {
             name: 'aprobacionMain',
             opcion: 1,
@@ -128,7 +131,7 @@ export default {
         },
         {
           title: 'Aprobación de cambios-permisos',
-          icon: 'how_to_reg',
+          icon: 'assignment_turned_in',
           link: {
             name: 'aprobacionMain',
             opcion: 2,

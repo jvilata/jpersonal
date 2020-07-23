@@ -100,15 +100,15 @@ export default {
         this.$q.loading.show()
         this.$axios.post(`bd_jpersonal.asp?action=tareasLaboral/list&auth=${this.user.auth}`, data)
           .then(result => {
+            this.$q.loading.hide()
+            this.dialogMes = true
+            this.$q.notify({
+            message: `Se ha registrado su solicitud de cambio.`
+            })
             this.timer = setTimeout(() => {
-              this.$q.loading.hide()
-              this.dialogMes = true
-              this.timer = void 0
-            }, 1000) 
-          this.$q.notify({
-          color: 'primary',
-          message: `Se ha registrado su solicitud de cambio.`
-          })
+              this.$emit('close')
+          }, 1000)
+
           })
           .catch(error => { console.log(error.message) })  
       })

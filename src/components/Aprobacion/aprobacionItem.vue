@@ -6,9 +6,13 @@
           class="q-pa-xs full-width column"
           group="porAprobar">
           <template v-slot:header>
-            <q-item-section avatar>
-              <q-avatar icon="person" color="primary" text-color="white" />
-            </q-item-section>
+            <q-avatar rounded size="30px">
+              <!-- <q-avatar icon="person" color="primary" text-color="white" /> -->
+              <q-img :src="`${urlF}${item.empleadoFoto}`" />
+            </q-avatar>
+
+        
+                  
             <q-item-section>
                 <q-item-label lines="2">{{item.empleadoNombre}}</q-item-label>
                 <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
@@ -44,11 +48,7 @@
                     </div>
                   </div>
                   <div class="row justify-center text-center">
-                    <div class="col-xs-12 justify-center q-pt-md">
-                      <q-btn v-if="keyValue==1" @click="confirm" style="width: 270px" color="indigo-1"> 
-                        <q-icon name="delete" color="grey-9" />
-                      </q-btn>
-                    </div>
+                      <q-btn v-if="keyValue==1 && (item.estadoSolicitudDesc === 'PENDIENTE')" @click="confirm" style="width: 270px" color="negative">Eliminar Solicitud</q-btn>
                   </div>
               </q-card-section>
           </q-card>
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 import { mapActions, mapState } from "vuex";
 
@@ -81,6 +82,8 @@ export default {
     return {
       aprobacion: {},
       origin: 0,
+      regper: {},
+      urlF: urlFotos,
       provisional: false
     }
   },
@@ -104,7 +107,8 @@ export default {
     ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
     ...mapActions('permisos', ['addPermisoPendiente', 'deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
-
+    
+    
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },
@@ -277,7 +281,7 @@ export default {
         } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
             
           let solicitud = {
-            estadoSolicitud: 4,
+            estadoSolicitud: 4, // APROBADA
             id: this.item.id,
             empleado: this.item.empleado,
             fechaSolicitud: this.item.fechaSolicitud,
@@ -292,8 +296,10 @@ export default {
             this.$emit('refresh')
           })
           .catch(error => {
-            console.log('aprobarCambiosEmpleado', error);
+           console.log('aprobarCambiosEmpleado', error);
           })
+          //No envíamos email desde aqui porque ya lo hace el backend
+          
         }
         if (this.origin === 1) this.posInicial(reset)
 
@@ -347,7 +353,7 @@ export default {
           .catch(error => console.log('rechazarPermiso', error))
         } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
           let solicitud = {
-            estadoSolicitud: 3,
+            estadoSolicitud: 3, //estadoSolicitud 3 es DENEGADA
             id: this.item.id,
             empleado: this.item.empleado,
             fechaSolicitud: this.item.fechaSolicitud,
@@ -357,7 +363,7 @@ export default {
             datosSolicitud: this.item.datosSolicitud,
             idautArea2: this.item.idautArea2
           }
-          this.aprobarCambiosEmpleado(solicitud)
+          this.aprobarCambiosEmpleado(solicitud) //Misma llamada que aprobar pero con estadoSol != (por eso tmpoco envíamos email)
           .then((response) => {
             this.$emit('refresh')
           })
@@ -371,5 +377,6 @@ export default {
       })
     }
   }
+    
 }
-</script>
+</script> 

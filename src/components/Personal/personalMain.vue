@@ -80,7 +80,6 @@ export default {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
       var objFilter = Object.assign({}, filter)
-      // objFilter.estadoActivo = (objFilter.estadoActivo !== null ? objFilter.estadoActivo.join() : null) // paso de array a concatenacion de strings (join)
       this.loadListaDetalleEmpleados(filter)
         .then(response => {
           this.registrosSeleccionados = response.data.root

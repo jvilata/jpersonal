@@ -56,7 +56,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('permisos', ['addJustificante', 'deleteJustificante']),
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD/MM/YYYY')
     },

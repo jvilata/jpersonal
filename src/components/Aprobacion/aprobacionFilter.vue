@@ -6,6 +6,7 @@
     </q-card-section>
     <q-form @submit="getRecords" class="q-gutter-y-xs">
         <q-select
+          v-if="keyValue == 2"
           label="Empleado"
           stack-label 
           outlined
@@ -21,8 +22,25 @@
           behavior="menu"
         />
 
+        <q-select
+          v-if="keyValue == 1"
+          label="Empleado"
+          stack-label 
+          outlined
+          clearable
+          v-model="filterR.empleado"
+          :options="listaEmpleadosResFilter"
+          @filter="filterEmpleadosRes"
+          option-value="id"
+          option-label="name"
+          emit-value
+          map-options
+          use-input
+          behavior="menu"
+        />
+
         <q-select 
-          v-if="keyValue == 2"
+          v-if="keyValue == 2 && user.esSuperUsuarioPersonal"
           outlined 
           clearable 
           label="Aprobador" 
@@ -37,6 +55,25 @@
           use-input
           behavior="menu"
         />
+
+        <q-select 
+          v-if="keyValue == 2 && !user.esSuperUsuarioPersonal"
+          readonly
+          outlined 
+          clearable 
+          label="Aprobador" 
+          stack-label 
+          v-model="filterR.persona"
+           :options="listaEmpleadosFilter"
+          @filter="filterEmpleados"
+          option-value="id"
+          option-label="name"
+          emit-value
+          map-options
+          use-input
+          behavior="menu"
+        />
+
         <q-select
           label="Estado"
           stack-label
@@ -92,14 +129,15 @@ export default {
       },
       disableEmpleado: true,
       listaEmpleadosFilter: [],
+      listaEmpleadosResFilter: [],
       listaResponsablesFilter: [],
       listaResponsables: [],
       responsable: ''
     }
   },
   computed: {
-    ...mapState('empleados', ['listaEmpleados']),
-    ...mapState('login', ['user']),
+    ...mapState('empleados', ['listaEmpleados', 'listaEmpleadosRestringido']),
+    ...mapState('login', ['user']), 
     ...mapState('tablasAux', ['listaEstadosAprobacion', 'listaEstadosSolicitudes', 'listaTiposSolicitudes']),
   },
   methods: {
@@ -112,15 +150,24 @@ export default {
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD-MM-YYYY')
     },
+    //Carga todos los empleados
     filterEmpleados(val, update, abort){
       update(() =>{
         const needle = val.toLowerCase()
         this.listaEmpleadosFilter = this.listaEmpleados.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    //Carga empleados Restringidos 
+    filterEmpleadosRes(val, update, abort){
+      update(() =>{
+        const needle = val.toLowerCase()
+        this.listaEmpleadosResFilter = this.listaEmpleadosRestringido.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+      })
     }
   },
   mounted () {
     this.listaEmpleadosFilter = this.listaEmpleados
+     this.listaEmpleadosResFilter = this.listaEmpleadosRestringido
     this.filterR = Object.assign( {} , this.value) // asignamos valor del parametro por si viene de otro tab
   },
   destroyed () {

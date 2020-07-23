@@ -64,10 +64,9 @@
                   style="height: 60px"/>
               </div>
             </div>
-          </q-card-section>
-        
-       
+          </q-card-section> 
     </q-card>
+    
   </div>
 </template>
 
@@ -80,9 +79,8 @@ export default {
   props: ['value', 'id', 'keyValue'],
   data () {
     return {
-      title: 'Activos',
+      done: false,
       urlF: urlFotos,
-      listaEntidadesFilter: [],
       recordToSubmit: {
         id: -1,
         nombre: '',
@@ -102,6 +100,12 @@ export default {
     ...mapActions('tabs', ['addTab']),
     openForm (otrosCambios) {
       this.addTab(['otrosCambios', 'Otros Cambios', {}, this.id])
+    },
+    showDone() {
+      this.done = true
+      this.timer = setTimeout(() => {
+        this.done = false
+      }, 800)
     },
     editLicensePlate(){
       var data = { 

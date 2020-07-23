@@ -39,7 +39,7 @@
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
               <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`" />
               <div v-if="col.name==='vigente'">
-                <q-checkbox v-model="user.pers.vigente" />
+                <q-checkbox v-model="props.row.vigente" />
               </div>
             </div>
           </q-td>
@@ -56,7 +56,7 @@
     <q-dialog v-model="expanded"  >
       <q-card style="width: 60vw">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h7 text-primary">{{ regper.nombre}} </div>
+          <div class="text-h7 text-primary">{{ regper.nombre}}</div>
           <q-space />
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
@@ -74,7 +74,7 @@ import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 
 export default {
-  props: ['value'], // en 'value' tenemos la tabla de datos del grid
+  props: ['value'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
   data () {
     return {
       expanded: false,
@@ -91,6 +91,7 @@ export default {
         { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'paisLaboral', sortable: true, style: 'width: 30px' },
         { name: 'pais', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },
         { name: 'grupoETM', align: 'left', label: 'GrupoETM', field: 'grupoETM', sortable: true },
+        { name: 'miemboGrupo', align: 'left', label: 'EquipoETM', field: 'miemboGrupo', sortable: true },
         { name: 'proximaTutorizacion', align: 'left', label: 'Próx.Tutoriz.', field: 'proximaTutorizacion', sortable: true, format: val => ((val !== null) ? date.formatDate(date.extractDate(val,'YYYY-MM-DDTHH:mm'), 'DD/MM/YYYY'): '')},
         { name: 'vehiculo', align: 'left', label: 'Vehiculo', field: 'vehiculo', sortable: true, style: 'width: 130px; whiteSpace: normal', format: val => val !== null ? val.substring(0, 30) : ''},
         { name: 'vigente', align: 'left', label: 'Vigente', field: 'vigente', sortable: true, format: val => val === 'Verdadero' }
@@ -106,6 +107,7 @@ export default {
     ampliarImagen (record) {
       this.regper = record
       this.expanded = true
+      console.log('value', this.value)
     },
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'
