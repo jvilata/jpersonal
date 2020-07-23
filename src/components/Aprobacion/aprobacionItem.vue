@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
-    ...mapActions('permisos', ['addPermisoPendiente', 'deletePermisoPendiente']),
+    ...mapActions('permisos', ['updatePermisoPendiente', 'deletePermisoPendiente']),
     ...mapActions('tablasAux', ['sendMail']),
     
     
@@ -157,7 +157,7 @@ export default {
           permisoProv.observaciones = this.aprobacion.observaciones
 
           console.log(permisoProv);
-          this.addPermisoPendiente(permisoProv)
+          this.updatePermisoPendiente(permisoProv)
           .then((response) => {
             console.log('response', response.data);
             this.$emit('refresh')

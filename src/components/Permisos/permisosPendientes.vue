@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 75vh">
+  <div style="height: calc(100vh - 268px)">
         <div class="text-center q-ma-sm no-pointer-events row justify-center">
           <q-btn 
             rounded
@@ -12,14 +12,10 @@
             class="col-8 all-pointer-events"/>
         </div>
 
-
         <permisosPendientesList
           v-model="permisosPendientes"
-          class="q-mb-md"
           @refresh="$emit('refresh')">
         </permisosPendientesList>
-
-        <q-separator spaced/>
 
         <div class="row q-mb-xl">
           <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Libres" :value="value.empleadoP.diasPendientes.tdiaslibres"/>
@@ -52,8 +48,12 @@ export default {
   data() {
     return {
       nuevoPermiso: false,
-      done: false
+      done: false,
     }
+  },
+  computed: {
+    ...mapState('permisos', ['permisosPendientes']),
+    ...mapState('login', ['screen'])
   },
   methods: {
     showDone() {
@@ -63,12 +63,21 @@ export default {
       }, 800)
     }
   },
-  computed: {
-    ...mapState('permisos', ['permisosPendientes'])
-  },
   components: {
     permisosAdd: require('components/Permisos/permisosAdd.vue').default,
     permisosPendientesList: require('components/Permisos/PermisosPendientes/permisosPendientesList.vue').default
   }
 }
 </script>
+
+<style lang="scss">
+  
+  .fullScreen {
+    height: calc(100vh - 188px); 
+  }
+
+  .sqScreen {
+    height: calc(100vh - 128px); 
+  }
+
+</style>

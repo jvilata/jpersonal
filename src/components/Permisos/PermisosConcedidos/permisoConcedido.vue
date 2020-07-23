@@ -4,7 +4,7 @@
     group="permisos">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon :color="color" :name="icon" />
+        <q-icon :color="getIcon().color" :name="getIcon().icon" />
       </q-item-section>
 
       <q-item-section>
@@ -28,9 +28,7 @@ export default {
   data () {
     return {
       expanded: false,
-      permisoAct: {},
-      icon: '',
-      color: ''
+      permisoAct: {}
     }
   },
   components: {
@@ -41,24 +39,24 @@ export default {
       var d1 = date.extractDate(pdate,'YYYY-MM-DDTHH:mm:ss.000ZZ')
       return date.formatDate(d1, 'DD/MM/YYYY')
     },
-  },
-  mounted() {
-    Object.assign(this.permisoAct, this.permiso)
-
-    if (this.permisoAct.tipoDiaLibre == 9 || this.permisoAct.tipoDiaLibre == 19) {
-      if (this.permisoAct.justificantesValidados > 0) {
-        this.icon = "check"
-        this.color = "positive"
-      } else if (this.permisoAct.justificantesNoValidados > 0) {
-        this.icon = "policy"
-        this.color = "warning"
+    getIcon() {
+      let obj = {}
+      if (this.permiso.tipoDiaLibre == 9 || this.permiso.tipoDiaLibre == 19) {
+        if (this.permiso.justificantesValidados > 0) {
+          obj.icon = "check"
+          obj.color = "positive"
+        } else if (this.permiso.justificantesNoValidados > 0) {
+          obj.icon = "policy"
+          obj.color = "warning"
+        } else {
+          obj.icon = "warning"
+          obj.color = "negative"
+        }
       } else {
-        this.icon = "warning"
-        this.color = "negative"
+        obj.icon = "check"
+        obj.color = "positive"
       }
-    } else {
-      this.icon = "check"
-      this.color = "positive"
+    return obj
     }
   }
 }

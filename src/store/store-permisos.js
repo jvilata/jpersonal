@@ -63,6 +63,11 @@ const actions = {
   addPermisoPendiente({ commit }, payload) {
     return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, { withCredentials: true })
   },
+
+  updatePermisoPendiente({ commit }, payload) {
+    return axiosInstance.put(`bd_jpersonal.asp?action=soldias/${payload.id}&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+  },
+
   deletePermisoPendiente({ commit }, payload){
     return axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=soldias/${payload.id}?&auth=${login.state.user.auth}`, payload, { withCredentials: true })
   },

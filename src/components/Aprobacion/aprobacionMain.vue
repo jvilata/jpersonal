@@ -1,6 +1,6 @@
   <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y ItemsList -->
   <template>
-    <div style="max-height: calc(100vh - 190px)">
+    <div style="max-height: calc(100vh - 124px)">
       <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
         <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
         <q-item-section avatar>
@@ -76,18 +76,9 @@ export default {
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('aprobacion', ['getListaCambios', 'deleteCambios']),
     getRecords (filter) {
-      console.log('filterRecord', this.filterRecord)
-      console.log('filter', filter)
       Object.assign(this.filterRecord, filter)
-      
-      console.log('estado2', this.filterRecord)
-
       this.$q.loading.show()
       this.getListaCambios(this.filterRecord)
-
-      this.filterRecord.estadoSolicitud = this.filterRecord.estadoSolicitud.split(",")
-      console.log('estado3', this.filterRecord.estadoSolicitud)
-      console.log('estado4', this.filterRecord)
     },
     deleteSolicitud(id){
       this.deleteCambios({id: id , filterR: this.filterRecord})
@@ -108,11 +99,9 @@ export default {
       if (this.keyValue === 1) { //Es tab de consultar solicitud
         this.nomFormulario = 'Consultar Solicitudes'
         this.filterRecord = {  empleado: this.user.pers.id, estadoSolicitud: "1,2" }
-        console.log('filterMounted', this.filterRecord)
       } else {
         //Es aprobador
         this.filterRecord = {  persona: this.user.pers.id, estadoSolicitud: "1,2" }
-        console.log('filterMounted', this.filterRecord)
       }
       this.getRecords(this.filterRecord)
     }
