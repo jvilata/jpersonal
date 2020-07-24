@@ -57,12 +57,13 @@
               @click.native="openForm(link.link)"
               exact
               class="text-grey-8"  >
-              <q-item-section v-if="link.icon" avatar>
-                <q-icon :name="link.icon"  v-if="link.title !== 'Aprobación de cambios-permisos'" />
+               <!--Todos los campos son visibles por Los usuarios excepto el de APROBACION -->
+              <q-item-section v-if="link.icon" avatar> <!--Iconos del DRAWER -->
+                <q-icon :name="link.icon"  v-if="link.title !== 'Aprobación de cambios-permisos'" />  
                 <q-icon :name="link.icon"  v-if="link.title === 'Aprobación de cambios-permisos' && (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal) " />
               </q-item-section>
 
-              <q-item-section>
+              <q-item-section><!--Títulos del DRAWER -->
                 <q-item-label v-if="link.title !== 'Aprobación de cambios-permisos'">{{ link.title  }}</q-item-label>
                 <q-item-label v-if="link.title === 'Aprobación de cambios-permisos'">{{ (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal ? `${link.title}` : '')  }}</q-item-label>
                 <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
@@ -97,7 +98,7 @@ export default {
       leftDrawerOpen: false,
       miniState: false,
       screen: 'sqScreen',
-      menuItems: [
+      menuItems: [ 
         {
           title: 'Consultar/Modificar Datos',
           icon: 'group',
@@ -132,7 +133,7 @@ export default {
           }
         },
         {
-          title: 'Aprobación de cambios-permisos',
+          title: 'Aprobación cambios-permisos',
           icon: 'assignment_turned_in',
           link: {
             name: 'aprobacionMain',
@@ -168,7 +169,6 @@ export default {
       } else {
           this.screen = 'sqScreen'
       }
-      console.log('screen', this.screen);
       this.setScreen(this.screen)
     }
   },

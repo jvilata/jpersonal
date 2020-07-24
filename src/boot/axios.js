@@ -13,8 +13,10 @@ const headerFormData = {
 }
 const urlFotos = 'https://gestion.edicom.es/intranet/telefonos/fotos/'
 
+const urlBase =  'https://gestion.edicom.es/fichajes/'
+
 const axiosInstance = axios.create({
-  baseURL: 'https://gestion.edicom.es/fichajes/',
+  baseURL: urlBase,
   withCredentials: true,
   headers: {
     Accept: ['application/json', 'text/html', 'application/xhtml+xml', 'application/xml'],
@@ -24,4 +26,4 @@ const axiosInstance = axios.create({
 export default ({ Vue }) => {
   Vue.prototype.$axios = axiosInstance
 }
-export { axiosInstance, headerFormData, urlFotos }
+export { axiosInstance, headerFormData, urlFotos, urlBase }

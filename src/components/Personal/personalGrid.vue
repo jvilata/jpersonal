@@ -107,7 +107,6 @@ export default {
     ampliarImagen (record) {
       this.regper = record
       this.expanded = true
-      console.log('value', this.value)
     },
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'

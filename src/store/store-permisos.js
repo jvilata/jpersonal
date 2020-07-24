@@ -73,16 +73,17 @@ const actions = {
   },
 
   getJustificantes({ commit }, payload) {
-    axiosInstance.get(`bd_jpersonal.asp?action=attach/J&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    axiosInstance.get(`bd_jpersonal.asp?action=attach/&auth=${login.state.user.auth}`, { params: { code: payload.code, type: payload.type } }, { withCredentials: true })
     .then((response) => {
-      console.log(response)
+      console.log('response', response.data)
       commit('loadJustificantes', response.data)
     })
     .catch(error => {
       this.dispatch('mensajeLog/addMensaje', 'getJustificantes' + error, { root: true })
     })
     
-  }
+  },
+  //attach/id del just
 }
 
 export default {

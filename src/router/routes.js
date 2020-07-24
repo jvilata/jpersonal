@@ -97,6 +97,12 @@ const routes = [
               }
             ]
           },
+          { 
+            path: 'verJustificantes', 
+            name: 'verJustificantes', 
+            component: () => import('components/Permisos/PermisosConcedidos/verJustificantes.vue'), 
+            props: true 
+          },
           {
             path: 'aprobacionMain',
             name: 'aprobacionMain',
