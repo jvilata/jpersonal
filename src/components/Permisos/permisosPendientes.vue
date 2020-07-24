@@ -1,5 +1,6 @@
 <template>
-  <div style="height: calc(100vh - 268px)">
+  <div :class="screen">
+  <!-- <div style="height: calc(100vh - 268px)"> -->
         <div class="text-center q-ma-sm no-pointer-events row justify-center">
           <q-btn 
             rounded
@@ -73,11 +74,11 @@ export default {
 <style lang="scss">
   
   .fullScreen {
-    height: calc(100vh - 188px); 
+    max-height: calc(100vh - 184px); 
   }
 
   .sqScreen {
-    height: calc(100vh - 128px); 
+    max-height: calc(100vh - 128px); 
   }
 
 </style>

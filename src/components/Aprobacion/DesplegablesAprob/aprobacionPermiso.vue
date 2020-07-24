@@ -72,7 +72,7 @@
     </div>
 
     <div class="row q-pb-md">
-        <q-input class="col"  v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
+        <q-input autogrow class="col" v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
     </div>
 
   </div>

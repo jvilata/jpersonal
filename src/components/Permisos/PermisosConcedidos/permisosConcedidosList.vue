@@ -8,7 +8,7 @@
             <b>Permisos concedidos</b>
           </div>
         </q-item-label>
-        <q-scroll-area style="height: calc(100vh - 436px)">
+        <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 380px)' : 'height: calc(100vh - 436px)'">
           <div>
             <permisoConcedido v-for="(permiso, key) in value"
               :key="key"
@@ -47,17 +47,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss">
-  
-  .fullScreen {
-    height: calc(100vh - 200px);
-    max-width: 100vw;
-  }
-
-  .sqScreen {
-    height: calc(100vh - 100px);
-    max-width: 100vw;
-}
-
-</style>
