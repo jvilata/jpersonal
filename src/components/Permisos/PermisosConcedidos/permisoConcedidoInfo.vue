@@ -136,6 +136,11 @@ export default {
                   .then(response => {
                     if (response.data.success) {
                       this.$q.dialog({ title: 'OK', message: 'Justificante subido correctamente' })
+                      var data = {
+                        code: this.permiso.id,
+                        type: 'J'
+                      }
+                      this.getJustificantes(data)
                       this.$emit('refresh')
                     } else {
                       this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })
