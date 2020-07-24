@@ -30,6 +30,7 @@
                   <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" :provisional="provisional" @permiso="value => permisoModif(value)"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
+                  <itemProcesoSel v-if="item.tipoSolicitud == 'PROCESO SELECCION'" :item="item" :keyValue="keyValue"/>
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
@@ -92,6 +93,7 @@ export default {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
     itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
+    itemProcesoSel: require('components/Aprobacion/DesplegablesAprob/aprobacionProcesoSel.vue').default
   },
   computed: { 
      ...mapState('login', ['user']),
