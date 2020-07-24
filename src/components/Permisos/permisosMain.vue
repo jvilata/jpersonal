@@ -1,6 +1,6 @@
 <template>
 
-  <div style="height: 76.7vh">
+  <div style="height: calc(100vh - 188px)">
   <!-- <div style="height: 85vh"> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
@@ -107,7 +107,7 @@ export default {
   computed: {
     ...mapState('permisos', ['permisosPendientes', 'permisosConcedidos', 'justPorPresentar']),
     ...mapState('empleados', ['listaEmpleados']),
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   },
   methods: {
     ...mapActions('permisos', ['getPermisosPendientes', 'getPermisosConcedidos']),
@@ -183,3 +183,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  
+  .fullScreen {
+    height: calc(100vh - 188px); 
+    overflow: hidden;
+  }
+
+  .sqScreen {
+    height: calc(100vh - 132px);
+    overflow: hidden; 
+  }
+
+</style>

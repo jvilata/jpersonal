@@ -14,7 +14,8 @@ const state = {
   loginError: null,
   loginSuccessful: false,
   user: {}, // { codEmpresa, nomEmpresa, user: {email, idPersonal }, pers: { id, codEmpresa, nombre, nombreAbreviado, email }}
-  token: {} // access_token, expires_in (en segundos), id_token, refresh_token, scope, token_type: "Bearer"
+  token: {}, // access_token, expires_in (en segundos), id_token, refresh_token, scope, token_type: "Bearer"
+  screen: ''
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('loginStart')
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
   },
   esUsuarioResponsable: (state, res) => { 
     state.user.esUsuarioResponsable = (res === 1 ? true : false)
+  },
+  setScreen(state, screen) {
+    state.screen = screen
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('login', ['doLogin'])
@@ -126,6 +130,10 @@ const actions = {
       .catch(error => {
         console.log('esUsuarioResponsable', response.data)
       })
+  },
+
+  setScreen({ commit }, screen) {
+    commit('setScreen', screen)
   }
 }
 

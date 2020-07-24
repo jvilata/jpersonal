@@ -80,7 +80,8 @@
           outlined
           clearable
           multiple
-          v-model="filterR.estadoSolicitud"
+          :value="filterR.estadoSolicitud.split(',')"
+          @input="v => filterR.estadoSolicitud = v.join()"
           :options="listaEstadosSolicitudes"
           option-value="codElemento"
           option-label="valor1"
@@ -124,7 +125,7 @@ export default {
       filterR: {
         idEmpleado: 0,
         persona: '',
-        estadoSolicitud: [],
+        estadoSolicitud: '',
         tipoSolicitud: 0
       },
       disableEmpleado: true,
@@ -143,7 +144,6 @@ export default {
   methods: {
     ...mapActions('empleados', ['calcularResponsable']),
     getRecords () {
-      this.filterR.estadoSolicitud = this.filterR.estadoSolicitud.toString()
       this.$emit('getRecords', this.filterR) // lo captura aprobacionMain
       this.$emit('close')
     },

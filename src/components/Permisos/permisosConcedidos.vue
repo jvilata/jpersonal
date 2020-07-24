@@ -1,7 +1,5 @@
 <template>
-  <q-layout>
-    <q-page-container>
-  <!-- <div style="height: 75vh"> -->
+  <div style="height: calc(100vh - 263px)">
       <permisosConcedidosList
         v-model="permisosConcedidos"
         @refresh="$emit('refresh')"
@@ -12,9 +10,8 @@
         <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Dias Especiales" :value="value.empleadoP.diasConcedidos.tdiasEspeciales"/>
         <q-input class="col-4 q-pa-sm" dense readonly outlined stack-label type="number" label="Días Vacaciones" :value="value.empleadoP.diasConcedidos.tdiasVacaciones"/>
       </div>
-  <!-- </div> -->
-    </q-page-container>
-  </q-layout>
+  </div>
+
 </template>
 
 <script>
@@ -31,7 +28,7 @@ export default {
   },
   computed: {
     ...mapState('permisos', ['permisosConcedidos']),
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   },
   components: {
     // permisosConcedidosGrid: require('components/Permisos/permisosConcedidosGrid.vue').default,
@@ -39,3 +36,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  
+  .fullScreen {
+    height: calc(100vh - 188px);
+  }
+
+  .sqScreen {
+    height: calc(100vh - 128px);
+}
+
+</style>

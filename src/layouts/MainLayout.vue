@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh lpR fFf" class="shadow-2 rounded-borders">
+  <q-layout view="lHh lpR fFf" :class="`shadow-2 rounded-borders ${screen}`">
     <q-header elevated >
       <q-toolbar>
         <q-btn flat @click="leftDrawerOpen = !leftDrawerOpen" round dense icon="menu" />
@@ -87,11 +87,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
-document.addEventListener('deviceready', onDeviceReady, false);
-function onDeviceReady() {
-    console.log('device', device.cordova);
-}
-
 export default {
   name: 'MainLayout',
 
@@ -101,6 +96,7 @@ export default {
       accionesPendientes: 0,
       leftDrawerOpen: false,
       miniState: false,
+      screen: 'sqScreen',
       menuItems: [
         {
           title: 'Consultar/Modificar Datos',
@@ -153,16 +149,32 @@ export default {
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
-    ...mapActions('login', ['desconectarLogin']),
+    ...mapActions('login', ['desconectarLogin', 'setScreen']),
     ...mapActions('permisos', ['getPermisosConcedidos']),
     openForm (link) {
       this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
     },
     desconectar () {
       this.desconectarLogin()
+    },
+    onDeviceReady() {
+      if (device.manufacturer === "Apple") {
+        let appleModel = parseFloat((device.model.split("e"))[1].replace(",", "."))
+        if ((appleModel >= 10.6 || appleModel === 10.2) && appleModel !== 12.8) {
+          this.screen = 'fullScreen'
+        } else {
+          this.screen = 'sqScreen'
+        }
+      } else {
+          this.screen = 'sqScreen'
+      }
+      console.log('screen', this.screen);
+      this.setScreen(this.screen)
     }
   },
   mounted() {
+    document.addEventListener('deviceready', this.onDeviceReady, false)
+
     var objFilter = { solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() }
     this.getPermisosConcedidos(objFilter)
   }
@@ -175,13 +187,15 @@ export default {
       display: none;
     }
   }
-
-  .q-header {
+.q-header {
   padding-top: 20px;
-  }
+}
+
+.fullScreen {
   .q-footer {
-  padding-bottom: 33px; 
+    padding-bottom: 33px; 
   }
+}
 
   .q-drawer .q-router-link--exact-active {
     color: white !important;
