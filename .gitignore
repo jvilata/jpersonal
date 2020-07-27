@@ -9,6 +9,7 @@ node_modules
 # Cordova related directories and files
 /src-cordova/node_modules
 /src-cordova/platforms
+!src-cordova/platforms/android/CordovaLib/src/org/apache/cordova/engine/SystemWebViewClient.java
 /src-cordova/plugins
 /src-cordova/www
 
