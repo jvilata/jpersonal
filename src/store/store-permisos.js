@@ -15,7 +15,13 @@ const mutations = {
   },
   loadPermisosConcedidos(state, lista) {
     if(!lista.length) state.permisosConcedidos = []
-    else state.permisosConcedidos = lista.sort((a, b) => { return (a.justificantesNoValidados + a.justificantesValidados) - (b.justificantesNoValidados + b.justificantesValidados) })
+    else state.permisosConcedidos = lista.sort((a, b) => { 
+      if (a.tipoDiaLibre!==9 && a.tipoDiaLibre!==17 && a.tipoDiaLibre!==19) return 1 // al final
+      else { // es un permiso
+         if (a.justificantesNoValidados + a.justificantesValidados > 0) return 1 //al final
+         else return -1 // al principio
+      }
+    })
   },
   loadContJustificantesPorPresentar(state, lista) {
     if(!lista.length) state.justPorPresentar = 0

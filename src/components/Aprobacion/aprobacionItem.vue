@@ -221,7 +221,8 @@ export default {
           }
           this.addToVacaciones(permiso)
           .then(response => {
-            if (response === true) {
+            var resp = JSON.parse(response.data)
+            if (resp.success === true) {
               //Bloque Borrar permiso
               this.deletePermisoPendiente(this.item)
               .then((response) => {
@@ -350,18 +351,21 @@ export default {
             }
           })
           .catch(error => console.log('rechazarPermiso', error))
-        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+        } else  {
+          var datossol = JSON.parse(this.item.datosSolicitud)
+          datossol.observaciones = this.item.observaciones + (this.item.observaciones.length>0?'\n':'') + 'Motivo rechazo:' + data
           let solicitud = {
             estadoSolicitud: 3, //estadoSolicitud 3 es DENEGADA
             id: this.item.id,
             empleado: this.item.empleado,
             fechaSolicitud: this.item.fechaSolicitud,
             idAutorizadorOf: this.item.idAutorizadorOf,
-            observaciones: this.item.observaciones,
+            observaciones: datossol.observaciones,
             tipoSolicitud: this.item.tipoSolicitud,
-            datosSolicitud: this.item.datosSolicitud,
+            datosSolicitud: JSON.stringify(datossol),
             idautArea2: this.item.idautArea2
           }
+          console.log('datos',solicitud)
           this.aprobarCambiosEmpleado(solicitud) //Misma llamada que aprobar pero con estadoSol != (por eso tmpoco envíamos email)
           .then((response) => {
             this.$emit('refresh')

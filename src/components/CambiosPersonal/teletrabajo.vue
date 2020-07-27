@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 85vh">
         <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
               <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
               <q-item-section avatar>
