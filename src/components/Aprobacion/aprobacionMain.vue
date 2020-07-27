@@ -127,4 +127,8 @@ export default {
     overflow: hidden; 
   }
 
+  .android {  
+    height: calc(100vh - 113px);
+  }
+
 </style>

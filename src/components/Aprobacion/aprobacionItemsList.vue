@@ -8,7 +8,7 @@
           </div>
         </q-item-label>
         <div>
-          <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 284px)' : 'height: calc(100vh - 350px)'">
+          <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 284px)' : screen=='fullScreen' ? 'height: calc(100vh - 350px)' : 'height: calc(100vh - 273px)'">
             <div>
               <aprobacionItem v-for="(item, key) in value"
                 :key="key"
@@ -55,4 +55,7 @@ export default {
     max-height: calc(100vh - 134px);
   }
 
+  .android {  
+    max-height: calc(100vh - 113px);
+  }
 </style>

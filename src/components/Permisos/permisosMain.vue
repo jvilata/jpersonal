@@ -1,6 +1,6 @@
 <template>
 
-  <div :class="screen">
+  <div :class="screen" >
   <!-- <div style="height: calc(100vh - 188px)> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
@@ -188,12 +188,14 @@ export default {
   
   .fullScreen {
     height: calc(100vh - 184px);
-    overflow: hidden;
   }
 
   .sqScreen {
     height: calc(100vh - 128px);
-    overflow: hidden; 
+  }
+
+  .android {
+    height: calc(100vh - 107px);
   }
 
 </style>

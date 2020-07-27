@@ -8,7 +8,7 @@
             <b>Permisos concedidos</b>
           </div>
         </q-item-label>
-        <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 380px)' : 'height: calc(100vh - 436px)'">
+        <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 380px)' : screen=='fullScreen' ? 'height: calc(100vh - 436px)' : 'height: calc(100vh - 359px)'">
           <div>
             <permisoConcedido v-for="(permiso, key) in value"
               :key="key"
