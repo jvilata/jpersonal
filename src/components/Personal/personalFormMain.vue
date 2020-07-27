@@ -1,5 +1,5 @@
 <template>
-  <div style="height: calc(100vh - 105px)">
+  <div :class="screen">
     <q-card>
       <q-card-section   class="q-pa-xs">
             <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
@@ -148,6 +148,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  
+  .fullScreen {
+    height: calc(100vh - 184px);
+    overflow: hidden; 
+  }
+
+  .sqScreen {
+    height: calc(100vh - 127px);
+    overflow: hidden; 
+  }
+
+  .android {
+    height: calc(100vh - 105px);
+    overflow: hidden; 
+  }
 
 </style>
