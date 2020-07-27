@@ -188,14 +188,17 @@ export default {
   
   .fullScreen {
     height: calc(100vh - 184px);
+    overflow: hidden;
   }
 
   .sqScreen {
     height: calc(100vh - 128px);
+    overflow: hidden;
   }
 
   .android {
     height: calc(100vh - 107px);
+    overflow: hidden;
   }
 
 </style>
