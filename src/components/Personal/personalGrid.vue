@@ -37,7 +37,7 @@
           >
             <div :style="col.style">
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`" />
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
               <div v-if="col.name==='vigente'">
                 <q-checkbox v-model="props.row.vigente" />
               </div>
