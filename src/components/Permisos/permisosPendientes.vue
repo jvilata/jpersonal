@@ -81,4 +81,9 @@ export default {
     max-height: calc(100vh - 128px); 
   }
 
+  .android {
+    max-height: calc(100vh - 107px);
+  }
+  
+
 </style>

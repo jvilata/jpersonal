@@ -13,7 +13,7 @@
           </div>
         </q-item-label>
 
-          <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 424px)' : 'height: calc(100vh - 480px)'">
+          <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 424px)' : screen=='fullScreen' ? 'height: calc(100vh - 480px)' : 'height: calc(100vh - 403px)'">
             <div>
               <permisoPendiente v-for="(permiso, key) in value"
                 :key="key"
