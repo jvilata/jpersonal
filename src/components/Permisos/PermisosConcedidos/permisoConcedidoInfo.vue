@@ -23,7 +23,7 @@
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
     </div>
-    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19">
+    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19 || permiso.tipoDiaLibre == 17">
       <q-separator spaced/>
       <div class="row q-pb-sm">
           <q-input class="col-4 q-pr-sm" :value="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>

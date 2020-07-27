@@ -81,7 +81,6 @@ const actions = {
     .catch(error => {
       this.dispatch('mensajeLog/addMensaje', 'getJustificantes' + error, { root: true })
     })
-    
   }
 }
 

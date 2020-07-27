@@ -1,7 +1,7 @@
 <template>
-  <q-page padding class="row justify-center">
+  <q-page padding class="row q-pa-xl justify-center" style="padding-top: 100px">
     <!-- definimos una pagina de LOGIN que tiene un logo arriba y un formulario de empresa, usu y pass abajo -->
-    <div class="gutter-sm" >
+    <div :class="`gutter-sm ${platform}`">
       <div class="row justify-center q-pa-lg">
         <q-img src="~assets/logo-edicom.png" style="width: 40vh"/>
       </div>
@@ -16,8 +16,8 @@
               emit-value
               map-options
             />
-            <q-input name="email" v-model="user.email" label="Usuario" />
-            <q-input name="password" autocomplete="password" v-model="user.password" type="password" label="Password" />
+            <q-input name="email" v-model="user.email" label="Usuario" type="text" style="font-size: 16px"/>
+            <q-input name="password" autocomplete="password" v-model="user.password" type="password" label="Password" style="font-size: 16px"/>
             <div class="row justify-center q-pa-md">
               <q-btn type="submit" rounded color="primary" class="full-width" label="Entrar"/>
             </div>
@@ -38,7 +38,8 @@ export default {
       user: {
         codEmpresa: '01',
         email: '',
-        password: ''
+        password: '',
+        platform: ''
       }
     }
   },
@@ -58,12 +59,26 @@ export default {
     loginSubmit () {
       this.user.nomEmpresa = this.listaEmpresas.find(emp => emp.codElemento === this.user.codEmpresa).valor1 // nombre de empresa
       this.doLogin(this.user) // para validar con bd propia
+    },
+    onDeviceReady() {
+      this.platform = device.platform
     }
   },
   mounted () {
+    document.addEventListener('deviceready', this.onDeviceReady, false)
+
     this.loadTablasAux()
     this.user.email = this.$q.localStorage.getItem('email')
     this.user.password = atob(this.$q.localStorage.getItem('password')) // from base64 to string
   }
 }
 </script>
+
+<style>
+
+.iOS {
+  max-width: 100vw;
+}
+
+
+</style>

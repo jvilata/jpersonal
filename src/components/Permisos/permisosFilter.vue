@@ -80,7 +80,9 @@ export default {
         if (window.cordova === undefined) { // desktop
           openURL(url)
         } else { // estamos en un disp movil
-          window.cordova.InAppBrowser.open(url, '_system') // openURL
+          document.addEventListener('deviceready', () => {
+            window.cordova.InAppBrowser.open(url, '_blank','usewkwebview=yes') // openURL
+          }, false)
         }
       })
     },
