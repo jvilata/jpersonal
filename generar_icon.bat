@@ -1,0 +1,1 @@
+icongenie generate -m cordova -i ./src/assets/logoedi300.png

@@ -1,0 +1,56 @@
+Se requiere instalar los siguientes paquetes:
+- revisar dirctorio boot por si acaso, lo normal es:
+cordova:
+  cordova plugin add cordova-plugin-file
+  cordova plugin add cordova-plugin-file-opener2
+  cordova plugin add cordova-plugin-inappbrowser
+numeral:
+	npm install numeral
+apexcharts:
+
+- otros:
+   npm install querystring // para convertir object a formData, en login y otros
+
+POR PROBLEMAS CON EL SSL DE IIS7 DE EDICOM:
+- el certificado del server no es reconocido por lo que hay que anular la comprobación.
+- hay que modificar el cordova en la clase: CordovaWebViewClient.java (CordovaLib/src/org/apache/cordova/engine)
+public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+  final String packageName = this.cordova.getActivity().getPackageName();
+  final PackageManager pm = this.cordova.getActivity().getPackageManager();
+
+  ApplicationInfo appInfo;
+  try {
+    appInfo = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+    if ((appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+      // debug = true
+      handler.proceed();
+      return;
+    } else {
+      // debug = false
+      // THIS IS WHAT YOU NEED TO CHANGE:
+      // 1. COMMENT THIS LINE
+      // super.onReceivedSslError(view, handler, error);
+      // 2. ADD THESE TWO LINES
+      // ---->
+      handler.proceed();
+      return;
+      // <----
+    }
+  } catch (NameNotFoundException e) {
+    // When it doubt, lock it out!
+    super.onReceivedSslError(view, handler, error);
+  }
+}
+
+
+/********/
+Ruta archivo a modificar: src-cordova/platforms/ios/nombreProyecto/Classes/AppDelegate.m
+
+Código a añadir: Hay que añadir al final del archivo AppDelegate.m el siguiente código.
+
+@implementation NSURLRequest(DataController)
++ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host
+{
+    return YES;
+}
+@end
