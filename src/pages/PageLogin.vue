@@ -69,7 +69,7 @@ export default {
 
     this.loadTablasAux()
     this.user.email = this.$q.localStorage.getItem('email')
-    this.user.password = atob(this.$q.localStorage.getItem('password')) // from base64 to string
+    this.user.password = (this.$q.localStorage.getItem('password')) // from base64 to string
   }
 }
 </script>

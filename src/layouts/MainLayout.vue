@@ -173,7 +173,8 @@ export default {
   },
   mounted() {
     if( !(this.user.esTMoPM || this.user.esUsuarioResponsable || this.user.esUsuarioPersonal)) { 
-      this.menuItems.splice(4,1) //splice(4,1) para eliminar elem en 4ta posicion (Aprobacion)
+      var i = this.menuItems.findIndex(opc => opc.link.name === 'aprobacionMain' && opc.link.opcion === 2) 
+      this.menuItems.splice(i,1) //splice(i,1) para eliminar elem de Aprobacion cuando no tenga permisos para aprobar
     }
     document.addEventListener('deviceready', this.onDeviceReady, false)
     var objFilter = { solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() }

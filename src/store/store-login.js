@@ -57,7 +57,6 @@ const actions = {
   doLogin ({ commit }, loginData) {
     commit('loginStart')
     loginData.auth = btoa(loginData.email + ':' + loginData.password) // token auth basica
-    loginData.password = btoa(loginData.password) // base64
     axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/logon&auth=${loginData.auth}`, { params: {} }, { withCredentials: true })
       .then((response) => {
         if(!response.data.id) { throw new Error("Credenciales incorrectas")}
