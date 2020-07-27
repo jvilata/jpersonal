@@ -36,6 +36,15 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
+        <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSPhotoLibraryUsageDescription">
+            <string>EDICOM necesita acceder a la Librería para seleccionar el justificante</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSCameraUsageDescription">
+            <string>EDICOM necesita acceder a la Cámara para añadir el justificante</string>
+        </edit-config>
+        <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSPhotoLibraryAddUsageDescription">
+            <string>EDICOM necesita acceder a la Librería para seleccionar el justificante</string>
+        </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <preference name="DisallowOverscroll" value="true" />
