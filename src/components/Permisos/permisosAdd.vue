@@ -70,7 +70,7 @@
           map-options
           :rules="[val => !!val || 'Campo obligatorio']"
         />
-        <q-input clearable outlined stack-label type="text" label="Observaciones" v-model="permisoToAdd.observaciones"/>
+        <q-input clearable outlined stack-label type="textarea" label="Observaciones" v-model="permisoToAdd.observaciones"/>
 
         <q-card-actions align="right">
           <q-btn flat label="Cancelar" color="primary" @click="$emit('close')"/><!-- lo captura accionesMain -->

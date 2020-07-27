@@ -2,22 +2,22 @@
 <template>
   <div class="container">    
     <div class="row q-pb-sm">
-        <q-input class="col-3 q-pr-sm"  v-model="permiso.id" label="ID" stack-label dense readonly/>
-        <q-input class="col-9"  v-model="permiso.ejercicioAplicacion" label="Ejercicio" stack-label dense readonly/>
+        <q-input class="col-3 q-pr-sm" :value="permiso.id" label="ID" stack-label dense readonly/>
+        <q-input class="col-9" :value="permiso.ejercicioAplicacion" label="Ejercicio" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.fechaDesde)" label="Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.fechaHasta)" label="Hasta" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-5 q-pr-sm"  v-model="permiso.diasEfectivos" label="Num. Jornadas" stack-label dense readonly/>
-        <q-input class="col-7"  v-model="permiso.datosTipoDiaLibre.descripcionDiaLibre" label="Tipo Jornada Libre" stack-label dense readonly/>
+        <q-input class="col-5 q-pr-sm" :value="permiso.diasEfectivos" label="Num. Jornadas" stack-label dense readonly/>
+        <q-input class="col-7" :value="permiso.datosTipoDiaLibre.descripcionDiaLibre" label="Tipo Jornada Libre" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col"  v-model="permiso.observaciones" label="Observaciones" stack-label dense readonly/>
+        <q-input autogrow class="col" :value="permiso.observaciones" label="Observaciones" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm" v-if="permiso.datosSustituto != null">
-        <q-input class="col"  v-model="permiso.datosSustituto.nombre" label="Sustituto" stack-label dense readonly/>
+        <q-input class="col" :value="permiso.datosSustituto.nombre" label="Sustituto" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm" v-if="permiso.datosSustituto != null">
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
@@ -26,9 +26,9 @@
     <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19 || permiso.tipoDiaLibre == 17" >
       <q-separator spaced/>
       <div class="row q-pb-sm">
-          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
-          <q-input class="col-4 q-pr-sm" v-model="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
-          <q-input class="col-4" v-model="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
+          <q-input class="col-4 q-pr-sm" :value="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
+          <q-input class="col-4 q-pr-sm" :value="permiso.justificantesNoValidados" label="Just. No Valid" stack-label dense readonly/>
+          <q-input class="col-4" :value="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
       </div>
       <div class="row q-pb-sm">
         <q-btn color="primary" icon="cloud_upload" class="col" label='Subir Justificante' dense @click="addPhoto"/>

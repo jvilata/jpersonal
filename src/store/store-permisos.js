@@ -65,7 +65,7 @@ const actions = {
   },
 
   updatePermisoPendiente({ commit }, payload) {
-    return axiosInstance.put(`bd_jpersonal.asp?action=soldias/${payload.id}&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    return axiosInstance.post(`bd_jpersonal.asp?http_method=PUT&action=soldias/${payload.id}&auth=${login.state.user.auth}`, payload, { withCredentials: true })
   },
 
   deletePermisoPendiente({ commit }, payload){
@@ -81,9 +81,7 @@ const actions = {
     .catch(error => {
       this.dispatch('mensajeLog/addMensaje', 'getJustificantes' + error, { root: true })
     })
-    
-  },
-  //attach/id del just
+  }
 }
 
 export default {

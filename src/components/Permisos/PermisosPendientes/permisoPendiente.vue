@@ -1,13 +1,17 @@
 <template>
   <q-expansion-item
-    expand-separator
-    clickable
-    expand-icon="expand_more"
-    icon="person_search"
     class="q-pa-xs full-width column"
-    group="permisos"
-    :label="`${formatDate(permiso.fechaDesde)} a ${formatDate(permiso.fechaHasta)}`"
-    :caption="permiso.datosTipoDiaLibre.descripcionDiaLibre">
+    group="permisos">
+    <template v-slot:header>
+      <q-item-section avatar>
+        <q-icon color="primary" name="person_search" />
+      </q-item-section>
+
+      <q-item-section>
+        {{ `${formatDate(permiso.fechaDesde)} a ${formatDate(permiso.fechaHasta)}` }}
+        <span class="text-caption text-weight-light">{{ permiso.datosTipoDiaLibre.descripcionDiaLibre }}</span>
+      </q-item-section>
+    </template>
     <q-card>
         <q-card-section>
             <permisoMoreInfo :permiso="permiso" @refresh="$emit('refresh')"/>

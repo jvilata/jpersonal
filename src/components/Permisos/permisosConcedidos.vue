@@ -1,5 +1,6 @@
 <template>
-  <div style="height: calc(100vh - 263px)">
+  <div :class="screen">
+  <!-- <div style="height: calc(100vh - 263px)"> -->
       <permisosConcedidosList
         v-model="permisosConcedidos"
         @refresh="$emit('refresh')"
@@ -40,7 +41,7 @@ export default {
 <style lang="scss">
   
   .fullScreen {
-    height: calc(100vh - 188px);
+    height: calc(100vh - 184px);
   }
 
   .sqScreen {

@@ -1,7 +1,7 @@
 <template>
 
-  <div style="height: calc(100vh - 188px)">
-  <!-- <div style="height: 85vh"> -->
+  <div :class="screen">
+  <!-- <div style="height: calc(100vh - 188px)> -->
     <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
       <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
       <q-item-section avatar class="q-ml-sm">
@@ -187,12 +187,12 @@ export default {
 <style lang="scss">
   
   .fullScreen {
-    height: calc(100vh - 188px); 
+    height: calc(100vh - 184px);
     overflow: hidden;
   }
 
   .sqScreen {
-    height: calc(100vh - 132px);
+    height: calc(100vh - 128px);
     overflow: hidden; 
   }
 
