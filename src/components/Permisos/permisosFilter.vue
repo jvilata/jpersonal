@@ -25,7 +25,6 @@
         option-label="name"
         emit-value
         map-options
-        use-input
         behavior="menu"
         :rules="[val => !!val || 'Campo obligatorio']"
         lazy-rules>
