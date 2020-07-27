@@ -1,6 +1,6 @@
   <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y ItemsList -->
   <template>
-    <div style="max-height: calc(100vh - 124px)">
+    <div :class="screen">
       <q-item clickable v-ripple @click="expanded = !expanded" class="q-ma-xs q-pa-xs bg-indigo-1 text-grey-8">
         <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
         <q-item-section avatar>
@@ -68,7 +68,7 @@ export default {
   computed: {
     ...mapState('tablasAux', ['listaEstadosSolicitudes']),
     ...mapState('empleados', ['listaEmpleados']),
-    ...mapState('login', ['user']), 
+    ...mapState('login', ['user', 'screen']), 
     ...mapState('aprobacion', ['listaCambios'])
   },
   methods: {
@@ -115,3 +115,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  
+  .fullScreen {
+    height: calc(100vh - 190px); 
+    overflow: hidden;
+  }
+
+  .sqScreen {
+    height: calc(100vh - 124px);
+    overflow: hidden; 
+  }
+
+</style>

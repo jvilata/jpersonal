@@ -72,8 +72,8 @@
           </div>
         </q-list>
       </q-scroll-area>
-      <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" />
-      <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png" />
+      <q-img v-if="!miniState" class="absolute-top q-mt-xl" src="~assets/logo-edicom.png" />
+      <q-img v-if="miniState" class="absolute-top q-mt-xl" src="~assets/logo-ed1.png" />
     </q-drawer>
     <q-footer>
     </q-footer>
@@ -161,11 +161,13 @@ export default {
       if (device.manufacturer === "Apple") {
         let appleModel = parseFloat((device.model.split("e"))[1].replace(",", "."))
         if ((appleModel >= 10.6 || appleModel === 10.2) && appleModel !== 12.8) {
+          //iPhone con pantalla completa (tipo X)
           this.screen = 'fullScreen'
         } else {
           this.screen = 'sqScreen'
         }
       } else {
+         //Android
           this.screen = 'sqScreen'
       }
       console.log('screen', this.screen);

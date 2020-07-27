@@ -13,7 +13,7 @@
           </div>
         </q-item-label>
 
-          <q-scroll-area style="height: calc(100vh - 480px)">
+          <q-scroll-area :style="screen=='sqScreen' ? 'height: calc(100vh - 424px)' : 'height: calc(100vh - 480px)'">
             <div>
               <permisoPendiente v-for="(permiso, key) in value"
                 :key="key"
@@ -53,17 +53,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss">
-  
-  .fullScreen {
-    max-height: calc(100vh - 100px);
-    max-width: 100vw;
-  }
-
-  .sqScreen {
-    max-height: calc(100vh - 100px);
-    max-width: 100vw;
-}
-
-</style>
