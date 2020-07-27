@@ -11,6 +11,7 @@
 
     <q-form @submit="getPermisos">
       <q-select
+        use-input
         :disable="disable"
         class="q-pb-xs"
         outlined 

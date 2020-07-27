@@ -103,7 +103,6 @@ export default {
     if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
     else this.provisional = false
 
-    //console.log('item', this.item);
   },
   methods: {
     ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
@@ -157,11 +156,8 @@ export default {
           permisoProv.estadoSolicitud = 2
           permisoProv.estadoSolicitudDesc = this.listaEstadosSolicitudes.find(record => record.codElemento == permisoProv.estadoSolicitud).valor1
           permisoProv.observaciones = this.aprobacion.observaciones
-
-          console.log(permisoProv);
           this.updatePermisoPendiente(permisoProv)
           .then((response) => {
-            console.log('response', response.data);
             this.$emit('refresh')
 
             let email = {
