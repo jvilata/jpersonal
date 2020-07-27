@@ -54,7 +54,8 @@ export default {
   data () {
     return {
       expanded: false,
-      options: {}
+      options: {},
+      listaJust: []
     }
   },
   computed: {
@@ -70,6 +71,7 @@ export default {
         type: 'J'
       }
       this.getJustificantes(data)
+      this.$emit('refresh')
       this.addTab(['verJustificantes', 'Ver Justificantes', {}, this.permiso.id ])
     },
     addPhoto() {

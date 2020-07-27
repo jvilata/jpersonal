@@ -25,9 +25,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      "cordova-plugin-camera": {
       }
     },
     "platforms": [

@@ -1,6 +1,7 @@
 <template>
-  <q-item class="row q-ma-xs q-pa-xs">
+  <div style="height: calc(100vh - 200px)">
     <q-card flat>
+      <q-card-section  class="q-pt-md q-pl-xs q-pr-xs">
       <div class="row q-pa-sm items-baseline" style="max-width: 380px">
           <div class="col-xs-4">Fecha Desde</div>
           <div class="col-xs-8">
@@ -23,10 +24,9 @@
           label="Cambiar Teletrabajo" 
           style="height: 60px"/>
       </div>
+      </q-card-section>
     </q-card>
-    
-    
-  </q-item>
+  </div>
 </template>
 
 <script>

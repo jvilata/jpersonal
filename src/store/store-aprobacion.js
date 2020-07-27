@@ -16,7 +16,6 @@ const mutations = {
 
 const actions = {
   getListaCambios({ commit }, objFilter) {
-    console.log('objFilter', objFilter);
     //Llamaremos al backend para rellenar la lista y actualizaremos el state (loadPermisos)
     axiosInstance.get(`bd_jpersonal.asp?action=soldias/solicitudesPendientes&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) // tipo acciones
       .then((response) => {
