@@ -70,8 +70,8 @@
           </div>
         </q-list>
       </q-scroll-area>
-      <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" />
-      <q-img v-if="miniState"  class="absolute-top" src="~assets/logo-ed1.png" />
+      <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png"/>
+      <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png"/>
     </q-drawer>
     <q-footer>
     </q-footer>
