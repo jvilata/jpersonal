@@ -34,20 +34,9 @@
         <q-btn color="primary" icon="cloud_upload" class="col" label='Subir Justificante' dense @click="addPhoto"/>
       </div>
       <div class="row q-pb-sm">
-        <q-btn outline icon="visibility" class="col" label='Visualizar Justificantes' dense />
+        <q-btn outline icon="visibility" class="col" label='Visualizar Justificantes' dense @click="openFormJust()" />
       </div>
     </div>
-
-    <!-- <q-dialog v-model="expanded"  >
-      <q-card style="width: 80vw">
-        <q-card-section class="row items-center q-pb-none">
-          <q-btn flat icon="close" color="primary" @click="expanded = false"/>
-        </q-card-section>
-        <q-card-section>
-          <q-img :src="justificante" />
-        </q-card-section>
-      </q-card>
-    </q-dialog> -->
 
   </div>
 
@@ -73,8 +62,15 @@ export default {
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
-    openForm (link) {
-      this.addTab([link, 'Teletrabajo', {}, 1])
+    ...mapActions('permisos', ['getJustificantes']),
+    openFormJust () {
+      //Añadiremos tab si es algun tipo de baja 
+      var data = {
+        code: this.permiso.id,
+        type: 'J'
+      }
+      this.getJustificantes(data)
+      this.addTab(['verJustificantes', 'Ver Justificantes', {}, this.permiso.id ])
     },
     addPhoto() {
       this.$q.bottomSheet({ 
@@ -140,6 +136,11 @@ export default {
                   .then(response => {
                     if (response.data.success) {
                       this.$q.dialog({ title: 'OK', message: 'Justificante subido correctamente' })
+                      var data = {
+                        code: this.permiso.id,
+                        type: 'J'
+                      }
+                      this.getJustificantes(data)
                       this.$emit('refresh')
                     } else {
                       this.$q.dialog({ title: 'Error', message: 'Error al subir justificante. Vuélvalo a intentar o contacte con el administrador' })

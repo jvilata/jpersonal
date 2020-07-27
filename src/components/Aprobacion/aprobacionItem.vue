@@ -30,6 +30,7 @@
                   <itemPermiso v-if="item.tipoSolicitud == 'PERMISO'" :item="item" :keyValue="keyValue" :provisional="provisional" @permiso="value => permisoModif(value)"/> 
                   <itemCambioHor v-if="item.tipoSolicitud == 'CAMBIO HORARIO'" :item="item" :keyValue="keyValue"/>
                   <itemTeletrab v-if="item.tipoSolicitud == 'TELETRABAJO'" :item="item" :keyValue="keyValue"/>
+                  <itemProcesoSel v-if="item.tipoSolicitud == 'PROCESO SELECCION'" :item="item" :keyValue="keyValue"/>
 
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
@@ -81,9 +82,9 @@ export default {
   data(){
     return {
       aprobacion: {},
-      origin: 0,
-      regper: {},
       urlF: urlFotos,
+      regper: {},
+      origin: 0,
       provisional: false
     }
   },
@@ -92,6 +93,7 @@ export default {
     itemPermiso: require('components/Aprobacion/DesplegablesAprob/aprobacionPermiso.vue').default,
     itemCambioHor: require('components/Aprobacion/DesplegablesAprob/aprobacionCambioHor.vue').default,
     itemTeletrab: require('components/Aprobacion/DesplegablesAprob/aprobacionTeletrab.vue').default,
+    itemProcesoSel: require('components/Aprobacion/DesplegablesAprob/aprobacionProcesoSel.vue').default
   },
   computed: { 
      ...mapState('login', ['user']),
@@ -101,7 +103,6 @@ export default {
     if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
     else this.provisional = false
 
-    //console.log('item', this.item);
   },
   methods: {
     ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
@@ -155,11 +156,8 @@ export default {
           permisoProv.estadoSolicitud = 2
           permisoProv.estadoSolicitudDesc = this.listaEstadosSolicitudes.find(record => record.codElemento == permisoProv.estadoSolicitud).valor1
           permisoProv.observaciones = this.aprobacion.observaciones
-
-          console.log(permisoProv);
           this.updatePermisoPendiente(permisoProv)
           .then((response) => {
-            console.log('response', response.data);
             this.$emit('refresh')
 
             let email = {

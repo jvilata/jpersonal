@@ -57,16 +57,14 @@
               @click.native="openForm(link.link)"
               exact
               class="text-grey-8"  >
-              <q-item-section v-if="link.icon" avatar>
-                <q-icon :name="link.icon"  v-if="link.title !== 'Aprobación de cambios-permisos'" />
-                <q-icon :name="link.icon"  v-if="link.title === 'Aprobación de cambios-permisos' && (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal) " />
+               <!--Todos los campos son visibles por Los usuarios excepto el de APROBACION - mounted-->
+              <q-item-section v-if="link.icon" avatar> <!--Iconos del DRAWER -->
+                <q-icon :name="link.icon"  v-if="link.title " />  
               </q-item-section>
 
-              <q-item-section>
-                <q-item-label v-if="link.title !== 'Aprobación de cambios-permisos'">{{ link.title  }}</q-item-label>
-                <q-item-label v-if="link.title === 'Aprobación de cambios-permisos'">{{ (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal ? `${link.title}` : '')  }}</q-item-label>
+              <q-item-section><!--Títulos del DRAWER -->
+                <q-item-label v-if="link.title">{{ link.title  }}</q-item-label>
                 <q-item-label v-if="link.caption">{{ link.caption }}</q-item-label>
-                <q-item-label v-if="link.title === 'Aprobación de cambios-permisos'">{{ (user.esTMoPM || user.esUsuarioResponsable || user.esUsuarioPersonal ? `${link.caption}` : '')  }}</q-item-label>
               </q-item-section>
             </q-item>
           </div>
@@ -97,7 +95,7 @@ export default {
       leftDrawerOpen: false,
       miniState: false,
       screen: 'sqScreen',
-      menuItems: [
+      menuItems: [ 
         {
           title: 'Consultar/Modificar Datos',
           icon: 'group',
@@ -132,7 +130,7 @@ export default {
           }
         },
         {
-          title: 'Aprobación de cambios-permisos',
+          title: 'Aprobación cambios-permisos',
           icon: 'assignment_turned_in',
           link: {
             name: 'aprobacionMain',
@@ -170,13 +168,14 @@ export default {
          //Android
           this.screen = 'sqScreen'
       }
-      console.log('screen', this.screen);
       this.setScreen(this.screen)
     }
   },
   mounted() {
+    if( !(this.user.esTMoPM || this.user.esUsuarioResponsable || this.user.esUsuarioPersonal)) { 
+      this.menuItems.splice(4,1) //splice(4,1) para eliminar elem en 4ta posicion (Aprobacion)
+    }
     document.addEventListener('deviceready', this.onDeviceReady, false)
-
     var objFilter = { solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() }
     this.getPermisosConcedidos(objFilter)
   }

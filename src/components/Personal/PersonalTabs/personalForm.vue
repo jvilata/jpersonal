@@ -46,13 +46,7 @@
                 </q-input>
               </div>
               <div class="col-xs-4">
-                <!-- <div class="row"> -->
-                <!-- <q-icon name="edit" @click="editLicensePlate()" color="primary" size="20px"/> -->
-                <!-- </div>
-                <div class="row"> -->
                   <q-btn outline color="primary" label="Editar Mat" @click="editLicensePlate()" icon="edit" />
-                  <!-- <span>Editar Mat.</span> -->
-                <!-- </div> -->
               </div>
             </div>
             <div class="row justify-center text-center q-pt-lg">

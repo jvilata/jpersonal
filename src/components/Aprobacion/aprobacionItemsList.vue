@@ -4,7 +4,7 @@
       <q-separator/>
         <q-item-label header dense class="row bg-indigo-1">
           <div class="col self-center text-center text-grey-8 text-subtitle1">
-            <b>({{value.length}}) Cambios pendientes de aprobación</b>
+            <b>({{value.length}}) Resultados de Búsqueda</b>
           </div>
         </q-item-label>
         <div>
