@@ -172,7 +172,7 @@ export default {
     }
   },
   mounted() {
-    if( !(this.user.esTMoPM || this.user.esUsuarioResponsable || this.user.esUsuarioPersonal)) { 
+    if( this.user.esTMoPM===false && this.user.esUsuarioResponsable===false && this.user.esUsuarioPersonal===false) { 
       var i = this.menuItems.findIndex(opc => opc.link.name === 'aprobacionMain' && opc.link.opcion === 2) 
       this.menuItems.splice(i,1) //splice(i,1) para eliminar elem de Aprobacion cuando no tenga permisos para aprobar
     }
