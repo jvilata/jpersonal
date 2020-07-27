@@ -115,6 +115,7 @@ export default {
       }    
   },
   mounted() { 
+    console.log('verJustificantes')
       this.listaJust = this.listaJustificantes
   }
 }
