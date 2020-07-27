@@ -6,10 +6,11 @@
           class="q-pa-xs full-width column"
           group="porAprobar">
           <template v-slot:header>
-            <q-avatar rounded size="30px">
-              <!-- <q-avatar icon="person" color="primary" text-color="white" /> -->
-              <q-img :src="`${urlF}${item.empleadoFoto}`" />
-            </q-avatar>
+            <q-item-section avatar>
+              <q-avatar round size="30px">
+                <q-img :src="`${urlF}${item.empleadoFoto}`" />
+              </q-avatar>
+            </q-item-section>
 
         
                   
