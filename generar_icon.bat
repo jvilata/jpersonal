@@ -1,0 +1,1 @@
+icongenie generate -m cordova -i /quasar/jpersonal/src/assets/logoedi300.png

@@ -7,7 +7,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label class="text-h6">
-             {{ nomFormulario }}
+             {{ nomFormulario }} #J-{{this.listaJust[0].code}}#
           </q-item-label>
           
         </q-item-section>
