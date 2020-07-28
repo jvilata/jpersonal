@@ -1,5 +1,5 @@
 <template>
-    <div :class="screen">
+    <div :style="screen=='sqScreen' ? 'height: calc(100vh - 130px)' : screen=='fullScreen' ? 'height: calc(100vh - 186px)' : 'height: calc(100vh - 110px)'">
         <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
               <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
               <q-item-section avatar>
@@ -203,7 +203,7 @@ export default {
         }
     }, 
     computed:{
-    ...mapState('login', ['user']),
+    ...mapState('login', ['user', 'screen']),
     ...mapState('empleados', ['listaPaises'])
     },
     components: {

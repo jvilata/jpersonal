@@ -1,6 +1,6 @@
 <template>
    
-   <div style="height: calc(100vh - 200px)">
+   <div :style="screen=='sqScreen' ? 'height: calc(100vh - 227px)' : screen=='fullScreen' ? 'height: calc(100vh - 283px)' : 'height: calc(100vh - 207px)'">
        
     <q-card flat>
       <q-card-section  class="q-pt-md q-pl-xs q-pr-xs">
@@ -24,7 +24,7 @@
         </div>
       </q-card-section>
     </q-card>
-    <div class="row justify-center text-center q-pt-lg" >
+    <div class="row justify-center text-center q-pt-lg q-pb-lg" >
       <q-btn
         @click="openForm('cambioHorario')"
         color="primary" 
@@ -46,7 +46,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   },
   methods: {
     ...mapActions('empleados', ['loadDetalleEmpleado']),

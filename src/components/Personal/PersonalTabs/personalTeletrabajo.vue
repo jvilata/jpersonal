@@ -1,5 +1,5 @@
 <template>
-  <div style="height: calc(100vh - 200px)">
+  <div :style="screen=='sqScreen' ? 'height: calc(100vh - 227px)' : screen=='fullScreen' ? 'height: calc(100vh - 283px)' : 'height: calc(100vh - 207px)'">
     <q-card flat>
       <q-card-section  class="q-pt-md q-pl-xs q-pr-xs">
       <div class="row q-pa-sm items-baseline" style="max-width: 380px">
@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     ...mapState('tablasAux', ['listaSINO']),
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   },
   methods: {
     ...mapActions('empleados', ['loadDetalleEmpleado']),
