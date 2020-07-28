@@ -11,7 +11,6 @@
                 <q-img :src="`${urlF}${item.empleadoFoto}`" />
               </q-avatar>
             </q-item-section>
-
         
                   
             <q-item-section>
