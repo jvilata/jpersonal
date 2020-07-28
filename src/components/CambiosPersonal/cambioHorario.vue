@@ -1,6 +1,6 @@
 <!-- componente principal de definicion de formularios. Se apoya en otros 2 componentes: Filter y Grid -->
   <template>
-    <div :class="screen">
+    <div :style="screen=='sqScreen' ? 'height: calc(100vh - 130px)' : screen=='fullScreen' ? 'height: calc(100vh - 186px)' : 'height: calc(100vh - 110px)'">
         <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
               <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
               <q-item-section avatar>

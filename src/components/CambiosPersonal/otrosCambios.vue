@@ -1,6 +1,5 @@
 <template>
-  <q-layout>
-  <q-page-container>
+  <div :style="screen=='sqScreen' ? 'height: calc(100vh - 130px)' : screen=='fullScreen' ? 'height: calc(100vh - 186px)' : 'height: calc(100vh - 110px)'">
     <q-item class="q-pa-xs bg-indigo-1 text-grey-8">
           <!-- cabecera de formulario. Botón de busqueda y cierre de tab -->
       <q-item-section avatar>
@@ -49,8 +48,7 @@
         </div>
       </div>
       </q-page-sticky>
-  </q-page-container>
-  </q-layout>
+  </div>
 </template>
 
 <script>
@@ -116,7 +114,7 @@ export default {
       }
   },
   computed:{
-    ...mapState('login', ['user'])
+    ...mapState('login', ['user', 'screen'])
   }
     
 }

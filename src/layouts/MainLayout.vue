@@ -205,7 +205,10 @@ export default {
   .q-footer {
     padding-bottom: 33px; 
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> javier
 }
 
   .q-drawer .q-router-link--exact-active {
