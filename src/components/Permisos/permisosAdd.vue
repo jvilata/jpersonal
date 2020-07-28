@@ -4,6 +4,7 @@
     <q-card style="width: 330px;" class="q-pa-xs q-gutter-xs">
       <q-card-section class="bg-primary text-white">
         <div class="text-h6">Solicitar nuevo permiso</div>
+        <small @click="verNormativa()"><u>Normativa de permisos y vacaciones</u></small>
       </q-card-section>
 
       <q-form @submit="solicitarPermiso" class="q-gutter-y-xs">
@@ -85,6 +86,7 @@
 import { mapActions, mapState } from 'vuex'
 import { date } from 'quasar'
 import wgDate from 'components/General/wgDate.vue'
+import { openURL } from "quasar"
 
 export default {
   props: ['value', 'empleadoP'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
@@ -127,6 +129,43 @@ export default {
     ...mapActions('tablasAux', ['sendMail']),
     formatDate (pdate, mask) {
       return date.formatDate(pdate, mask)
+    },
+    verNormativa() {
+      let filialAbrev = this.empleadoP.filialEmpleado.filial.abrev
+      let url = 'https://gestion.edicom.es/fichajes/NormasDeRegimenInternoEDICOM_'
+      switch (filialAbrev) {
+        case 'ES':
+          url += 'ES.pdf'
+          break;
+        case 'MX':
+          url += 'MX.pdf'
+          break;
+        case 'FR':
+          url += 'FR.pdf'
+          break;
+        case 'AR':
+          url += 'AR.pdf'
+          break;
+        case 'US':
+          url += 'US.pdf'
+          break;
+        case 'BR':
+          url += 'BR.pdf'
+          break;
+        case 'CO':
+          url += 'CO.pdf'
+          break;
+        default: 
+          url += 'ES.pdf'
+      }
+      console.log('url', url)
+        if (window.cordova === undefined) { // desktop
+          openURL(url)
+        } else { // estamos en un disp movil
+          document.addEventListener('deviceready', () => {
+            window.cordova.InAppBrowser.open(url) // openURL
+          }, false)
+        }
     },
     calcDiasEfectivos() {
       if (this.permisoToAdd.fechaDesde && this.permisoToAdd.fechaHasta) {

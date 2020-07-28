@@ -4,9 +4,6 @@
       <q-item-label class="text-h6">
           Filtrar por
       </q-item-label>
-      <q-item-label>
-        <small @click="verNormativa"><u>Normativa de permisos y vacaciones</u></small>
-      </q-item-label>
     </q-card-section>
 
     <q-form @submit="getPermisos">
@@ -14,6 +11,7 @@
         :disable="disable"
         class="q-pb-xs"
         outlined 
+        use-input
         clearable 
         label="Empleado" 
         stack-label
@@ -53,10 +51,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { openURL } from "quasar";
 
 export default {
-  props: ['value', 'filialEmp'],
+  props: ['value'],
   data() {
     return {
       filterP: {},
@@ -69,22 +66,6 @@ export default {
     ...mapState('empleados', ['listaEmpleadosRestringido'])
   },
   methods: {
-    ...mapActions('empleados', ['loadFilialEmpleado']),
-    verNormativa() {
-      this.$q.loading.show()
-      this.loadFilialEmpleado(this.filterP.empleado)
-      .then((response) => {
-        this.$q.loading.hide()
-        let url = response.filial.urlNormativa
-        if (window.cordova === undefined) { // desktop
-          openURL(url)
-        } else { // estamos en un disp movil
-          document.addEventListener('deviceready', () => {
-            window.cordova.InAppBrowser.open(url, '_blank','usewkwebview=yes') // openURL
-          }, false)
-        }
-      })
-    },
     getPermisos() {
       this.$q.loading.show()
       this.$emit('getPermisos', this.filterP)
