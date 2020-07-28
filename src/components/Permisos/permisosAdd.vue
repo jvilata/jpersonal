@@ -163,7 +163,7 @@ export default {
           openURL(url)
         } else { // estamos en un disp movil
           document.addEventListener('deviceready', () => {
-            window.cordova.InAppBrowser.open(url) // openURL
+            window.cordova.InAppBrowser.open(url, '_system') // openURL
           }, false)
         }
     },
