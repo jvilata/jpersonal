@@ -68,11 +68,10 @@ export default {
       //Añadiremos tab si es algun tipo de baja 
       var data = {
         code: this.permiso.id,
-        type: 'J'
+        type: 'J',
+        idTab: 'verJustificantes-1'
       }
-      this.getJustificantes(data)
-      this.$emit('refresh')
-      this.addTab(['verJustificantes', 'Ver Justificantes', {}, this.permiso.id ])
+      this.addTab(['verJustificantes', 'Ver Justificantes', data, 1])
     },
     addPhoto() {
       this.$q.bottomSheet({ 

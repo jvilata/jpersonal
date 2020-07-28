@@ -7,7 +7,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label class="text-h6">
-             {{ nomFormulario }} #J-{{ listaJust[0].code }}#
+             {{ nomFormulario }} {{ '#J-'+value.code +'#' }}
           </q-item-label>
           
         </q-item-section>
@@ -28,8 +28,8 @@
         virtual-scroll
         :rows-per-page-options="[0]"
         :virtual-scroll-sticky-size-start="48"
-        row-key="listaJust.name"
-        :data="listaJust"
+        row-key="listaJustificantes.name"
+        :data="listaJustificantes"
         :columns="columns"
         table-style="max-height: 65vh; max-width: 96vw"
         >
@@ -65,7 +65,7 @@
 
         <template v-slot:bottom>
             <div>
-            {{ listaJust.length }} Filas
+            {{ listaJustificantes.length }} Filas
             </div>
         </template> 
 
@@ -80,10 +80,10 @@ import { date, openURL } from 'quasar'
 import { urlBase } from 'boot/axios.js' // headerFormData
 
 export default {
+  props: ['value'],
   data () {
     return {
       nomFormulario: 'Justificantes',
-      listaJust: [],
       expanded: false,
       rowId: '',
       columns: [
@@ -104,6 +104,7 @@ export default {
     ...mapState('permisos', ['listaJustificantes'])
   },
   methods: { 
+      ...mapActions('permisos', ['getJustificantes']),
       abrirURL (justificante) {
        var strUrl = urlBase + `bd_jpersonal.asp?action=attach/${justificante.id}&auth=${this.user.auth}`
         if (window.cordova === undefined) { // desktop
@@ -115,7 +116,8 @@ export default {
       }    
   },
   mounted() { 
-      this.listaJust = this.listaJustificantes
+    console.log(this.value)
+      this.getJustificantes(this.value)
   }
 }
 

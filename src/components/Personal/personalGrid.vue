@@ -82,7 +82,7 @@ export default {
       urlF: urlFotos,
       rowId: '',
       columns: [
-        { name: 'foto', align: 'left', label: 'Foto', field: 'foto' },
+        { name: 'foto', align: 'left', label: 'foto', field: 'foto' },
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
         { name: 'id', label: 'IdEmpleado', align: 'left', field: 'id', sortable: true, style: 'width: 20px' },
         { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
