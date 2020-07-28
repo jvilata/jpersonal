@@ -31,7 +31,6 @@
       <!-- formulario con campos de filtro -->
       <permisosFilter
         :value="filterRecord"
-        :filialEmp="empleadoP.filialEmpleado"
         @input="(value) => Object.assign(filterRecord, value)"
         @getPermisos="(value) => getPermisos(value)"
         @getEmpleado="(value) => nuevoEmpleado(value)"
