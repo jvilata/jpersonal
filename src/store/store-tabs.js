@@ -49,6 +49,9 @@ const actions = {
     if (!state.tabs[tab.params.id]) {
       commit('addTab', tab)
     }
+    else {
+      this.dispatch('tabs/updateTabData', [tab, defaultValue])
+    }
     if (tab.params.id !== this.$router.app._route.params.id) {
       this.$router.push(state.tabs[tab.params.id])
     }
