@@ -111,12 +111,14 @@ export default {
             //window.open(strUrl, '_blank')
             openURL(strUrl)
         } else { // estamos en un disp movil
-          window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
+          document.addEventListener('deviceready', () => {
+            window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
+          }, false)
+          // window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
         }
       }    
   },
   mounted() { 
-    console.log(this.value)
       this.getJustificantes(this.value)
   }
 }
