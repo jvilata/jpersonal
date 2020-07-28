@@ -1,24 +1,26 @@
 <template>
-  <q-item class="row q-ma-xs q-pa-xs">
-    <q-table
-      dense
-      class="personalGrid-header-table"
-      virtual-scroll
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-      row-key="name"
-      :data="data"
-      :columns="columns"
-      table-style="max-height: 65vh; max-width: 96vw"
-    >
-    <template v-slot:bottom>
-        <div>
-          {{ data.length }} Filas
-        </div>
-      </template>
-    </q-table>
-    
-  </q-item>
+  <div :style="screen=='sqScreen' ? 'height: calc(100vh - 227px)' : screen=='fullScreen' ? 'height: calc(100vh - 283px)' : 'height: calc(100vh - 207px)'">
+    <q-item class="row q-ma-xs q-pa-xs">
+      <q-table
+        dense
+        class="personalGrid-header-table"
+        virtual-scroll
+        :rows-per-page-options="[0]"
+        :virtual-scroll-sticky-size-start="48"
+        row-key="name"
+        :data="data"
+        :columns="columns"
+        table-style="max-height: 65vh; max-width: 96vw"
+      >
+      <template v-slot:bottom>
+          <div>
+            {{ data.length }} Filas
+          </div>
+        </template>
+      </q-table>
+      
+    </q-item>
+  </div>
 </template>
 
 <script>

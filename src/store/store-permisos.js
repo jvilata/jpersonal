@@ -81,7 +81,6 @@ const actions = {
   getJustificantes({ commit }, payload) {
     axiosInstance.get(`bd_jpersonal.asp?action=attach/&auth=${login.state.user.auth}`, { params: { code: payload.code, type: payload.type } }, { withCredentials: true })
     .then((response) => {
-      console.log('response get Justificantes', response.data)
       commit('loadJustificantes', response.data)
     })
     .catch(error => {
