@@ -92,7 +92,6 @@ export default {
       }).onOk(action => {
         //if (window.cordova) {
           this.options.destinationType = Camera.DestinationType.DATA_URL
-          console.log('Action chosen:', action.id)
           if (action.id === 'galeria') { this.options.sourceType = Camera.PictureSourceType.SAVEDPHOTOALBUM }
 
           navigator.camera.getPicture(

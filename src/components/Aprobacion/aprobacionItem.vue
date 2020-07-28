@@ -12,7 +12,6 @@
               </q-avatar>
             </q-item-section>
         
-                  
             <q-item-section>
                 <q-item-label lines="2">{{item.empleadoNombre}}</q-item-label>
                 <q-item-label caption>{{item.tipoSolicitud}} </q-item-label>
@@ -182,7 +181,6 @@ export default {
           }
           this.generarReservasVacaciones(solicitud)
           .then((response) => {
-            console.log('generarReservasVacaciones', response);
           })
           .catch(error => {
             console.log('generarReservasVacaciones', error);
@@ -270,7 +268,6 @@ export default {
           }
           this.generarReservasVacaciones(solicitud)
           .then((response) => {
-            console.log('generarReservasVacaciones', response);
           })
           .catch(error => {
             console.log('generarReservasVacaciones', error);
@@ -364,7 +361,6 @@ export default {
             datosSolicitud: JSON.stringify(datossol),
             idautArea2: this.item.idautArea2
           }
-          console.log('datos',solicitud)
           this.aprobarCambiosEmpleado(solicitud) //Misma llamada que aprobar pero con estadoSol != (por eso tmpoco envíamos email)
           .then((response) => {
             this.$emit('refresh')
