@@ -68,10 +68,15 @@
               </q-item-section>
             </q-item>
           </div>
+          
         </q-list>
       </q-scroll-area>
-      <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png"/>
-      <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png"/>
+       <div clickable @click="emailUs()" class="absolute-bottom text-grey-8 q-pb-xl q-pl-md">
+        appstore@edicomgroup.com
+      </div>
+
+      <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" :style="screen==='fullScreen' ? 'margin-top:35px' :screen==='sqScreen' ? 'margin-top:20px' : ''"/>
+      <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png" :style="screen==='fullScreen' ? 'margin-top:35px' :screen==='sqScreen' ? 'margin-top:20px' : ''"/>
     </q-drawer>
     <q-footer>
     </q-footer>
@@ -152,6 +157,9 @@ export default {
     openForm (link) {
       this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
     },
+    emailUs() {
+      window.location.href='mailto:appstore@edicomgroup.com?subject=Informacion JPersonal App'
+    },
     desconectar () {
       this.desconectarLogin()
     },
@@ -196,6 +204,10 @@ export default {
 .fullScreen {
   .q-footer {
     padding-bottom: 33px; 
+  }
+
+  .img {
+    margin-top: 30px;
   }
 }
 
