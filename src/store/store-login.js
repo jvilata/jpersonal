@@ -75,11 +75,12 @@ const actions = {
           commit('esSuperUsuarioPersonal', res.data)
           this.dispatch('login/esUsuarioPersonaltmp', 21).then(res => { 
             commit('esUsuarioPersonal', res.data)
-          })
+            this.dispatch('login/esUsuarioResponsable').then(res => {
+                commit('esUsuarioResponsable', JSON.parse(res.data).resultado)
+                this.$router.push('/sinTabs')
+              })
+            })
         })
-        this.dispatch('login/esUsuarioResponsable')
-
-        this.$router.push('/sinTabs')
       })
       .catch(error => {
         commit('loginStop', error) // .response.data.error
@@ -103,7 +104,7 @@ const actions = {
         commit('esTMoPM', JSON.parse(response.data).resultado)
       })
       .catch(error => {
-        console.log('esTMoPM', response.data)
+        console.log('esTMoPM', error.message)
       })
   },
 
@@ -112,23 +113,21 @@ const actions = {
   },
   
   esUsuarioResponsable({ commit }){
-    axiosInstance.post(`bd_jpersonal.asp?action=tablaAuxiliar/15&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
+    return new Promise((resolve, reject) => {
+      axiosInstance.post(`bd_jpersonal.asp?action=tablaAuxiliar/15&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
       .then((response) => {
         if(response.data === 0) { 
-          axiosInstance.post(`bd_jpersonal.asp?action=areaspersonal/count&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData )
-            .then((response) => {
-              commit('esUsuarioResponsable', JSON.parse(response.data).resultado)
-            })
-            .catch(error => {
-              console.log('esUsuarioResponsable', response.data)
-            })
+          resolve(axiosInstance.post(`bd_jpersonal.asp?action=areaspersonal/count&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData ))
         } else { 
-          commit('esUsuarioResponsable', 1) 
+          // commit('esUsuarioResponsable', 0) 
+          resolve(new Promise((resolve) => resolve(0)))
         }
       })
       .catch(error => {
-        console.log('esUsuarioResponsable', response.data)
+        console.log('esUsuarioResponsable', error.message)
+        reject('Error esUsuarioResponsable' + error.message)
       })
+    })
   },
 
   setScreen({ commit }, screen) {

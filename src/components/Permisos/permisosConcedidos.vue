@@ -47,8 +47,8 @@ export default {
   .sqScreen {
     height: calc(100vh - 128px);
   }
-  
-  .android {  
+
+  .android {
     height: calc(100vh - 107px);
   }
 
