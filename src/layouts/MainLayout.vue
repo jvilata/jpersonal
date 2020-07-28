@@ -206,9 +206,6 @@ export default {
     padding-bottom: 33px; 
   }
 
-  .img {
-    margin-top: 30px;
-  }
 }
 
   .q-drawer .q-router-link--exact-active {
