@@ -161,7 +161,7 @@ export default {
             this.$emit('refresh')
 
             let email = {
-              to: this.item.empleadoEmailNotif,
+              to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
               from: 'edicom@edicom.es',
               subject: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`,
               text: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`
@@ -233,7 +233,7 @@ export default {
               let mail = {
                 to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
-                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+                subject: `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
               }
               if (this.item.tipoDiaLibre === 9) {
                 mail.text = `Hola,\nEsperamos que te recuperes lo antes posible de tu baja y para que podamos tramitar adecuadamente ante los organismos oficiales tu situación, cumpliendo la legislación vigente,  
@@ -249,7 +249,7 @@ export default {
                              \n\nGracias por tu comprensión. No dudes en consultarnos cualquier duda.\n\nEDICOM\nDepto. Administración`
                 mail.replyto = 'adjuntos@edicom.es'
               } else {
-                mail.text = `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+                mail.text = `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
               }
             
               this.sendMail(mail)
@@ -339,7 +339,7 @@ export default {
 
               //Send email
               let mail = {
-                to: this.item.empleadoEmailNotif,
+                to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
                 subject: `Vacaciones/Permiso denegadas: ${data}`,
                 text: `Vacaciones/Permiso denegadas: ${data}. Del ${this.formatDate(solicitud.old_fechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.old_fechaHasta, 'DD/MM/YYYY')}\nConsulta con tu responsable si necesitas más aclaración.`
