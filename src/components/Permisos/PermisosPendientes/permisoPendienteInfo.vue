@@ -19,7 +19,7 @@
     </div>
 
     <div class="row">
-      <q-btn color="negative" class="col" @click="deleteP(permiso.id)">Eliminar permiso</q-btn>
+      <q-btn unelevated color="negative" class="col" @click="deleteP(permiso.id)">Eliminar permiso</q-btn>
     </div>
   </div>
 </template>

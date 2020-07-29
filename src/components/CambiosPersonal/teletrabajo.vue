@@ -19,157 +19,160 @@
                 icon="close"/>
               </q-item-section>
             </q-item>
-        <q-card flat>
-            <div class="row q-pa-sm items-baseline" style="max-width: 360px">
-                <div class="col-xs-4">Fecha Desde</div>
-                <div class="col-xs-8">
-                    <q-input 
-                        clearable
-                        outlined
-                        stack-label
-                        :value="formatDate(recordToSubmit.teletrabajoFechaDesde)"
-                        @blur="fechasCorrectas()"
-                        :rules="[val => !!val || 'Campo obligatorio']">
-                    <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                        <q-popup-proxy ref="qFechaDesde">
-                            <wgDate 
-                                @input="$refs.qFechaDesde.hide()"
-                                v-model="recordToSubmit.teletrabajoFechaDesde" />
-                        </q-popup-proxy>
-                        </q-icon>  
-                    </template>
-                    </q-input>
-                </div>
-            </div>
-            <div class="row q-pa-sm items-baseline" style="max-width: 360px">
-                 <div class="col-xs-4">Fecha Hasta</div>
-                 <div class="col-xs-8">
-                    <q-input 
-                        clearable
-                        outlined 
-                        stack-label 
-                        @blur="fechasCorrectas()"
-                        :value="formatDate(recordToSubmit.teletrabajoFechaHasta)"
-                        :rules="[val => !!val || 'Campo obligatorio']">
-                    <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                        <q-popup-proxy ref="qFechaHasta">
-                            <wgDate 
-                            @input="$refs.qFechaHasta.hide()"
-                            v-model="recordToSubmit.teletrabajoFechaHasta" />
-                        </q-popup-proxy>
-                        </q-icon>
-                    </template>
-                    
-                    </q-input>
-                 </div>
-            </div>
-            <div class="row q-pa-sm items-baseline" style="max-width: 360px">
-                 <div class="col-xs-4">Pais Teletrabajo</div>
-                 <div class="col-xs-8">
-                    <q-select 
-                        outlined
-                        :value="recordToSubmit.paisTeletrabajo" 
-                        @input="v => recordToSubmit.paisTeletrabajo = v"
-                        :rules="[val => !!val || 'Campo obligatorio']"
-                        :options="listaPaisesFilter"
-                        @filter="filterPaises"
-                        option-value="codigo"
-                        option-label="descripcion"
-                        emit-value
-                        map-options
-                        behavior="menu">
-                        <template v-slot:append>
-                        <q-icon name="place" @click.stop />
-                        </template>
-                    </q-select>
-                 </div>
-            </div>
-            <div class="row q-pa-sm items-baseline" style="max-width: 360px">
-                 <q-input 
-                    outlined 
-                    v-model="recordToSubmit.domicilioTeletrabajo" 
-                    label="Domicilio Teletrabajo" 
-                    clearable 
-                    :rules="[val => !!val || 'Campo obligatorio']"
-                    class="col-xs-12" />
-            </div>
-            <div class="row q-pa-sm" >
-                <div class="col-xs-12">
-                <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Motivo Teletrabajo" clearable autogrow @keyup.enter.stop />
-                </div>
-            </div>
-        </q-card>
-     <q-card flat>
-        <div class="q-px-xs">
+        <q-form @submit="solicitarTeletrabajo">
+          <q-card flat>
+              <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+                  <div class="col-xs-4">Fecha Desde</div>
+                  <div class="col-xs-8">
+                      <q-input 
+                          clearable
+                          outlined
+                          stack-label
+                          :value="formatDate(recordToSubmit.teletrabajoFechaDesde)"
+                          @blur="fechasCorrectas()"
+                          :rules="[val => !!val || 'Campo obligatorio']">
+                      <template v-slot:append>
+                          <q-icon name="event" class="cursor-pointer">
+                          <q-popup-proxy ref="qFechaDesde">
+                              <wgDate 
+                                  @input="$refs.qFechaDesde.hide()"
+                                  v-model="recordToSubmit.teletrabajoFechaDesde" />
+                          </q-popup-proxy>
+                          </q-icon>  
+                      </template>
+                      </q-input>
+                  </div>
+              </div>
+              <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+                  <div class="col-xs-4">Fecha Hasta</div>
+                  <div class="col-xs-8">
+                      <q-input 
+                          clearable
+                          outlined 
+                          stack-label 
+                          @blur="fechasCorrectas()"
+                          :value="formatDate(recordToSubmit.teletrabajoFechaHasta)"
+                          :rules="[val => !!val || 'Campo obligatorio']">
+                      <template v-slot:append>
+                          <q-icon name="event" class="cursor-pointer">
+                          <q-popup-proxy ref="qFechaHasta">
+                              <wgDate 
+                              @input="$refs.qFechaHasta.hide()"
+                              v-model="recordToSubmit.teletrabajoFechaHasta" />
+                          </q-popup-proxy>
+                          </q-icon>
+                      </template>
+                      
+                      </q-input>
+                  </div>
+              </div>
+              <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+                  <div class="col-xs-4">Pais Teletrabajo</div>
+                  <div class="col-xs-8">
+                      <q-select 
+                          outlined
+                          :value="recordToSubmit.paisTeletrabajo" 
+                          @input="v => recordToSubmit.paisTeletrabajo = v"
+                          :rules="[val => !!val || 'Campo obligatorio']"
+                          :options="listaPaisesFilter"
+                          @filter="filterPaises"
+                          option-value="codigo"
+                          option-label="descripcion"
+                          emit-value
+                          map-options
+                          behavior="menu">
+                          <template v-slot:append>
+                          <q-icon name="place" @click.stop />
+                          </template>
+                      </q-select>
+                  </div>
+              </div>
+              <div class="row q-pa-sm items-baseline" style="max-width: 360px">
+                  <q-input 
+                      outlined 
+                      v-model="recordToSubmit.domicilioTeletrabajo" 
+                      label="Domicilio Teletrabajo" 
+                      clearable 
+                      :rules="[val => !!val || 'Campo obligatorio']"
+                      class="col-xs-12" />
+              </div>
+              <div class="row q-pa-sm" >
+                  <div class="col-xs-12">
+                  <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Motivo Teletrabajo" clearable autogrow @keyup.enter.stop />
+                  </div>
+              </div>
 
-            <div class="row items-baseline">
-                 <div class="col-xs-1">
-                    <q-checkbox
-                        v-model="val1"
-                        color="primary"
-                        />
-                </div>
-                <div class="col-xs-11 q-pl-xs">
-                    <span>He leído y acepto las</span>
-                    <span 
-                    @click="abrirURL('https://documentacion.edicom.es/share/proxy/alfresco/api/node/content/workspace/SpacesStore/58bed1d9-38fb-465c-bf1f-eb0a2e89ccdd/SGSI%20Procedimiento%20de%20Teletrabajo.pdf')" 
-                    class="text-primary text-left q-pl-sm">condiciones de Teletrabajo </span>
-                </div>
-            </div>
-            <div class="row items-baseline q-my-md">
-                <div class="col-xs-1">
-                <q-checkbox
-                    v-model="val2"
-                    color="primary"
-                    />
-                </div>
-                <div class="col-xs-11 q-pl-xs">
-                    <span>Cumplo en mi domicilio con las condiciones de seguridad y salud que se indican en el apartado 1.3 del</span>
-                    <span 
-                        @click="abrirURL('https://documentacion.edicom.es/share/proxy/alfresco/api/node/content/workspace/SpacesStore/58bed1d9-38fb-465c-bf1f-eb0a2e89ccdd/SGSI%20Procedimiento%20de%20Teletrabajo.pdf')" 
-                        class="text-primary text-align-right q-pl-sm">procedimiento de Teletrabajo </span>
-                </div>
-            </div>
-            <div class="row items-baseline q-my-md">
-                <div class="col-xs-1">
-                <q-checkbox
-                    v-model="val3"
-                    color="primary"
-                    />
-                </div>
-                <div class="col-xs-11 q-pl-xs">
-                    <span>Asumo responsabilidades por accidente o baja por enfermedad común</span>
-                    <span 
-                        @click="confirm1" 
-                        class="text-primary text-align-right q-pl-sm">Leer más</span>
-                </div>
-            </div>
-            <div class="row items-baseline q-my-md">
-                <div class="col-xs-1">
-                <q-checkbox
-                    v-model="val4"
-                    color="primary"
-                    />
-                </div>
-                <div class="col-xs-11 q-pl-xs">
-                    <span>Ambas partes acuerdan que todos los costes indirectos derivados</span>
-                    <span 
-                        @click="confirm2" 
-                        class="text-primary text-align-right q-pl-sm">Leer más</span>
-                </div>
-            </div>
-            <div class="row q-pb-md justify-center" >
-                <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                    <q-btn @click="solicitarTeletrabajo" :disabled="!val1 || !val2 || !val3 || !val4 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
-                </div>
-                <q-dialog v-model="dialogMes" @click="$emit('close')" >
-                  <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
-                </q-dialog>
-            </div>
-        </div>
-    </q-card>
+          </q-card>
+      <q-card flat>
+          <div class="q-px-xs">
+
+              <div class="row items-baseline">
+                  <div class="col-xs-1">
+                      <q-checkbox
+                          v-model="val1"
+                          color="primary"
+                          />
+                  </div>
+                  <div class="col-xs-11 q-pl-xs">
+                      <span>He leído y acepto las</span>
+                      <span 
+                      @click="abrirURL('https://gestion.edicom.es/fichajes/SGSICondicionesdeTeletrabajo.pdf')" 
+                      class="text-primary text-left q-pl-sm">condiciones de Teletrabajo </span>
+                  </div>
+              </div>
+              <div class="row items-baseline q-my-md">
+                  <div class="col-xs-1">
+                  <q-checkbox
+                      v-model="val2"
+                      color="primary"
+                      />
+                  </div>
+                  <div class="col-xs-11 q-pl-xs">
+                      <span>Cumplo en mi domicilio con las condiciones de seguridad y salud que se indican en el apartado 1.3 del</span>
+                      <span 
+                          @click="abrirURL('https://gestion.edicom.es/fichajes/SGSIProcedimientodeTeletrabajo.pdf')" 
+                          class="text-primary text-align-right q-pl-sm">procedimiento de Teletrabajo </span>
+                  </div>
+              </div>
+              <div class="row items-baseline q-my-md">
+                  <div class="col-xs-1">
+                  <q-checkbox
+                      v-model="val3"
+                      color="primary"
+                      />
+                  </div>
+                  <div class="col-xs-11 q-pl-xs">
+                      <span>Asumo responsabilidades por accidente o baja por enfermedad común</span>
+                      <span 
+                          @click="confirm1" 
+                          class="text-primary text-align-right q-pl-sm">Leer más</span>
+                  </div>
+              </div>
+              <div class="row items-baseline q-my-md">
+                  <div class="col-xs-1">
+                  <q-checkbox
+                      v-model="val4"
+                      color="primary"
+                      />
+                  </div>
+                  <div class="col-xs-11 q-pl-xs">
+                      <span>Ambas partes acuerdan que todos los costes indirectos derivados</span>
+                      <span 
+                          @click="confirm2" 
+                          class="text-primary text-align-right q-pl-sm">Leer más</span>
+                  </div>
+              </div>
+              <div class="row q-pb-md justify-center" >
+                  <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
+                      <q-btn type="submit" :disabled="!val1 || !val2 || !val3 || !val4 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                  </div>
+              </div>
+          </div>
+        </q-card>
+      </q-form>
+      <q-dialog v-model="dialogMes" @click="$emit('close')" >
+        <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />
+      </q-dialog>
     </div>
 </template>
 

@@ -17,13 +17,13 @@
       </div>
     </div>
     <div class="row q-pb-sm">
+        <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="datosSolicitud.domicilioTeletrabajo" label="Domicilio Teletrabajo" stack-label dense readonly/>
+    </div>
+    <div class="row q-pb-sm">
         <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="item.nomAutorizadorOf" label="Autorizador 1" stack-label dense readonly/>
     </div>
     <div class="row q-pb-sm">
-        <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="datosSolicitud.domicilioTeletrabajo" label="Autorizador 1" stack-label dense readonly/>
-    </div>
-    <div class="row q-pb-sm">
-        <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="datosSolicitud.teletrabajoObservaciones" label="Autorizador 1" stack-label dense readonly/>
+        <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="datosSolicitud.teletrabajoObservaciones" label="Observaciones" stack-label dense readonly/>
     </div>
     <div class="row items-baseline">
       <div class="col-xs-1">
