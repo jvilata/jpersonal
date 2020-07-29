@@ -153,7 +153,8 @@ cfg.module.rules.push({
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
-      id: 'com.edicom.jpersonal'
+      id: 'com.edicom.jpersonal',
+      version: '0.0.2'
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
