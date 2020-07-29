@@ -28,9 +28,10 @@
     <div class="row items-baseline">
       <div class="col-xs-1">
         <q-checkbox
-            v-model="datosSolicitud.aceptaTeletrabajo"
-            color="primary"
-            />
+          disable
+          v-model="datosSolicitud.aceptaTeletrabajo"
+          color="primary"
+          />
       </div>
     <div class="col-xs-11 q-pl-xs">
       <span>He leído y acepto las</span>
@@ -42,6 +43,7 @@
     <div class="row items-baseline q-my-md">
       <div class="col-xs-1">
       <q-checkbox
+          disable
           v-model="datosSolicitud.aceptaTeletrabajo"
           color="primary"
           />
@@ -56,9 +58,10 @@
     <div class="row items-baseline q-my-md">
       <div class="col-xs-1">
       <q-checkbox
-          v-model="datosSolicitud.aceptaTeletrabajo"
-          color="primary"
-          />
+        disable
+        v-model="datosSolicitud.aceptaTeletrabajo"
+        color="primary"
+        />
       </div>
       <div class="col-xs-11 q-pl-xs">
           <span>Asumo responsabilidades por accidente o baja por enfermedad común</span>
@@ -70,9 +73,10 @@
     <div class="row items-baseline q-my-md">
         <div class="col-xs-1">
         <q-checkbox
-            v-model="datosSolicitud.aceptaTeletrabajo"
-            color="primary"
-            />
+          disable
+          v-model="datosSolicitud.aceptaTeletrabajo"
+          color="primary"
+          />
         </div>
         <div class="col-xs-11 q-pl-xs">
             <span>Ambas partes acuerdan que todos los costes indirectos derivados</span>
