@@ -71,6 +71,19 @@
 
         </q-table> 
     </q-item>
+
+    <q-dialog v-model="expanded"  >
+      <q-card style="width: 80vw">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h7 text-primary">{{ datosImagen.id}}</div>
+          <q-space />
+          <q-btn flat icon="close" color="primary" @click="expanded = false"/>
+        </q-card-section>
+        <q-card-section>
+          <q-img :src="datosImagen.data" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 </div>
 </template>
 
@@ -85,6 +98,10 @@ export default {
     return {
       nomFormulario: 'Justificantes',
       expanded: false,
+      datosImagen: {
+        id: 0,
+        data: null
+      },
       rowId: '',
       columns: [
         { name: 'id', align: 'left', label: 'ID', field: 'id' },
@@ -108,8 +125,16 @@ export default {
       abrirURL (justificante) {
        var strUrl = urlBase + `bd_jpersonal.asp?action=attach/${justificante.id}&auth=${this.user.auth}`
         if (window.cordova === undefined) { // desktop
-            //window.open(strUrl, '_blank')
-            openURL(strUrl)
+        this.$axios.get(strUrl)
+          .then(response => {
+            console.log(response.data)
+            if (response.headers['content-type']==='application/jpeg') {
+              this.datosImagen.id = justificante.id
+              this.datosImagen.data = 'data:image/jpeg;base64,' + btoa(unescape(encodeURIComponent(response.data)))
+              this.expanded = true
+            }
+          })
+            // openURL(strUrl)
         } else { // estamos en un disp movil
           document.addEventListener('deviceready', () => {
             window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
