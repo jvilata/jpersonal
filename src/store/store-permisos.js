@@ -27,7 +27,7 @@ const mutations = {
     if(!lista.length) state.justPorPresentar = 0
     else {
       function justificantesCont (acum, permiso) {
-        if ((permiso.tipoDiaLibre === 9 || permiso.tipoDiaLibre === 19)) {
+        if ((permiso.tipoDiaLibre === 9 || permiso.tipoDiaLibre === 19 || permiso.tipoDiaLibre === 17)) {
           if ((permiso.justificantesNoValidados === 0 && permiso.justificantesValidados === 0)) {
             acum++
           }
