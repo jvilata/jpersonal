@@ -254,12 +254,12 @@
                             <span @click="confirm2" class="text-primary text-align-right q-pl-sm">Leer Más</span>
                         </div>
                     </div>
-                <div class="row justify-center" style="max-height: 70px">
+                <div class="row justify-center" style="max-height: 60px">
                     <div class="column q-pr-sm q-mt-sm" style="max-width: 150px">
                         <q-input filled v-model="sumaHoras" label="Horas Semanales"></q-input>
                     </div>
                     <div class="column q-mt-sm" style="max-width: 150px">
-                        <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" style="max-height: 50px" :disable="disableBut"/>
+                        <q-btn @click="solicitarCambioHorario"  color="primary" label="Solicitar Cambio Horario" :disable="disableBut"/>
                     </div>
                     <q-dialog v-model="dialogMes" @click="$emit('close')" >
                         <q-icon color="green" name="check_circle" size="100px"  @click="$emit('close')" />

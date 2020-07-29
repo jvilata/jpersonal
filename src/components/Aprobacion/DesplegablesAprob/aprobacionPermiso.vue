@@ -11,7 +11,7 @@
         <q-input class="col-4 q-pr-sm"  :value="formatDate(item.fechaHasta, 'DD/MM/YYYY')" label="Hasta" stack-label dense readonly/>
         <q-input class="col-4 q-pr-sm"  v-model="item.diasEfectivos" label="Num. Jornadas" stack-label dense readonly/>
     </div>
-    <div v-if="!provisional">
+    <div v-if="!provisional && keyValue===2">
       <div class="row q-pb-sm">
         <q-select
           class="col q-pb-xs"
@@ -72,7 +72,7 @@
     </div>
 
     <div class="row q-pb-md">
-        <q-input autogrow class="col" v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
+        <q-input :readonly="keyValue===1" autogrow class="col" v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
     </div>
 
   </div>
@@ -85,7 +85,7 @@ import { date } from 'quasar'
 
 export default {
 
-  props: ['item', 'keyvalue', 'provisional'],
+  props: ['item', 'keyValue', 'provisional'],
   data () {
     return {
       permisoAprobar: {

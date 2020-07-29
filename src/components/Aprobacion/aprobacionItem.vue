@@ -1,5 +1,5 @@
 <template>
-  <q-slide-item :left-color="provisional ? 'warning' : 'positive'" right-color="negative" @left="(reset) => provisional ? aceptarProvisional(reset, 1) : aceptar(reset, 1)" @right="(reset) => rechazar(reset, 1)">
+  <q-slide-item :right-color="provisional ? 'warning' : 'positive'" left-color="negative" @right="(reset) => provisional ? aceptarProvisional(reset, 1) : aceptar(reset, 1)" @left="(reset) => rechazar(reset, 1)">
     <q-expansion-item
           clickable
           expand-icon="expand_more"
@@ -34,39 +34,41 @@
                   <div class="row justify-center text-center">
                     <div class="col-xs-6 justify-center">
                       <q-btn 
+                        unelevated
                         v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
-                        color="red" 
+                        color="negative" 
                         label="RECHAZAR" 
                         @click="rechazar({}, 2)"/>
                     </div>
                     <div class="col-xs-6 justify-center">
                       <q-btn 
-                      v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
-                      color="primary" 
-                      :label="provisional ? 'APROBAR PROVISIONAL' : 'APROBAR'" 
-                      @click="provisional ? aceptarProvisional({}, 2) : aceptar({}, 2)"/>
+                        unelevated
+                        v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
+                        :color="provisional ? 'amber-8' : 'positive'" 
+                        :label="provisional ? 'PROVISIONAL' : 'APROBAR'" 
+                        @click="provisional ? aceptarProvisional({}, 2) : aceptar({}, 2)"/>
                     </div>
                   </div>
-                  <div class="row justify-center text-center">
-                      <q-btn v-if="keyValue==1 && (item.estadoSolicitudDesc === 'PENDIENTE')" @click="confirm" style="width: 270px" color="negative">Eliminar Solicitud</q-btn>
+                  <div class="row">
+                      <q-btn unelevated v-if="keyValue==1 && (item.estadoSolicitudDesc === 'PENDIENTE')" @click="confirm" class="col" color="negative">Eliminar Solicitud</q-btn>
                   </div>
               </q-card-section>
           </q-card>
     </q-expansion-item>
-    <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
+    <template v-slot:right v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
       <div v-if="provisional" class="row items-center">
-        <q-icon name="query_builder"/>
         APROBAR PROVISIONAL
+        <q-icon name="query_builder"/>
       </div>
       <div v-else class="row items-center">
-        <q-icon name="done"/>
         APROBAR
+        <q-icon name="done"/>
       </div>
     </template>
-    <template v-slot:right v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
+    <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
       <div class="row items-center">
-        RECHAZAR
         <q-icon name="close"/>
+        RECHAZAR
       </div>
     </template>
   </q-slide-item>
@@ -83,7 +85,6 @@ export default {
       aprobacion: {},
       urlF: urlFotos,
       regper: {},
-      origin: 0,
       provisional: false
     }
   },
@@ -144,8 +145,8 @@ export default {
 
     aceptarProvisional({reset}, origin) {
       this.$q.dialog({
-      title: 'ACEPTAR PROVISIONALMENTE',
-      message: '¿Está seguro de que desea ACEPTAR PROVISIONALMENTE la solicitud?',
+      title: 'APROBAR PROVISIONALMENTE',
+      message: '¿Está seguro de que desea APROBAR PROVISIONALMENTE la solicitud?',
       cancel: true,
       persistent: true
       }).onOk(() => {
@@ -160,7 +161,7 @@ export default {
             this.$emit('refresh')
 
             let email = {
-              to: this.item.empleadoEmailNotif,
+              to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
               from: 'edicom@edicom.es',
               subject: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`,
               text: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`
@@ -196,8 +197,8 @@ export default {
 
     aceptar({reset}, origin){
       this.$q.dialog({
-      title: 'ACEPTAR SOLICITUD',
-      message: '¿Está seguro de que desea ACEPTAR la solicitud?',
+      title: 'APROBAR SOLICITUD',
+      message: '¿Está seguro de que desea APROBAR la solicitud?',
       cancel: true,
       persistent: true
       }).onOk(() => {
@@ -232,7 +233,7 @@ export default {
               let mail = {
                 to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
-                subject: `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+                subject: `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
               }
               if (this.item.tipoDiaLibre === 9) {
                 mail.text = `Hola,\nEsperamos que te recuperes lo antes posible de tu baja y para que podamos tramitar adecuadamente ante los organismos oficiales tu situación, cumpliendo la legislación vigente,  
@@ -248,7 +249,7 @@ export default {
                              \n\nGracias por tu comprensión. No dudes en consultarnos cualquier duda.\n\nEDICOM\nDepto. Administración`
                 mail.replyto = 'adjuntos@edicom.es'
               } else {
-                mail.text = `Solicitud ${this.item.tipoDiaDes}, aprobada con id: #${this.item.id}# :: ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}`
+                mail.text = `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
               }
             
               this.sendMail(mail)
@@ -297,11 +298,11 @@ export default {
           //No envíamos email desde aqui porque ya lo hace el backend
           
         }
-        if (this.origin === 1) this.posInicial(reset)
+        if (origin === 1) this.posInicial(reset)
 
       }).onDismiss(() => {
         this.$emit('close')
-        if (this.origin === 1) this.posInicial(reset)
+        if (origin === 1) this.posInicial(reset)
       })
     },
 
@@ -338,7 +339,7 @@ export default {
 
               //Send email
               let mail = {
-                to: this.item.empleadoEmailNotif,
+                to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
                 subject: `Vacaciones/Permiso denegadas: ${data}`,
                 text: `Vacaciones/Permiso denegadas: ${data}. Del ${this.formatDate(solicitud.old_fechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.old_fechaHasta, 'DD/MM/YYYY')}\nConsulta con tu responsable si necesitas más aclaración.`
@@ -369,9 +370,9 @@ export default {
            console.log('aprobarCambiosEmpleado', error);
           })
         }
-        if (this.origin === 1) this.posInicial(reset)
+        if (origin === 1) this.posInicial(reset)
       }).onDismiss(() => {
-        if (this.origin === 1) this.posInicial(reset)
+        if (origin === 1) this.posInicial(reset)
       })
     }
   }
