@@ -44,7 +44,7 @@
                       <q-btn 
                         unelevated
                         v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
-                        :color="provisional ? 'warning' : 'positive'" 
+                        :color="provisional ? 'amber-8' : 'positive'" 
                         :label="provisional ? 'PROVISIONAL' : 'APROBAR'" 
                         @click="provisional ? aceptarProvisional({}, 2) : aceptar({}, 2)"/>
                     </div>
