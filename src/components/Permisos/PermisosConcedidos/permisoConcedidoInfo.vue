@@ -23,7 +23,7 @@
         <q-input class="col-6 q-pr-sm"  :value="formatDate(permiso.sustFDesde)" label="Sust. Desde" stack-label dense readonly/>
         <q-input class="col-6"  :value="formatDate(permiso.sustFHasta)" label="Sust. Hasta" stack-label dense readonly/>
     </div>
-    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19 || permiso.tipoDiaLibre == 17" >
+    <div v-if="permiso.tipoDiaLibre == 9 || permiso.tipoDiaLibre == 19" >
       <q-separator spaced/>
       <div class="row q-pb-sm">
           <q-input class="col-4 q-pr-sm" :value="permiso.justificantesValidados" label="Just. Valid" stack-label dense readonly/>
@@ -31,7 +31,7 @@
           <q-input class="col-4" :value="permiso.autorizadosSinDoc" label="Aut. Sin Doc" stack-label dense readonly/>
       </div>
       <div class="row q-pb-sm">
-        <q-btn color="primary" icon="cloud_upload" class="col" label='Subir Justificante' dense @click="addPhoto"/>
+        <q-btn unelevated color="primary" icon="cloud_upload" class="col" label='Subir Justificante' dense @click="addPhoto"/>
       </div>
       <div class="row q-pb-sm">
         <q-btn outline icon="visibility" class="col" label='Visualizar Justificantes' dense @click="openFormJust()" />

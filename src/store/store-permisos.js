@@ -16,7 +16,7 @@ const mutations = {
   loadPermisosConcedidos(state, lista) {
     if(!lista.length) state.permisosConcedidos = []
     else state.permisosConcedidos = lista.sort((a, b) => { 
-      if (a.tipoDiaLibre!==9 && a.tipoDiaLibre!==17 && a.tipoDiaLibre!==19) return 1 // al final
+      if (a.tipoDiaLibre!==9 && a.tipoDiaLibre!==19) return 1 // al final
       else { // es un permiso
          if (a.justificantesNoValidados + a.justificantesValidados > 0) return 1 //al final
          else return -1 // al principio
