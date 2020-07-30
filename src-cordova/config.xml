@@ -37,6 +37,11 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
     <platform name="ios">
+        <preference name="WKWebViewOnly" value="true" />
+        <feature name="CDVWKWebViewEngine">
+            <param name="ios-package" value="CDVWKWebViewEngine" />
+        </feature>
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
         <edit-config file="*-Info.plist" mode="merge" overwrite="true" target="NSPhotoLibraryUsageDescription">
             <string>EDICOM necesita acceder a la Librería para seleccionar el justificante</string>
         </edit-config>
