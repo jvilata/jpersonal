@@ -35,7 +35,7 @@
                     <div class="col-xs-6 justify-center">
                       <q-btn 
                         unelevated
-                        v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
+                        v-if="keyValue==2 && (item.estadoSolicitud === 1 || item.estadoSolicitud === 2)" 
                         color="negative" 
                         label="RECHAZAR" 
                         @click="rechazar({}, 2)"/>
@@ -43,7 +43,7 @@
                     <div class="col-xs-6 justify-center">
                       <q-btn 
                         unelevated
-                        v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')" 
+                        v-if="keyValue==2 && (item.estadoSolicitud === 1 || item.estadoSolicitud === 2)" 
                         :color="provisional ? 'amber-8' : 'positive'" 
                         :label="provisional ? 'PROVISIONAL' : 'APROBAR'" 
                         @click="provisional ? aceptarProvisional({}, 2) : aceptar({}, 2)"/>
@@ -55,7 +55,7 @@
               </q-card-section>
           </q-card>
     </q-expansion-item>
-    <template v-slot:right v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
+    <template v-slot:right v-if="keyValue==2 && (item.estadoSolicitud === 1 || item.estadoSolicitud === 2)">
       <div v-if="provisional" class="row items-center">
         APROBAR PROVISIONAL
         <q-icon name="query_builder"/>
@@ -65,7 +65,7 @@
         <q-icon name="done"/>
       </div>
     </template>
-    <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitudDesc === 'PENDIENTE' || item.estadoSolicitudDesc === 'CONC.PROVISIONAL')">
+    <template v-slot:left v-if="keyValue==2 && (item.estadoSolicitud === 1 || item.estadoSolicitud === 2)">
       <div class="row items-center">
         <q-icon name="close"/>
         RECHAZAR
