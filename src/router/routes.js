@@ -104,7 +104,7 @@ const routes = [
             props: true 
           },
           {
-            path: 'aprobacionMain',
+            path: 'aprobacionMain/:id',
             name: 'aprobacionMain',
             component: () => import('components/Aprobacion/aprobacionMain.vue'),
             props: true

@@ -71,6 +71,19 @@
 
         </q-table> 
     </q-item>
+
+    <q-dialog v-model="expanded"  >
+      <q-card style="width: 100vw">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h7 text-primary">{{ datosImagen.id}}</div>
+          <q-space />
+          <q-btn flat icon="close" color="primary" @click="expanded = false"/>
+        </q-card-section>
+        <q-card-section>
+          <q-img :src="datosImagen.data"  />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 </div>
 </template>
 
@@ -85,6 +98,10 @@ export default {
     return {
       nomFormulario: 'Justificantes',
       expanded: false,
+      datosImagen: {
+        id: 0,
+        data: null
+      },
       rowId: '',
       columns: [
         { name: 'id', align: 'left', label: 'ID', field: 'id' },
@@ -106,16 +123,23 @@ export default {
   methods: { 
       ...mapActions('permisos', ['getJustificantes']),
       abrirURL (justificante) {
-       var strUrl = urlBase + `bd_jpersonal.asp?action=attach/${justificante.id}&auth=${this.user.auth}`
-        if (window.cordova === undefined) { // desktop
-            //window.open(strUrl, '_blank')
-            openURL(strUrl)
-        } else { // estamos en un disp movil
-          document.addEventListener('deviceready', () => {
-            window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
-          }, false)
-          // window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
-        }
+        var strUrl = urlBase + `bd_jpersonal.asp?action=attach/${justificante.id}&auth=${this.user.auth}`
+        this.$axios.get(strUrl)
+          .then(response => {
+            if (response.headers['content-type']==='application/jpeg') {
+              this.datosImagen.id = justificante.attach
+              this.datosImagen.data = strUrl
+              this.expanded = true
+            } else {
+              if (window.cordova === undefined) { // desktop
+                openURL(strUrl)
+              } else { // estamos en un disp movil
+                document.addEventListener('deviceready', () => {
+                  window.cordova.InAppBrowser.open(strUrl, '_system') // openURL
+                }, false)
+              }
+            }
+          })
       }    
   },
   mounted() { 
