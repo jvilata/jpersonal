@@ -116,7 +116,7 @@
                   <div class="col-xs-11 q-pl-xs">
                       <span>He leído y acepto las</span>
                       <span 
-                      @click="abrirURL('https://gestion.edicom.es/fichajes/SGSICondicionesdeTeletrabajo.pdf')" 
+                      @click="abrirURL('https://gestion.edicom.es/fichajes/SGSIProcedimientodeTeletrabajo.pdf')" 
                       class="text-primary text-left q-pl-sm">condiciones de Teletrabajo </span>
                   </div>
               </div>
