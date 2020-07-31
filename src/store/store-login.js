@@ -35,7 +35,7 @@ const mutations = {
     Object.assign(state.token, ptoken)
   },
   esTMoPM: (state, res) => {
-    state.user.esTMoPM = (res === 1 ? true : false)
+    state.user.esTMoPM = (res >= 1 ? true : false)
   },
   esSuperUsuarioPersonal: (state, res) => { 
     if(res === 1) state.user.esSuperUsuarioPersonal = true
@@ -43,10 +43,10 @@ const mutations = {
   },
   esUsuarioPersonal: (state, res) => { 
     if(state.user.esSuperUsuarioPersonal) state.user.esUsuarioPersonal = true
-    else state.user.esUsuarioPersonal = (res === 1 ? true : false)
+    else state.user.esUsuarioPersonal = (res >= 1 ? true : false)
   },
   esUsuarioResponsable: (state, res) => { 
-    state.user.esUsuarioResponsable = (res === 1 ? true : false)
+    state.user.esUsuarioResponsable = (res >= 1 ? true : false)
   },
   setScreen(state, screen) {
     state.screen = screen
@@ -60,6 +60,7 @@ const actions = {
     axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of/logon&auth=${loginData.auth}`, { params: {} }, { withCredentials: true })
       .then((response) => {
         if(!response.data.id) { throw new Error("Credenciales incorrectas")}
+        // response.data.idpersonal=39 // boronat
         commit('setUser', { codEmpresa: loginData.codEmpresa, nomEmpresa: loginData.nomEmpresa, auth: loginData.auth, pers: response.data }) // llamo a mutation->setUser, en user tengo el login y en pers los datos personales
         LocalStorage.set('email', loginData.email)
         LocalStorage.set('password', loginData.password)
