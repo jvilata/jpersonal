@@ -2,6 +2,7 @@
   <q-slide-item :right-color="provisional ? 'warning' : 'positive'" left-color="negative" @right="(reset) => provisional ? aceptarProvisional(reset, 1) : aceptar(reset, 1)" @left="(reset) => rechazar(reset, 1)">
     <q-expansion-item
           clickable
+          v-model="expanded"
           expand-icon="expand_more"
           class="q-pa-xs full-width column"
           group="porAprobar">
@@ -82,10 +83,11 @@ import { mapActions, mapState } from "vuex";
 export default {
   data(){
     return {
+      expanded: false,
       aprobacion: {},
       urlF: urlFotos,
       regper: {},
-      provisional: false
+      // provisional: false
     }
   },
   props: ['item', 'id', 'keyValue'],
@@ -97,12 +99,17 @@ export default {
   },
   computed: { 
      ...mapState('login', ['user']),
-     ...mapState('tablasAux', ['listaEstadosSolicitudes'])
+     ...mapState('tablasAux', ['listaEstadosSolicitudes']),
+     provisional () {
+       var prov = false
+       if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) prov = true
+       else prov = false
+       return prov
+     }
   },
   mounted() {
-    if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
-    else this.provisional = false
-
+    // if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
+    // else this.provisional = false
   },
   methods: {
     ...mapActions('aprobacion', ['generarReservasVacaciones', 'addToVacaciones', 'rechazarPermiso', 'aprobarCambiosEmpleado']),
@@ -135,6 +142,7 @@ export default {
       },
       persistent: true
       }).onOk(() => {
+        this.expanded = false
         this.$q.notify({
         color: 'primary',
         message: `Solicitud eliminada.`
@@ -150,6 +158,7 @@ export default {
       cancel: true,
       persistent: true
       }).onOk(() => {
+        this.expanded = false
         if (this.item.tipoDiaLibre != 9 && this.item.tipoDiaLibre != 18 && this.provisional) {
           //Bloque actualizar estado solicitud a Conc.Provisional
           let permisoProv = Object.assign({}, this.item)
@@ -202,6 +211,7 @@ export default {
       cancel: true,
       persistent: true
       }).onOk(() => {
+        this.expanded = false
         this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque añadir a Vacaciones
@@ -317,6 +327,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(data => {
+        this.expanded = false
         this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
           //Bloque Rechazar solicitud
