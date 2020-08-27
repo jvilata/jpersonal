@@ -23,6 +23,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json'
   }
 })
+
 export default ({ Vue }) => {
   Vue.prototype.$axios = axiosInstance
 }
