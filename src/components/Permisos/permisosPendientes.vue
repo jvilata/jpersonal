@@ -72,16 +72,16 @@ export default {
 </script>
 
 <style lang="scss">
-  
   .fullScreen {
-    max-height: calc(100vh - 184px); 
+    height: calc(100vh - 184px); 
   }
 
   .sqScreen {
-    max-height: calc(100vh - 128px); 
+    height: calc(100vh - 128px); 
   }
 
   .android {  
-    max-height: calc(100vh - 107px);
+    height: calc(100vh - 107px);
   }
-</style>
+
+  </style>

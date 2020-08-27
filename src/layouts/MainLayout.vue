@@ -164,13 +164,14 @@ export default {
       this.desconectarLogin()
     },
     onDeviceReady() {
+      this.screen = 'sqScreen'
       if (device.manufacturer === "Apple") {
-        let appleModel = parseFloat((device.model.split("e"))[1].replace(",", "."))
-        if ((appleModel >= 10.6 || appleModel === 10.2) && appleModel !== 12.8) {
-          //iPhone con pantalla completa (tipo X)
-          this.screen = 'fullScreen'
-        } else {
-          this.screen = 'sqScreen'
+        if (device.model.includes('e')) { //Diferenciar iPhone de iPad
+          let appleModel = parseFloat((device.model.split("e"))[1].replace(",", "."))
+          if ((appleModel >= 10.6 || appleModel === 10.2) && appleModel !== 12.8) {
+            //iPhone con pantalla completa (tipo X)
+            this.screen = 'fullScreen'
+          }
         }
       } else {
          //Android
