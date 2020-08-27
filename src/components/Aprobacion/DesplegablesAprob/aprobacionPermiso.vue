@@ -72,7 +72,7 @@
     </div>
 
     <div class="row q-pb-md">
-        <q-input :readonly="keyValue===1" autogrow class="col" v-model="permisoAprobar.observaciones" label="Observaciones" stack-label dense @input="$emit('permiso', permisoAprobar)"/>
+        <q-input :readonly="keyValue===1" autogrow class="col" v-model="item.observaciones" label="Observaciones" stack-label dense @input="v => {permisoAprobar.observaciones=v; $emit('permiso', permisoAprobar)}"/>
     </div>
 
   </div>
@@ -116,10 +116,10 @@ export default {
   },
   mounted() {
     this.listaEmpleadosFilter = this.listaEmpleados
-    this.permisoAprobar.observaciones = this.item.observaciones
+    // this.permisoAprobar.observaciones = this.item.observaciones
   },
   destroyed() {
-    this.$emit('input', this.permisoAprobar)
+    // this.$emit('input', this.permisoAprobar)
   }
 }
 </script>

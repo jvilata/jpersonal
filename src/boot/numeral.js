@@ -20,5 +20,6 @@ if (typeof window !== 'undefined' && window.Vue) {
   // eslint-disable-next-line no-undef
   Vue.use(VueNumerals)
 }
+
 const numeralInstance = numeral
 export { numeralInstance }

@@ -54,3 +54,19 @@ Código a añadir: Hay que añadir al final del archivo AppDelegate.m el siguien
     return YES;
 }
 @end
+
+
+/********************* IOS 6-8-2020 hay que poner CDVWKWebViewEngine.m ********************/
+Ruta archivo a modificar: src-cordova/platforms/ios/nombreProyecto/Plugins/cordova-plugin-wkwebview-engine/CDVWKWebViewEngine.m
+
+Código a añadir: Dentro de @implementation CDVWKWebViewEngine y después del método - (instancetype)initWithFrame:(CGRect)frame. (Aproximadamente en la línea 68 del documento). Hay que añadir el siguiente código:
+
+- (void)webView:(WKWebView *)webView
+didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge 
+*)challenge completionHandler:(void (^)
+(NSURLSessionAuthChallengeDisposition 
+disposition, NSURLCredential *credential))completionHandler {
+    SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+    completionHandler(NSURLSessionAuthChallengeUseCredential, 
+    [NSURLCredential credentialForTrust:serverTrust]);
+}
