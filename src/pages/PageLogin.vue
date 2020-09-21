@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="row q-pa-xl justify-center" style="padding-top: 100px">
     <!-- definimos una pagina de LOGIN que tiene un logo arriba y un formulario de empresa, usu y pass abajo -->
-    <div :class="`gutter-sm ${platform}`">
+    <div :class="`gutter-sm ${user.platform}`">
       <div class="row justify-center q-pa-lg">
         <q-img src="~assets/logo-edicom.png" style="width: 40vh"/>
       </div>
@@ -61,7 +61,7 @@ export default {
       this.doLogin(this.user) // para validar con bd propia
     },
     onDeviceReady() {
-      this.platform = device.platform
+      this.user.platform = device.platform
     }
   },
   mounted () {
