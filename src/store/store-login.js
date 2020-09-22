@@ -79,7 +79,7 @@ const actions = {
             this.dispatch('login/esUsuarioResponsable').then(res => {
                 var res1 = 0
                 try {
-                  if (res1 !== undefined) res1 = JSON.parse(res.data).resultado
+                  if (res.data !== undefined) res1 = JSON.parse(res.data).resultado
                 } catch(error) { res1 = 0 }
                 commit('esUsuarioResponsable', res1)
                 this.$router.push('/sinTabs')

@@ -19,7 +19,7 @@
             <q-input name="email" v-model="user.email" label="Usuario" type="text" style="font-size: 16px"/>
             <q-input name="password" autocomplete="password" v-model="user.password" type="password" label="Password" style="font-size: 16px"/>
             <div class="row justify-center q-pa-md">
-              <q-btn type="submit" rounded color="primary" class="full-width" label="Entrar"/>
+              <q-btn :disable="disableLogin" type="submit" rounded color="primary" class="full-width" label="Entrar"/>
             </div>
             <p v-if="loggingIn">Cargando...</p>
             <p v-if="loginError">{{ loginError }}</p>
@@ -35,11 +35,12 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
+      disableLogin: false,
       user: {
         codEmpresa: '01',
         email: '',
         password: '',
-        platform: ''
+        platform: '',
       }
     }
   },
@@ -56,9 +57,14 @@ export default {
     // accedo a VUEX al store/store-login a la action doLogin y aqui la podemos invocar como this.doLogin
     ...mapActions('login', ['doLogin']),
     ...mapActions('tablasAux', ['loadTablasAux']),
+    cambioDisableLogin() {
+      this.disableLogin = false
+    },
     loginSubmit () {
+      this.disableLogin = true
       this.user.nomEmpresa = this.listaEmpresas.find(emp => emp.codElemento === this.user.codEmpresa).valor1 // nombre de empresa
       this.doLogin(this.user) // para validar con bd propia
+      setTimeout(this.cambioDisableLogin, 10000)
     },
     onDeviceReady() {
       this.user.platform = device.platform
