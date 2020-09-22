@@ -285,7 +285,7 @@ export default {
           })
 
          //La solicitud es de Cambio Horario o de Teletrabajo  
-        } else if(this.item.tipoSolicitud === 'CAMBIO HORARIO' || this.item.tipoSolicitud === 'TELETRABAJO') {
+        } else {
             
           let solicitud = {
             estadoSolicitud: 4, // APROBADA
