@@ -51,7 +51,7 @@
         :width="220">
       <q-scroll-area style="height: calc(100vh - 170px); margin-top: 100px; border-right: 1px solid #ddd">
         <q-list>
-          <div v-for="link in menuItems" :key="link.title">
+          <div v-for="link in menuItemsFilter" :key="link.title">
             <q-item 
               clickable
               @click.native="openForm(link.link)"
@@ -106,6 +106,7 @@ export default {
           icon: 'group',
           link: {
             name: 'personalFormMain',
+            opcion: 1,
             label: 'Consultar Datos'
           }
         },
@@ -114,6 +115,7 @@ export default {
           icon: 'note_add',
           link: {
             name: 'permisosMain',
+            opcion: 1,
             label: 'Solicitud de permisos'
           }
         },
@@ -122,6 +124,7 @@ export default {
           icon: 'search',
           link: {
             name: 'personalMain',
+            opcion: 1,
             label: 'Buscar Empleado'
           }
         },
@@ -142,13 +145,44 @@ export default {
             opcion: 2,
             label: 'Aprobación Cambios-Permisos'
           }
+        },
+        {
+          title: 'Clientes',
+          icon: 'list',
+          link: {
+            name: 'clientesMain',
+            opcion: 3,
+            label: 'Clientes'
+          }
+        },
+        {
+          title: 'Dashboard',
+          icon: 'dashboard',
+          link: {
+            name: 'dashboardMain',
+            opcion: 3,
+            label: 'Dashboard'
+          }
         }
       ]
     }
   },
   computed: {
     ...mapState('login', ['user']),
-    ...mapState('permisos', ['justPorPresentar'])
+    ...mapState('permisos', ['justPorPresentar']),
+    menuItemsFilter () {
+      var arr = []
+      this.menuItems.forEach(element => {
+        if (this.user.esTMoPM===false && this.user.esUsuarioResponsable===false && this.user.esUsuarioPersonal===false) { // no es nada
+         // no es nada, solo opcion 1
+         if (element.link.opcion === 1) arr.push(element)
+        } else { // si es algun responsable
+          if (element.link.opcion === 2) arr.push(element) // a los demás pueden ver opcion 2
+          if (this.user.esUsuarioResponsable === true) arr.push(element) // si además es un responsable puede verlo todo
+        }
+      })
+      return arr
+    }
   },
   methods: {
     ...mapActions('tabs', ['addTab']),
@@ -181,10 +215,10 @@ export default {
     }
   },
   mounted() {
-    if( this.user.esTMoPM===false && this.user.esUsuarioResponsable===false && this.user.esUsuarioPersonal===false) { 
+    /* if (this.user.esTMoPM===false && this.user.esUsuarioResponsable===false && this.user.esUsuarioPersonal===false) { 
       var i = this.menuItems.findIndex(opc => opc.link.name === 'aprobacionMain' && opc.link.opcion === 2) 
       this.menuItems.splice(i,1) //splice(i,1) para eliminar elem de Aprobacion cuando no tenga permisos para aprobar
-    }
+    } */
     document.addEventListener('deviceready', this.onDeviceReady, false)
     var objFilter = { solIdEmpleado: this.user.pers.id, solejercicio: (new Date()).getFullYear() }
     this.getPermisosConcedidos(objFilter)
