@@ -22,7 +22,7 @@
           v-model="filterR.tipoCliente"
           :options="listaTiposCliente"
           option-value="id"
-          option-label="desc"
+          option-label="nombre"
           emit-value
           map-options
         />
@@ -51,7 +51,7 @@ export default {
 
   props: ['value'], // value es el objeto con los campos de filtro que le pasa accionesMain con v-model
   computed: {
-    ...mapState('tablasAux', ['listaSINO'])
+    ...mapState('tablasAux', ['listaSINO', 'listaTiposCliente'])
   },
   methods: {
     getRecords () {

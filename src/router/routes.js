@@ -109,6 +109,23 @@ const routes = [
             component: () => import('components/Aprobacion/aprobacionMain.vue'),
             props: true
           },
+          { 
+            path: 'clientesMain', 
+            name: 'clientesMain', 
+            component: () => import('components/Clientes/clientesMain.vue'), 
+            props: true 
+          },
+          {
+            path: 'dashboardMain',
+            name: 'dashboardMain',
+            component: () => import('components/Dashboard/dashboardMain.vue'),
+            props: true,
+            children: [
+              { path: 'panelDatos', name: 'panelDatos', component: () => import('components/Dashboard/dashboardPanelDatos.vue'), props: true },
+              { path: 'gridClientes', name: 'gridClientes', component: () => import('components/Dashboard/dashboardGridClientes.vue'), props: true },
+              { path: 'dashboardGraficos', name: 'dashboardGraficos', component: () => import('components/Dashboard/dashboardGraficos.vue'), props: true }
+            ]
+          }
         ]
       },
       {

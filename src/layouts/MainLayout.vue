@@ -51,7 +51,7 @@
         :width="220">
       <q-scroll-area style="height: calc(100vh - 170px); margin-top: 100px; border-right: 1px solid #ddd">
         <q-list>
-          <div v-for="link in menuItemsFilter" :key="link.title">
+          <div v-for="(link, index) in menuItemsFilter" :key="index">
             <q-item 
               clickable
               @click.native="openForm(link.link)"
@@ -173,13 +173,9 @@ export default {
     menuItemsFilter () {
       var arr = []
       this.menuItems.forEach(element => {
-        if (this.user.esTMoPM===false && this.user.esUsuarioResponsable===false && this.user.esUsuarioPersonal===false) { // no es nada
-         // no es nada, solo opcion 1
-         if (element.link.opcion === 1) arr.push(element)
-        } else { // si es algun responsable
-          if (element.link.opcion === 2) arr.push(element) // a los demás pueden ver opcion 2
-          if (this.user.esUsuarioResponsable === true) arr.push(element) // si además es un responsable puede verlo todo
-        }
+          if (element.link.opcion === 1) arr.push(element) // no es nada, solo opcion 1
+          if (element.link.opcion === 2 && (this.user.esTMoPM===true || this.user.esUsuarioResponsable===true || this.user.esUsuarioPersonal===true)) arr.push(element) // a los demás pueden ver opcion 2
+          if (element.link.opcion === 3 && this.user.esUsuarioResponsable === true) arr.push(element) // si además es un responsable puede verlo todo
       })
       return arr
     }
