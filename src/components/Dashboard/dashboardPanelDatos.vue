@@ -90,6 +90,14 @@
         </q-card-section>
       </q-card>
     </div>
+    <div class="row">
+      <q-card class="col-6 col-md bg-green-1">
+        <q-card-section align="center">
+          <div class="text-subtitle-2 text-grey-8 text-weight-bold">NºClientes</div>
+          <div class="text-h5 text-green-7 text-weight-bold">{{ parseFloat(registrosPanelDatos.numclientes) | numeralFormat('0,0') }}</div>
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
 
 </template>

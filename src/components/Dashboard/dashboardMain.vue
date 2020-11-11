@@ -86,6 +86,12 @@ export default {
           // caption: '',
           icon: 'bar_chart',
           link: { name: 'dashboardGraficos' }
+        },
+        {
+          title: 'SQL',
+          // caption: '',
+          icon: 'table_rows',
+          link: { name: 'dashboardSQL' }
         }
       ],
       registrosPatrimonioEntidad: [],
