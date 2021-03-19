@@ -79,7 +79,8 @@ const actions = {
             this.dispatch('login/esUsuarioResponsable').then(res => {
                 var res1 = 0
                 try {
-                  if (res.data !== undefined) res1 = JSON.parse(res.data).resultado
+                  if (res.data && res.data !== undefined) res1 = JSON.parse(res.data).resultado
+                  else res1 = res
                 } catch(error) { res1 = 0 }
                 commit('esUsuarioResponsable', res1)
                 this.$router.push('/sinTabs')
@@ -125,7 +126,7 @@ const actions = {
           resolve(axiosInstance.post(`bd_jpersonal.asp?action=areaspersonal/count&auth=${state.user.auth}`, querystring.stringify({ idpersonal: state.user.pers.idpersonal }), headerFormData ))
         } else { 
           // commit('esUsuarioResponsable', 0) 
-          resolve(new Promise((resolve) => resolve(0)))
+          resolve(new Promise((resolve) => resolve(1))) // esta en la tabla 15 de responsables
         }
       })
       .catch(error => {

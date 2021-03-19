@@ -36,7 +36,7 @@
 import { numeralInstance } from 'boot/numeral.js'
 import { mapActions } from 'vuex'
 export default {
-  props: ['value'],
+  props: ['value', 'ltab'],
   data: function () {
     return {
       tipoGrafico: 'line',
@@ -169,7 +169,7 @@ export default {
     }
   },
   mounted () {
-    this.getKPIDefinicion(this.value)
+    if (this.ltab === 'dashboardGraficos') this.getKPIDefinicion(this.value)
   }
 }
 </script>

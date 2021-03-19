@@ -14,7 +14,8 @@ const state = {
   listaTiposCliente: [{ id: 1, nombre: 'CLIENTE' }, { id: 2, nombre: 'CLIENTE POTENCIAL' }, { id: 11, nombre: 'EXCLIENTE' }, { id: 4, nombre: 'OTROS' }, { id: 8, nombre: 'COLABORADOR' }, { id: 13, nombre: 'CLIENTE PASARELA' }, { id: 16, nombre: 'CLIENTE DIST' }, { id: 17, nombre: 'CLIENTE USU SER' }, { id: 18, nombre: 'COMPETENCIA' }],
   listaTiposDiasLibres: [],
   listaEstadosSolicitudes: [],
-  listaTiposSolicitudes: []
+  listaTiposSolicitudes: [],
+  listaSalas: [] //[{ id: 5, desc: 'Sala 5', plano: 'sala5.svg' }, { id: 7, desc: 'Sala 7', plano: 'sala7.svg' }, { id: 8, desc: 'Sala 8', plano: 'sala8.svg' }, { id: 10, desc: 'Sala Sistemas', plano: 'sala10.svg' }]
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('loadUsers')
 const mutations = {
@@ -29,6 +30,10 @@ const mutations = {
   },
   loadTiposSolicitudes(state, lista) {
     state.listaTiposSolicitudes = lista
+  },
+  loadListaSalas(state, lista) {
+    lista.sort((a, b) => a.valor2 < b.valor2 ? 1 : -1)
+    state.listaSalas = lista
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('tablaAux', ['loadTablasAux'])
@@ -38,6 +43,7 @@ const actions = {
     this.dispatch('tablasAux/loadTiposDiasLibres')
     this.dispatch('tablasAux/loadTablaAuxiliar', { codTabla: 14, mutation: 'loadEstadosSolicitudes' })
     this.dispatch('tablasAux/loadTablaTiposSolicitudes', { codTabla: 34, mutation: 'loadTiposSolicitudes' })
+    this.dispatch('tablasAux/loadTablaTiposSolicitudes', { codTabla: 37, mutation: 'loadListaSalas' })
   },
   loadTiposDiasLibres({ commit }, objFilter) {
     //Llamaremos al backend para rellenar la lista y actualizaremos el state 

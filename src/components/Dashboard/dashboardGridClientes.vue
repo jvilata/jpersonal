@@ -7,7 +7,7 @@
       :pagination.sync="pagination"
       :rows-per-page-options="[0]"
       :virtual-scroll-sticky-size-start="48"
-      row-key="id"
+      row-key="tipo"
       :data="registrosSeleccionados"
       :columns="columns"
       table-style="max-height: 65vh; max-width: 93vw"
@@ -28,7 +28,7 @@
       </template>
 
       <template v-slot:body="props">
-        <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
+        <q-tr :props="props" :key="`m_${props.row.tipo}`" @mouseover="rowId=`m_${props.row.tipo}`">
           <q-td
             v-for="col in props.cols"
             :key="col.name"
@@ -48,7 +48,7 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  props: ['value'], // en 'value' tenemos la tabla de datos del grid
+  props: ['value', 'ltab'], // en 'value' tenemos la tabla de datos del grid
   data () {
     return {
       rowId: '',
@@ -72,9 +72,7 @@ export default {
         .then(response => {
           this.registrosSeleccionados = []
           this.registrosSeleccionados.push(...response.data) // para que refresque lo antes posible
-          setTimeout(() => {
-            this.$q.loading.hide()
-          }, 1000)
+          this.$q.loading.hide()
         })
         .catch(error => {
           this.$q.dialog({ title: 'Error', message: error.response.statusText })
@@ -86,7 +84,8 @@ export default {
     }
   },
   mounted () {
-    this.getTiposClientes(this.value) // carga grid de activos Inversion
+    // cuando cambia de tab se dispara 2 veces con ltab el primer tab de la lista...
+    if (this.ltab === 'gridClientes') this.getTiposClientes(this.value) // carga grid de activos Inversion
   }
 }
 </script>

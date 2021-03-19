@@ -34,7 +34,7 @@ const mutations = {
 
 const actions = {
   loadListaDetalleEmpleados({ commit }, objFilter) {
-    return axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) 
+    return axiosInstance.get(`bd_jpersonal.asp?action=cpersonal_of_tab&auth=${login.state.user.auth}`, { params: objFilter }, { withCredentials: true }) 
   },
 
   loadDetalleEmpleado({ commit }, id) {

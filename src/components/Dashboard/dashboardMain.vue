@@ -36,7 +36,7 @@
 
       <q-tab-panels v-model="ltab" animated >
           <q-tab-panel v-for="(tab, index) in menuItems" :key="index" :name="tab.link.name"  class="q-pa-none">
-            <router-view :value="filterRecord" :key="refreshRec" :keyValue="refreshRec"/>
+            <router-view :value="filterRecord" :key="refreshRec" :keyValue="refreshRec" :ltab="ltab"/>
           </q-tab-panel>
       </q-tab-panels>
       <!-- podemos poner tabs en el pie para dispositivos moviles pero quita pantalla y no me gusta -->

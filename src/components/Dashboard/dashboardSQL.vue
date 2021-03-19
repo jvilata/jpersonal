@@ -31,7 +31,7 @@
             :pagination.sync="pagination"
             :rows-per-page-options="[0]"
             :virtual-scroll-sticky-size-start="48"
-            row-key="id"
+            row-key="idxxXX"
             :data="registrosSeleccionados"
             :columns="columns"
             table-style="max-height: 55vh; max-width: 96vw"
@@ -51,7 +51,7 @@
               </q-tr>
             </template>
             <template v-slot:body="props">
-              <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
+              <q-tr :props="props" :key="`m_${props.row.idxxXX}`" @mouseover="rowId=`m_${props.row.idxxXX}`">
                 <q-td
                   v-for="col in props.cols"
                   :key="col.name"
@@ -81,7 +81,7 @@ import { mapActions, mapState } from 'vuex'
 import { headerFormData } from 'boot/axios.js'
 import querystring from 'querystring'
 export default {
-  props: ['value'],
+  props: ['value', 'ltab'],
   data: function () {
     return {
       tipoGrafico: 'line',
@@ -117,6 +117,7 @@ export default {
         })
     },
     ejecutarSQL (objFilter) {
+      this.$q.loading.show()
       this.SQLSeleccionada = this.registrosSQLs.find(x => x.id === objFilter.id)
       this.$axios.post(`bd_consultassql.asp?action=ejecutarSQL&auth=${this.user.auth}`, querystring.stringify({ SQL: this.SQLSeleccionada.sql, string_con: this.SQLSeleccionada.string_con }), headerFormData)
         .then(response => {
@@ -134,6 +135,9 @@ export default {
               })
             })
             this.registrosSeleccionados = result
+            var i = 0
+            this.registrosSeleccionados.forEach(element => element.idxxXX = i++)
+            this.$q.loading.hide()
           } else {
             this.$q.dialog({ title: 'Aviso', message: 'No hay registros' })
             this.registrosSeleccionados = []
@@ -146,7 +150,7 @@ export default {
     }
   },
   mounted () {
-    this.getSQLs({ id: 475 })
+    if (this.ltab === 'dashboardSQL') this.getSQLs({ id: '475, 630' })
   }
 }
 </script>

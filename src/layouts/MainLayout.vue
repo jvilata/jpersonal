@@ -71,7 +71,7 @@
           
         </q-list>
       </q-scroll-area>
-       <div clickable @click="emailUs()" class="absolute-bottom text-grey-8 q-pb-xl q-pl-md">
+       <div clickable @click="emailUs()" class="text-caption absolute-bottom text-grey-8 q-pb-xl q-pl-md">
         appstore@edicomgroup.com
       </div>
 
@@ -135,6 +135,24 @@ export default {
             name: 'aprobacionMain',
             opcion: 1,
             label: 'Consultar Cambios-Permisos'
+          }
+        },
+        {
+          title: 'Consultar Reservas',
+          icon: 'screen_search_desktop',
+          link: {
+            name: 'consReservasMain',
+            opcion: 1,
+            label: 'Cons.Reservas'
+          }
+        },
+        {
+          title: 'Reserva Mesas',
+          icon: 'event_seat',
+          link: {
+            name: 'planosMain',
+            opcion: 1,
+            label: 'Reserva Mesa'
           }
         },
         {

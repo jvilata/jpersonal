@@ -109,6 +109,8 @@ const routes = [
             component: () => import('components/Aprobacion/aprobacionMain.vue'),
             props: true
           },
+          { path: 'planosMain', name: 'planosMain', component: () => import('components/Planos/planosMain.vue'), props: true },
+          { path: 'consReservasMain', name: 'consReservasMain', component: () => import('components/ConsultaReservas/consReservasMain.vue'), props: true },
           { 
             path: 'clientesMain', 
             name: 'clientesMain', 
