@@ -128,8 +128,14 @@ const routes = [
               { path: 'dashboardGraficos', name: 'dashboardGraficos', component: () => import('components/Dashboard/dashboardGraficos.vue'), props: true },
               { path: 'dashboardSQL', name: 'dashboardSQL', component: () => import('components/Dashboard/dashboardSQL.vue'), props: true }
             ]
+          },
+          {
+            path: 'fichajesMain', 
+            name: 'fichajesMain', 
+            component: () => import('components/Fichajes/fichajesMain.vue'), 
+            props: true 
           }
-        ]
+      ]
       },
       {
         path: 'sinTabs',

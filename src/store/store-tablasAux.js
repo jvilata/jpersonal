@@ -15,6 +15,7 @@ const state = {
   listaTiposDiasLibres: [],
   listaEstadosSolicitudes: [],
   listaTiposSolicitudes: [],
+  listaAreas: [],
   listaSalas: [] //[{ id: 5, desc: 'Sala 5', plano: 'sala5.svg' }, { id: 7, desc: 'Sala 7', plano: 'sala7.svg' }, { id: 8, desc: 'Sala 8', plano: 'sala8.svg' }, { id: 10, desc: 'Sala Sistemas', plano: 'sala10.svg' }]
 }
 // mutations: solo están accesibles a las actions a traves de commit, p.e., commit('loadUsers')
@@ -34,6 +35,10 @@ const mutations = {
   loadListaSalas(state, lista) {
     lista.sort((a, b) => a.valor2 < b.valor2 ? 1 : -1)
     state.listaSalas = lista
+  },
+  loadAreas(state, lista) {
+    lista.sort((a, b) => a.valor2 < b.valor2 ? -1 : 1)
+    state.listaAreas = lista
   }
 }
 // actions: accesibles desde componentes a traves de ...mapActions('tablaAux', ['loadTablasAux'])
@@ -41,6 +46,7 @@ const mutations = {
 const actions = {
   loadTablasAux () {
     this.dispatch('tablasAux/loadTiposDiasLibres')
+    this.dispatch('tablasAux/loadAreas')
     this.dispatch('tablasAux/loadTablaAuxiliar', { codTabla: 14, mutation: 'loadEstadosSolicitudes' })
     this.dispatch('tablasAux/loadTablaTiposSolicitudes', { codTabla: 34, mutation: 'loadTiposSolicitudes' })
     this.dispatch('tablasAux/loadTablaTiposSolicitudes', { codTabla: 37, mutation: 'loadListaSalas' })
@@ -53,6 +59,20 @@ const actions = {
           this.dispatch('mensajeLog/addMensaje', 'loadTiposDiasLibres' + 'No existen datos', { root: true })
         } else {
           commit('loadTiposDiasLibres', response.data)
+        }
+      })
+      .catch(error => {
+        this.dispatch('mensajeLog/addMensaje', 'loadTiposDiasLibres' + error, { root: true })
+      })
+  },
+  loadAreas({ commit }, objFilter) {
+    //Llamaremos al backend para rellenar la lista y actualizaremos el state 
+    axiosInstance.get(`bd_jpersonal.asp?action=areasPersonal/list&auth=${login.state.user.auth}`, { params: {} }, { withCredentials: true }) // tipo acciones
+      .then((response) => {
+        if (response.data.length === 0) {
+          this.dispatch('mensajeLog/addMensaje', 'loadAreas' + 'No existen datos', { root: true })
+        } else {
+          commit('loadAreas', response.data)
         }
       })
       .catch(error => {

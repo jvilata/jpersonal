@@ -181,6 +181,15 @@ export default {
             opcion: 3,
             label: 'Dashboard'
           }
+        },
+        {
+          title: 'Fichajes',
+          icon: 'payments',
+          link: {
+            name: 'fichajesMain',
+            opcion: 2,
+            label: 'Fichajes'
+          }
         }
       ]
     }
