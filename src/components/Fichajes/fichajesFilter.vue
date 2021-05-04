@@ -86,23 +86,32 @@ export default {
   },
   methods: {
     chequeaFDesde (val) {
-      if (date.getDateDiff(this.filterR.fechaHasta, this.filterR.fechaDesde, 'days') > 7) {
-        this.$q.dialog({ title: 'Aviso', message: 'Para filtros de área no más de 7 días' })
-        this.filterR.fechaHasta = date.formatDate(date.addToDate(this.filterR.fechaDesde, { days: 7 }), 'YYYY-MM-DD')
+      if (date.getDateDiff(this.filterR.fechaHasta, this.filterR.fechaDesde, 'days') > 15) {
+        this.$q.dialog({ title: 'Aviso', message: 'Para filtros de área no más de 15 días' })
+        this.filterR.fechaHasta = date.formatDate(date.addToDate(this.filterR.fechaDesde, { days: 15 }), 'YYYY-MM-DD')
       } else {
         this.$refs.qFechaDesde.hide()
       }
     },
     chequeaFFin (val) {
-      if (date.getDateDiff(this.filterR.fechaHasta, this.filterR.fechaDesde, 'days') > 7) {
-        this.$q.dialog({ title: 'Aviso', message: 'Para filtros de área no más de 7 días' })
-        this.filterR.fechaDesde = date.formatDate(date.subtractFromDate(this.filterR.fechaHasta, { days: 7 }), 'YYYY-MM-DD')
+      if (date.getDateDiff(this.filterR.fechaHasta, this.filterR.fechaDesde, 'days') > 15) {
+        this.$q.dialog({ title: 'Aviso', message: 'Para filtros de área no más de 15 días' })
+        this.filterR.fechaDesde = date.formatDate(date.subtractFromDate(this.filterR.fechaHasta, { days: 15 }), 'YYYY-MM-DD')
       } else {
         this.$refs.qFechaHasta.hide()
       }
     },
     getRecords () {
-      this.$emit('getRecords', this.filterR) // lo captura accionesMain
+      // console.log(this.filterR)
+      if ((this.filterR.idpersonal !== undefined && this.filterR.idpersonal !== null && this.filterR.idpersonal !== '') ||
+        (this.filterR.equipoETM !== undefined && this.filterR.equipoETM !== null && this.filterR.equipoETM !== '') ||
+        (this.filterR.area !== undefined && this.filterR.area !== null && this.filterR.area !== '')
+      ) {
+        this.$emit('getRecords', this.filterR)
+      }
+      else {
+        this.$q.dialog({ title: 'Aviso', message: 'Debe filtrar al menos por persona, area o equipo' })
+      }
     },
     formatDate (pdate) {
       return date.formatDate(pdate, 'DD-MM-YYYY')

@@ -51,16 +51,18 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 import fichajesFilter from 'components/Fichajes/fichajesFilter.vue'
 import fichajesGrid from 'components/Fichajes/fichajesGrid.vue'
+import { setInterval } from 'timers'
 export default {
   props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
   data () {
     return {
       expanded: false,
       visible: '',
-      filterRecord: {},
       visibleProgress: false,
       progress1: 0,
       progressLabel1: '0%',
+      numseg: 0,
+      filterRecord: {},
       nomFormulario: 'Fichajes',
       listaPersonasHorariosAcum: [],
       listaPersonasFichajes: [],
@@ -72,18 +74,31 @@ export default {
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
+    progreso () {
+      this.numseg++ // 73r->24s, 124r -> 124s, 207r->16s
+      var mult = 5
+      if (this.listaPersonasHorariosAcum.length > 100 && this.listaPersonasHorariosAcum.length <= 200) mult = 2
+      else if (this.listaPersonasHorariosAcum.length > 200  && this.listaPersonasHorariosAcum.length <= 300) mult = 4
+      else if (this.listaPersonasHorariosAcum.length > 300) mult = 8
+      if (this.listaPersonasHorariosAcum.length > 0) this.progress1 = this.numseg * mult / this.listaPersonasHorariosAcum.length
+      else this.progress1 = 0
+      this.progressLabel1 = Math.round(this.progress1 * 100) + ' %'
+      if (this.progress1 < 1) setTimeout(this.progreso, 1000)
+      else  this.visibleProgress = false
+    },
     generarPersonas() {
       this.expanded = false
-      this.visibleProgress = true
+      this.listaPersonasHorariosAcum = []
       this.$q.loading.show()
       this.listaPersonasFichajes.splice(0, this.listaPersonasFichajes.length)
       this.listaFichajesDetalle = []
       const objFilter = {
         area: this.filterRecord.area,
         persona: this.filterRecord.idpersonal, // 24 alberto 942 filippo 506 julio
+        equipoETM: this.filterRecord.equipoETM,
         fecha_combo: 'A',
-        fecha_date_desde: this.filterRecord.fechaDesde + 'T00:00:00',
-        fecha_date_hasta: this.filterRecord.fechaHasta + 'T23:59:59' // '2021-03-29T23:59:59'
+        fecha_date_desde: this.filterRecord.fechaDesde.substring(0,10) + 'T00:00:00',
+        fecha_date_hasta: this.filterRecord.fechaHasta.substring(0,10) + 'T23:59:59' // '2021-03-29T23:59:59'
       }
       this.$axios.get(`bd_jpersonal.asp?action=jornadaLaboral&auth=${this.user.auth}`, { params: objFilter }) // tipo acciones
         .then((response) => {
@@ -91,57 +106,57 @@ export default {
           if (listaPersonasHorarios.length === 0) this.$q.loading.hide()
           // ordeno por empleado fecha
           listaPersonasHorarios.sort((a, b) => a.empleado + a.fecha.substring(6,10) + a.fecha.substring(3,5) + a.fecha.substring(0,2) <= b.empleado + b.fecha.substring(6,10) + b.fecha.substring(3,5) + b.fecha.substring(0,2) ? -1 : 1)
-          this.listaPersonasHorariosAcum = this.listaPersonasHorariosAcum.concat(listaPersonasHorarios)
+          this.listaPersonasHorariosAcum = listaPersonasHorarios
           var numPerFich = listaPersonasHorarios.length
-          listaPersonasHorarios.forEach(pers => {
-            const objFilterFichaje = {
-              persona: pers.idPersonal,
-              fecha_combo: 'A',
-              fecha_date_desde: pers.fecha.substring(6,10) + '-' + pers.fecha.substring(3,5) + '-' + pers.fecha.substring(0,2) + 'T00:00:00',
-              fecha_date_hasta: pers.fecha.substring(6,10) + '-' + pers.fecha.substring(3,5) + '-' + pers.fecha.substring(0,2) + 'T23:59:59'
-            }
-            this.generarFichajesTele(objFilterFichaje)
+          this.numseg = 0
+          this.visibleProgress = true
+          if (this.listaPersonasHorariosAcum.length > 0) setTimeout(this.progreso, 1000)
+
+          this.generarFichajesConsolidado(objFilter)
             .then(data1 => {
               var listaFichajes = data1
-              this.generarFichajesPresen(objFilterFichaje)
-              .then(data => {
-                data.forEach(record => {
-                  if (record.datetime.substring(0,10) === pers.fecha.substring(6,10) + '-' + pers.fecha.substring(3,5) + '-' + pers.fecha.substring(0,2)) {
-                    listaFichajes.push({
-                      fecha: record.datetime,
-                      idPersonal: pers.idPersonal,
-                      nombre: pers.empleado
-                    })
-                  }
-                })
-                listaFichajes.forEach(fich => {
-                  fich.horaEntrada1 = pers.horaEntrada1
-                  fich.horaSalida1 = pers.horaSalida1
-                  fich.horaEntrada2 = pers.horaEntrada2
-                  fich.horaSalida2 = pers.horaSalida2
-                })
-                this.listaFichajesDetalle = this.listaFichajesDetalle.concat(listaFichajes)
-                // console.log(this.listaFichajesDetalle)
+              listaFichajes.forEach(record => {
+                const persHor = listaPersonasHorarios.find(ph => ph.idPersonal === record.personalId && record.ts.substring(0,10) === ph.fecha.substring(6,10) + '-' + ph.fecha.substring(3,5) + '-' + ph.fecha.substring(0,2))
+                record.fecha = record.ts
+                record.idPersonal = record.personalId
+                record.nombre = record.personalNombre
+                record.horaEntrada1 = ''
+                record.horaSalida1 = ''
+                record.horaEntrada2 = ''
+                record.horaSalida2 = ''
+                if (persHor !== undefined && persHor !== null) {
+                  record.horaEntrada1 = persHor.horaEntrada1
+                  record.horaSalida1 = persHor.horaSalida1
+                  record.horaEntrada2 = persHor.horaEntrada2
+                  record.horaSalida2 = persHor.horaSalida2
+                }
+              })
+              listaFichajes.sort((a, b) => a.fecha < b.fecha ? -1 : 0) // ordena fichajes por hora
+              this.listaFichajesDetalle = listaFichajes
+              // console.log(this.listaFichajesDetalle)
+              listaPersonasHorarios.forEach(ph => {
+                
                 var horasFichadas = 0
                 var horasConfiguradas = 0
                 var cumpleHorario = false
                 var olvidoFichar = false
-                if (listaFichajes.length !== 0) { // hay fichjes}
-                  listaFichajes.sort((a, b) => a.fecha < b.fecha ? -1 : 0) // ordena fichajes por hora
+                const listaFichDia = listaFichajes.filter(record => ph.idPersonal === record.personalId && record.ts.substring(0,10) === ph.fecha.substring(6,10) + '-' + ph.fecha.substring(3,5) + '-' + ph.fecha.substring(0,2))
+
+                if (listaFichDia.length !== 0) { // hay fichjes}
                   var primero = 0
                   var ultimo = 0
                   // compruebo si el primero pasa de las 24h porque entonces sera el ultimo (mx)
-                  while (primero < listaFichajes.length && date.formatDate(date.extractDate(listaFichajes[primero].fecha, 'YYYY-MM-DDTHH:mm:ss.SSSZZ'), 'HH') <= '03') primero++;
+                  while (primero < listaFichDia.length && date.formatDate(date.extractDate(listaFichDia[primero].fecha, 'YYYY-MM-DDTHH:mm:ssZ'), 'HH') <= '03') primero++;
                   if (primero > 0) ultimo = 0
-                  else ultimo = listaFichajes.length - 1
-                  if (primero >= listaFichajes.length) primero = listaFichajes.length - 1
-                  const fp = date.extractDate(listaFichajes[primero].fecha, 'YYYY-MM-DDTHH:mm:ss.SSSZZ') // paso a Date
-                  const fu = date.extractDate(listaFichajes[ultimo].fecha, 'YYYY-MM-DDTHH:mm:ss.SSSZZ')
+                  else ultimo = listaFichDia.length - 1
+                  if (primero >= listaFichDia.length) primero = listaFichDia.length - 1
+                  const fp = date.extractDate(listaFichDia[primero].fecha, 'YYYY-MM-DDTHH:mm:ssZ') // paso a Date
+                  const fu = date.extractDate(listaFichDia[ultimo].fecha, 'YYYY-MM-DDTHH:mm:ssZ')
                   const horaPrimera = date.extractDate(date.formatDate(fp, 'HH:mm:00'),'HH:mm:ss') // hora en locale
                   var horaUltima = date.extractDate(date.formatDate(fu, 'HH:mm:00'),'HH:mm:ss')
                   if (date.formatDate(fu, 'HH') <= '03') horaUltima = date.addToDate(horaUltima, { days: 1 }) // si >24h le sumo 1 dia
-                  const horaEntrada = date.extractDate(pers.horaEntrada1,'HH:mm:ss')
-                  var horaSalida = date.extractDate(pers.horaSalida2 === '' ? pers.horaSalida1 : pers.horaSalida2,'HH:mm:ss')
+                  const horaEntrada = date.extractDate(ph.horaEntrada1,'HH:mm:ss')
+                  var horaSalida = date.extractDate(ph.horaSalida2 === '' ? ph.horaSalida1 : ph.horaSalida2,'HH:mm:ss')
                   if (date.formatDate(horaSalida,'HH') < '03') horaSalida = date.addToDate(horaSalida, { days: 1 })
                   horasFichadas = date.getDateDiff(horaUltima, horaPrimera, 'minutes')/60
                   horasConfiguradas = date.getDateDiff(horaSalida, horaEntrada, 'minutes')/60
@@ -154,28 +169,41 @@ export default {
                 }
                 this.listaPersonasFichajes.push({
                   id: Math.random() * 100000, // key
-                  idPersonal: pers.idPersonal,
-                  empleado: pers.empleado,
-                  fecha: pers.fecha,
+                  idPersonal: ph.idPersonal,
+                  empleado: ph.empleado,
+                  fecha: ph.fecha,
                   cumple: cumpleHorario,
                   olvido: olvidoFichar,
                   desfase: horasFichadas - horasConfiguradas
                 })
                 numPerFich--
-                this.progress1 =(listaPersonasHorarios.length - numPerFich) / listaPersonasHorarios.length
-                this.progressLabel1 = Math.round(this.progress1 * 100) + ' %'
-                if (numPerFich === 0) {
-                  this.$q.loading.hide()
+                if (numPerFich <= 2) {
                   this.visibleProgress = false
+                  this.$q.loading.hide()
                 }
-              })
-            })
-          })        
+                // })
+              }) // foreach listapersonashorarios
+            })        
         })
         .catch(error => {
           this.$q.loading.hide()
           this.$q.dialog({ title: 'Error', message: error })
         })
+    },
+    generarFichajesConsolidado (objFilter) {
+      return new Promise((resolve, reject) => {
+        // this.$q.loading.show()
+        this.$axios.get(`bd_jpersonal.asp?action=fichajes&auth=${this.user.auth}`,{ params: objFilter }) // tipo acciones
+          .then((response) => {
+            // this.$q.loading.hide()
+            resolve(response.data)
+          })
+          .catch(error => {
+            this.$q.loading.hide()
+            this.$q.dialog({ title: 'Error', message: error })
+            reject(error)
+          })
+      })
     },
     generarFichajesTele (objFilter) {
       return new Promise((resolve, reject) => {

@@ -81,7 +81,7 @@ export default {
       columns: [
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
         { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idPersonal', sortable: true, style: 'width: 20px' },
-        { name: 'fecha', align: 'left', label: 'Fecha', field: 'fecha', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DDTHH:mm:ss.SSSZZ'), 'DD/MM/YYYY HH:mm') },
+        { name: 'fecha', align: 'left', label: 'Fecha', field: 'fecha', sortable: true, format: val => date.formatDate(date.extractDate(val, 'YYYY-MM-DDTHH:mm:ssZ'), 'DD/MM/YYYY HH:mm') },
         { name: 'horaEntrada1', align: 'left', label: 'Hora Ent1', field: 'horaEntrada1', sortable: true, format: val => val.substring(0, 5) },
         { name: 'horaSalida1', align: 'left', label: 'Hora Sal1', field: 'horaSalida1', sortable: true, format: val => val.substring(0, 5) },
         { name: 'horaEntrada2', align: 'left', label: 'Hora Ent2', field: 'horaEntrada2', sortable: true, format: val => val.substring(0, 5) },

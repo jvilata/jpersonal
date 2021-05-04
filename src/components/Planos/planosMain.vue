@@ -94,7 +94,7 @@
                         @input="v => { $refs.qSal4.hide() }"
                         v-model="filterRecord.fechaDesde"
                         :hour-options="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]"
-                        :minute-options="[0]"
+                        :minute-options="[0, 30]"
                         mask="YYYY-MM-DD HH:mm"
                         format24h />
                     </q-popup-proxy>
@@ -217,7 +217,7 @@ export default {
               this.$q.dialog({ title: 'Aviso', message: 'Ya tiene reservada mesa en este periodo. Anule primero: Mesa: ' + reservadas.reduce((a, b) => a + b.idmesa + ',', '') })
             } else {
               if (this.filterRecord.sala.substring(0,3) === 'reu') {
-                if (this.filterRecord.fechaDesde.length < 11)this.filterRecord.fechaDesde += ' 09:00'
+                this.filterRecord.fechaDesde = this.filterRecord.fechaDesde.substring(0, 10) + ' 09:00'
                 this.filterRecord.duracion = 60
                 this.mesaActiva = e
                 this.$refs.dialogSalaR.show()
