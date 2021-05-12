@@ -117,6 +117,12 @@ const routes = [
             component: () => import('components/Clientes/clientesMain.vue'), 
             props: true 
           },
+          { 
+            path: 'reservaPadelMain', 
+            name: 'reservaPadelMain', 
+            component: () => import('components/ReservasPadel/consReservasPadelMain.vue'), 
+            props: true 
+          },
           {
             path: 'dashboardMain',
             name: 'dashboardMain',

@@ -138,6 +138,15 @@ export default {
           }
         },
         {
+          title: 'Aprobación cambios-permisos',
+          icon: 'assignment_turned_in',
+          link: {
+            name: 'aprobacionMain',
+            opcion: 2,
+            label: 'Aprobación Cambios-Permisos'
+          }
+        },
+        {
           title: 'Consultar Reservas',
           icon: 'screen_search_desktop',
           link: {
@@ -156,12 +165,21 @@ export default {
           }
         },
         {
-          title: 'Aprobación cambios-permisos',
-          icon: 'assignment_turned_in',
+          title: 'Reserva Padel',
+          icon: 'sports_tennis',
           link: {
-            name: 'aprobacionMain',
+            name: 'reservaPadelMain',
+            opcion: 1,
+            label: 'Reserva Padel'
+          }
+        },
+        {
+          title: 'Fichajes',
+          icon: 'payments',
+          link: {
+            name: 'fichajesMain',
             opcion: 2,
-            label: 'Aprobación Cambios-Permisos'
+            label: 'Fichajes'
           }
         },
         {
@@ -180,15 +198,6 @@ export default {
             name: 'dashboardMain',
             opcion: 3,
             label: 'Dashboard'
-          }
-        },
-        {
-          title: 'Fichajes',
-          icon: 'payments',
-          link: {
-            name: 'fichajesMain',
-            opcion: 2,
-            label: 'Fichajes'
           }
         }
       ]

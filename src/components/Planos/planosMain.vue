@@ -44,6 +44,7 @@
             <div class="text-h8">Fecha: {{reserva.fechareserva}} {{reserva.sala.substring(0,3) === 'reu' ? `- Duración: ${reserva.duracion}'` : ''}}</div>
             <div class="text-h8">Mesa: {{reserva.idmesa}}</div>
             <div class="text-h8">Persona: {{reserva.idpersonal}} - {{reserva.nompersona }}</div>
+            <div v-if="reserva.observaciones!==''" class="text-h8">Observaciones: {{reserva.observaciones}}</div>
             <div class="text-h8">Email: {{reserva.email}}</div>
             <div class="text-h8">Área: {{reserva.nomarea}} - Grupo: {{ reserva.grupoetm }}</div>
             </div>
@@ -109,6 +110,7 @@
               v-model="filterRecord.duracion"
               :options="[60, 120, 180, 240, 300, 480]"
             />
+            <q-input outlined clearable label="Observaciones" v-model="filterRecord.observaciones" />
           </q-form>
           <q-card-actions align="right">
             <q-btn color="primary" label="OK" @click="reservaSalaReunionesOk" />
@@ -220,6 +222,7 @@ export default {
                 this.filterRecord.fechaDesde = this.filterRecord.fechaDesde.substring(0, 10) + ' 09:00'
                 this.filterRecord.duracion = 60
                 this.mesaActiva = e
+                this.filterRecord.observaciones = ''
                 this.$refs.dialogSalaR.show()
               } else {
                 this.$q.dialog({
@@ -249,10 +252,10 @@ export default {
       var solapa = false
       this.listaIDsReservados.forEach(valor => {
         const fsol = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DD HH:mm:ss')
-        const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY HH:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
+        const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
         if (valor.sala.substring(0,3) === 'reu' && valor.idmesa === this.mesaActiva.target.id &&
           date.formatDate(fres, 'YYYY-MM-DD').substring(0,10) === this.filterRecord.fechaDesde.substring(0, 10) &&
-          ((fres < fsol && date.addToDate(fres, { minutes: parseInt(valor.duracion) }) > fsol) ||
+          ((fres.getTime() == fsol.getTime()) || (fres < fsol && date.addToDate(fres, { minutes: parseInt(valor.duracion) }) > fsol) ||
            (fsol < fres && date.addToDate(fsol, { minutes: parseInt(this.filterRecord.duracion) }) > fres))) {
           // es sala de reun y es la misma fecha y (una reserva anterior se solapa con la solic o la solic se solapa con una posterior)
           this.$q.dialog({ title: 'Aviso', message: 'Esta reserva se solapa con otra ya existente: ' + valor.fechareserva + ' (' + valor.duracion + '\')' })
@@ -264,6 +267,7 @@ export default {
         const objfilter = this.filterRecord
         objfilter.idMesa = this.mesaActiva.target.id
         objfilter.idPersonal = this.user.pers.idpersonal
+        objfilter.observaciones = btoa(objfilter.observaciones) // para que no altere los acentos
         return this.$axios.get(`bd_reservaMesas.asp?action=reservarMesa&auth=${this.user.auth}`, { params: objfilter }) // pasar e.target.id y la mesaAnterior para quitar reserva
           .then(response => {
             this.getRecords({ sala: this.filterRecord.sala, fechaDesde: this.filterRecord.fechaDesde, fechaHasta: this.filterRecord.fechaHasta })
