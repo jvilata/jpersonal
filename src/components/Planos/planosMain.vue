@@ -214,7 +214,7 @@ export default {
           if (this.listaIDsReservados.findIndex(valor => valor.sala.substring(0,3) !== 'reu' && valor.idmesa === e.target.id) >= 0) { // ya está reservada
             this.$q.dialog({ title: 'Aviso', message: 'Esta mesa ya está reservada por otra persona' })
           } else {
-            const reservadas = this.listaIDsReservados.filter(valor => valor.sala.substring(0,3) !== 'reu' && parseInt(valor.idpersonal) === this.user.pers.idpersonal)
+            const reservadas = this.listaIDsReservados.filter(valor => valor.sala.substring(0,3) !== 'reu' && valor.sala.substring(0,3) !== 'pad' && parseInt(valor.idpersonal) === this.user.pers.idpersonal)
             if (this.filterRecord.sala.substring(0,3) !== 'reu' && reservadas.length > 0) {
               this.$q.dialog({ title: 'Aviso', message: 'Ya tiene reservada mesa en este periodo. Anule primero: Mesa: ' + reservadas.reduce((a, b) => a + b.idmesa + ',', '') })
             } else {
