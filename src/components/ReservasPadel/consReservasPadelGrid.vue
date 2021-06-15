@@ -200,7 +200,7 @@ export default {
     return {
       expanded: false,
       dialogSalaR1: false,
-      filterRecord: { nivel: 0, jug1: '', jug2: '', jug3: '', jug4: ''},
+      filterRecord: { nivel: 0, duracion: 60, jug1: '', jug2: '', jug3: '', jug4: ''},
       fechaDesde: '',
       regper: {},
       urlF: urlFotos,

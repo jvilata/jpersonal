@@ -338,7 +338,7 @@ export default {
           binsertar = false
         }
       } else if (bloques.length > 0) { //COMPROBACIONES PARA BLOQUES (Solo compruebo si tengo bloques configurados)
-        if ((solicitud.ejercicioAplicacion === 2021 && solicitud.diasEfectivos > 15) || //Solo 2021 convencion permito bloques de 15 o más dias
+        if ( // (solicitud.ejercicioAplicacion === 2021 && solicitud.diasEfectivos > 15) || //Solo 2021 convencion permito bloques de 15 o más dias
             (this.empleadoP.diasPendientes.tdiaslibres === solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes)) { //Si agota los dias libres -> No compruebo bloques
           binsertar = true
         } else { //Comprobamos si existe un bloque configurado igual

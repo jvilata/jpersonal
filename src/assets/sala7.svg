@@ -44,7 +44,7 @@
      showgrid="false"
      inkscape:zoom="1.0289025"
      inkscape:cx="442.6442"
-     inkscape:cy="361.06986"
+     inkscape:cy="1173.4643"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -337,5 +337,82 @@
        x="222.56725"
        y="1703.7572"
        inkscape:label="7.65" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.39"
+       width="63.174118"
+       height="84.556091"
+       x="191.4325"
+       y="893.18475" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.29"
+       width="55.432487"
+       height="84.556122"
+       x="189.48868"
+       y="37.904465" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.59"
+       width="57.309006"
+       height="85.19651"
+       x="128.29204"
+       y="450.32556" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.35"
+       width="62.202206"
+       height="82.612259"
+       x="188.55042"
+       y="563.70746" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.53"
+       width="65.117943"
+       height="80.66848"
+       x="121.48867"
+       y="977.74084" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.41"
+       width="56.404396"
+       height="81.971954"
+       x="189.48868"
+       y="1086.5947" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.47"
+       width="66.089851"
+       height="80.66848"
+       x="119.54485"
+       y="1503.5438" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.22"
+       width="70.949402"
+       height="82.612312"
+       x="398.48285"
+       y="902.90381" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.15"
+       width="68"
+       height="85.19648"
+       x="400.42667"
+       y="1512.6226" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.28"
+       width="64.146004"
+       height="80.999992"
+       x="403.34241"
+       y="404.3143" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="7.21"
+       width="66.056175"
+       height="81.64035"
+       x="404.3143"
+       y="1016.6172" />
   </g>
 </svg>

@@ -44,7 +44,7 @@
      showgrid="false"
      inkscape:zoom="1.2646927"
      inkscape:cx="380.02107"
-     inkscape:cy="1283.8975"
+     inkscape:cy="792.41468"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -182,5 +182,47 @@
        height="88.559059"
        x="245.90955"
        y="1184.4774" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.1"
+       width="68.791405"
+       height="90.14048"
+       x="208.74637"
+       y="67.209999" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.17"
+       width="66.419304"
+       height="89.349747"
+       x="142.32707"
+       y="514.74957" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.27"
+       width="68.000717"
+       height="85.255768"
+       x="380.32956"
+       y="537.67999" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.18"
+       width="73.535652"
+       height="86.837181"
+       x="136.79213"
+       y="684.75134" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.31"
+       width="65.581406"
+       height="91.07164"
+       x="380.32956"
+       y="890.98511" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="5.10"
+       width="67.209999"
+       height="90.280945"
+       x="210.32777"
+       y="952.66016" />
   </g>
 </svg>
