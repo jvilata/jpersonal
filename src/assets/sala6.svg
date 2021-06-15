@@ -44,7 +44,7 @@
      showgrid="false"
      inkscape:zoom="1.0289025"
      inkscape:cx="266.1627"
-     inkscape:cy="1324.9636"
+     inkscape:cy="960.10031"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -193,5 +193,47 @@
        height="208.45457"
        x="1234.4137"
        y="2129.7473" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.32"
+       width="134.13597"
+       height="172.2016"
+       x="1163.7203"
+       y="114.08222" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.16"
+       width="130.51077"
+       height="175.82681"
+       x="1036.835"
+       y="616.18591" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.28"
+       width="119.63484"
+       height="161.32571"
+       x="1167.3456"
+       y="955.15112" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.12"
+       width="119.63479"
+       height="157.70035"
+       x="543.79456"
+       y="817.38983" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.6"
+       width="117.82216"
+       height="164.95082"
+       x="425.97241"
+       y="1647.5831" />
+    <rect
+       style="opacity:0;fill:#ff0000;stroke-width:1.86504"
+       id="6.22"
+       width="126.88544"
+       height="161.32561"
+       x="1042.2729"
+       y="1787.1569" />
   </g>
 </svg>
