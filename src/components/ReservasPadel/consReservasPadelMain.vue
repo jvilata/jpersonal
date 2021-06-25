@@ -15,6 +15,9 @@
             <small>{{ Object.keys(filterRecord).length > 1 ? filterRecord : 'Pulse para definir filtro' }}</small>
           </q-item-label>
         </q-item-section>
+        <q-item-section avatar>
+          <q-btn label="Normas" color="primary" @click="mostrarNormas"/>
+        </q-item-section>
         <q-item-section side>
           <q-btn
           @click="$emit('close')"
@@ -51,7 +54,7 @@ import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
 import personalFilter from 'components/ReservasPadel/consReservasPadelFilter.vue'
 import personalGrid from 'components/ReservasPadel/consReservasPadelGrid.vue'
-
+import { openURL } from "quasar"
 export default {
   props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
   data () {
@@ -72,6 +75,16 @@ export default {
   methods: {
     ...mapActions('login', ['desconectarLogin']),
     ...mapActions('empleados', ['loadListaDetalleEmpleados']),
+    mostrarNormas() {
+      let url = 'https://gestion.edicom.es/fichajes/normaspadel.pdf'
+      if (window.cordova === undefined) { // desktop
+        openURL(url)
+      } else { // estamos en un disp movil
+        document.addEventListener('deviceready', () => {
+          window.cordova.InAppBrowser.open(url, '_system') // openURL
+        }, false)
+      }
+    },
     getRecords (filter) {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
