@@ -330,6 +330,10 @@ export default {
       const fsol = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DDTHH:mm:ss')
       this.dialogSalaR1 = false
       // this.$refs.dialogSalaR1.hide()
+      if (fsol > date.addToDate(new Date(), { days: 7 })) {
+        this.$q.dialog({ title: 'Aviso', message: 'No puede reservar pista a más de 7 días vista' })
+        return
+      }
       var solapa = false
       this.value.forEach(valor => {
         const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
