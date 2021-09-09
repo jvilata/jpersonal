@@ -70,3 +70,6 @@ disposition, NSURLCredential *credential))completionHandler {
     completionHandler(NSURLSessionAuthChallengeUseCredential, 
     [NSURLCredential credentialForTrust:serverTrust]);
 }
+
+
+// 09/09/2021 - SUBIDO A GITLAB EDICOM
