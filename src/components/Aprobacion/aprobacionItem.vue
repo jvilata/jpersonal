@@ -168,19 +168,19 @@ export default {
           this.updatePermisoPendiente(permisoProv)
           .then((response) => {
             this.$emit('refresh')
-
-            let email = {
+            // jv. 8.7.2021 - se cambia el backend y envia ya el email y genera las reservas
+            /* let email = {
               to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
               from: 'edicom@edicom.es',
               subject: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`,
               text: `Vacaciones/Permiso aprobadas provisionalmente: ${this.formatDate(permisoProv.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permisoProv.sfechaHasta, 'DD/MM/YYYY')}`
             }
-            this.sendMail()
+            this.sendMail() */
           })
           .catch(error => console.log('addPermisoPendiente', error))
 
           //Bloque generar reservas vacaciones
-          let solicitud = {
+          /* let solicitud = {
             old_fechaDesde: this.item.sfechaDesde,
             old_fechaHasta: this.item.sfechaHasta,
             tecnico: this.item.empleadoIdpersonal,
@@ -194,7 +194,7 @@ export default {
           })
           .catch(error => {
             console.log('generarReservasVacaciones', error);
-          })
+          }) */
         }
         
        if (origin === 1) this.posInicial(reset)
@@ -214,33 +214,37 @@ export default {
         this.expanded = false
         this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
+          // jv. 8.7.2021 - se cambia la llamada al backend y ahora lo hace todo
           //Bloque añadir a Vacaciones
           let permiso =  {
-            diasEfectivos: this.item.diasEfectivos,
-            ejercicioAplicacion: this.item.ejercicioAplicacion,
-            empleado: this.item.empleado,
+            idSol: this.item.id,
+            // diasEfectivos: this.item.diasEfectivos,
+            // ejercicioAplicacion: this.item.ejercicioAplicacion,
+            // empleado: this.item.empleado,
             observaciones: this.aprobacion.observaciones,
-            sfechaDesde: this.item.sfechaDesde,
-            sfechaHasta: this.item.sfechaHasta,
-            ssustFdesde: this.aprobacion.ssustFdesde,
-            ssustFhasta: this.aprobacion.ssustFhasta,
+            // sfechaDesde: this.item.sfechaDesde,
+            // sfechaHasta: this.item.sfechaHasta,
+            fDesdeSust: this.aprobacion.ssustFdesde,
+            fHastaSust: this.aprobacion.ssustFhasta,
             sustituto: this.aprobacion.sustituto,
-            tipoDiaLibre: this.item.tipoDiaLibre
+            // tipoDiaLibre: this.item.tipoDiaLibre
           }
           this.addToVacaciones(permiso)
           .then(response => {
-            var resp = JSON.parse(response.data)
-            if (resp.success === true) {
+            this.$q.loading.hide()
+            if (response.success === true) {
+              this.$emit('refresh')
+
               //Bloque Borrar permiso
-              this.deletePermisoPendiente(this.item)
-              .then((response) => {
+              /* this.deletePermisoPendiente(this.item)
+               .then((response) => {
                 this.$emit('refresh')
-              })
+               })
               .catch(error => {
                 console.log('deletePermisoPendiente', error);
-              })
+              }) */
               //Bloque mandar correo-notificación
-              let mail = {
+              /* let mail = {
                 to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
                 from: 'edicom@edicom.es',
                 subject: `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
@@ -262,13 +266,13 @@ export default {
                 mail.text = `Solicitud ${this.item.tipoDiaDesc}, aprobada con id: #${this.item.id}# :: ${this.formatDate(permiso.sfechaDesde, 'DD/MM/YYYY')} -- ${this.formatDate(permiso.sfechaHasta, 'DD/MM/YYYY')}`
               }
             
-              this.sendMail(mail)
+              this.sendMail(mail) */
             }
           })
-          .catch(error => console.log('addToVacaciones', error))
+          .catch(error => {  this.$q.loading.hide(); console.log('addToVacaciones', error) })
 
           //Bloque generar reservas vacaciones
-          let solicitud = {
+          /* let solicitud = {
             old_fechaDesde: this.item.sfechaDesde,
             old_fechaHasta: this.item.sfechaHasta,
             tecnico: this.item.empleadoIdpersonal,
@@ -282,7 +286,7 @@ export default {
           })
           .catch(error => {
             console.log('generarReservasVacaciones', error);
-          })
+          }) */
 
          //La solicitud es de Cambio Horario o de Teletrabajo  
         } else {
@@ -330,15 +334,16 @@ export default {
         this.expanded = false
         this.$q.loading.show()
         if (this.item.tipoSolicitud === 'PERMISO') {
+          // jv. 8.7.2021 - se cambia backed y ahiora deletePermisoPendiente lo hace todo, reservas y email
           //Bloque Rechazar solicitud
-          let solicitud = {
+          /* let solicitud = {
             old_fechaDesde: this.item.sfechaDesde,
             old_fechaHasta: this.item.sfechaHasta,
             tecnico: this.item.empleadoIdpersonal
           }
           this.rechazarPermiso(solicitud)
           .then(response => {
-            if (response.data == "OK") {
+            if (response.data == "OK") { */
               //Bloque borrar
               this.deletePermisoPendiente(this.item)
               .then((response) => {
@@ -347,7 +352,7 @@ export default {
               .catch(error => {
                 console.log('deletePermisoPendiente', error)
               })
-
+          /*
               //Send email
               let mail = {
                 to: `${this.item.empleadoEmail}; ${this.item.empleadoEmailNotif ? this.item.empleadoEmailNotif : ''}`,
@@ -355,10 +360,10 @@ export default {
                 subject: `Vacaciones/Permiso denegadas: ${data}`,
                 text: `Vacaciones/Permiso denegadas: ${data}. Del ${this.formatDate(solicitud.old_fechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.old_fechaHasta, 'DD/MM/YYYY')}\nConsulta con tu responsable si necesitas más aclaración.`
               } 
-              this.sendMail(mail)
-            }
+              this.sendMail(mail) 
+            } 
           })
-          .catch(error => console.log('rechazarPermiso', error))
+          .catch(error => console.log('rechazarPermiso', error)) */
         } else  {
           var datossol = JSON.parse(this.item.datosSolicitud)
           datossol.observaciones = this.item.observaciones + (this.item.observaciones.length>0?'\n':'') + 'Motivo rechazo:' + data

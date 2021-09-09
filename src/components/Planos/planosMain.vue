@@ -82,6 +82,10 @@
             <div class="text-h6">Datos de reserva</div>
           </q-card-section>
           <q-form class="q-gutter-y-xs">
+            <div class="row">
+              <q-input class="col" label="Desde" outlined readonly :value="formateaFecha(filterRecord.fechaDesde)"/>
+              <q-input class="col" label="Hasta" outlined readonly :value="formateaFecha(filterRecord.fechaHasta)"/> 
+            </div>
             <q-input 
               label="Hora inicio"
               outlined 
@@ -249,32 +253,40 @@ export default {
     },
     reservaSalaReunionesOk () {
       this.$refs.dialogSalaR.hide()
-      var solapa = false
-      this.listaIDsReservados.forEach(valor => {
-        const fsol = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DD HH:mm:ss')
-        const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
-        if (valor.sala.substring(0,3) === 'reu' && valor.idmesa === this.mesaActiva.target.id &&
-          date.formatDate(fres, 'YYYY-MM-DD').substring(0,10) === this.filterRecord.fechaDesde.substring(0, 10) &&
-          ((fres.getTime() == fsol.getTime()) || (fres < fsol && date.addToDate(fres, { minutes: parseInt(valor.duracion) }) > fsol) ||
-           (fsol < fres && date.addToDate(fsol, { minutes: parseInt(this.filterRecord.duracion) }) > fres))) {
-          // es sala de reun y es la misma fecha y (una reserva anterior se solapa con la solic o la solic se solapa con una posterior)
-          this.$q.dialog({ title: 'Aviso', message: 'Esta reserva se solapa con otra ya existente: ' + valor.fechareserva + ' (' + valor.duracion + '\')' })
-          solapa = true
-          return
+      // para cada dia
+      for (var d = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DD HH:mm:ss'); d <= date.extractDate(this.filterRecord.fechaHasta.substring(0,10) + ' 23:59:00','YYYY-MM-DD HH:mm:ss'); d.setDate(d.getDate() + 1)) {
+        var solapa = false
+        this.listaIDsReservados.forEach(valor => {
+          const fsol = d // date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DD HH:mm:ss')
+          const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
+          if (valor.sala.substring(0,3) === 'reu' && valor.idmesa === this.mesaActiva.target.id &&
+            date.formatDate(fres, 'YYYY-MM-DD') === date.formatDate(d, 'YYYY-MM-DD') &&
+            ((fres.getTime() == fsol.getTime()) || (fres < fsol && date.addToDate(fres, { minutes: parseInt(valor.duracion) }) > fsol) ||
+            (fsol < fres && date.addToDate(fsol, { minutes: parseInt(this.filterRecord.duracion) }) > fres))) {
+            // es sala de reun y es la misma fecha y (una reserva anterior se solapa con la solic o la solic se solapa con una posterior)
+            this.$q.dialog({ title: 'Aviso', message: 'Esta reserva se solapa con otra ya existente: ' + valor.fechareserva + ' (' + valor.duracion + '\'). REVÍSELO, NO SE RESERVA ESTE DIA' })
+            solapa = true
+            // return
+          }
+        })
+        if (!solapa) {
+          var objfilter = {}
+          Object.assign(objfilter, this.filterRecord)
+          objfilter.fechaDesde = date.formatDate(d, 'YYYY-MM-DD HH:mm:ss')
+          objfilter.fechaHasta = date.formatDate(d, 'YYYY-MM-DD HH:mm:ss')
+          objfilter.idMesa = this.mesaActiva.target.id
+          objfilter.idPersonal = this.user.pers.idpersonal
+          objfilter.observaciones = btoa(objfilter.observaciones) // para que no altere los acentos
+          this.$axios.get(`bd_reservaMesas.asp?action=reservarMesa&auth=${this.user.auth}`, { params: objfilter }) // pasar e.target.id y la mesaAnterior para quitar reserva
+            .then(response => {              
+            })
+            .catch(error => {
+              this.$q.dialog({ title: 'Error', message: error.message })
+            })
         }
-      })
-      if (!solapa) {
-        const objfilter = this.filterRecord
-        objfilter.idMesa = this.mesaActiva.target.id
-        objfilter.idPersonal = this.user.pers.idpersonal
-        objfilter.observaciones = btoa(objfilter.observaciones) // para que no altere los acentos
-        return this.$axios.get(`bd_reservaMesas.asp?action=reservarMesa&auth=${this.user.auth}`, { params: objfilter }) // pasar e.target.id y la mesaAnterior para quitar reserva
-          .then(response => {
-            this.getRecords({ sala: this.filterRecord.sala, fechaDesde: this.filterRecord.fechaDesde, fechaHasta: this.filterRecord.fechaHasta })
-          })
-          .catch(error => {
-            this.$q.dialog({ title: 'Error', message: error })
-          })
+        if (date.formatDate(d, 'YYYY-MM-DD') === this.filterRecord.fechaHasta.substring(0, 10)) {
+          setTimeout(this.getRecords, 500, { sala: this.filterRecord.sala, fechaDesde: this.filterRecord.fechaDesde, fechaHasta: this.filterRecord.fechaHasta.substring(0,10) + ' 23:59:00' })
+        }
       }
       this.mesaActiva = null
     },

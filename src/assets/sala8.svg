@@ -44,7 +44,7 @@
      showgrid="false"
      inkscape:zoom="0.67521728"
      inkscape:cx="531"
-     inkscape:cy="2024.8948"
+     inkscape:cy="1074.0897"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -195,14 +195,14 @@
        y="998.1972" />
     <rect
        style="opacity:0"
-       id="8.11"
+       id="rect877"
        width="98"
        height="120"
        x="180.68259"
        y="1122.6016" />
     <rect
        style="opacity:0"
-       id="8.23"
+       id="rect881"
        width="98"
        height="120"
        x="85.898277"
@@ -326,5 +326,159 @@
        height="124.36574"
        x="79.974258"
        y="2270.4189" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.18"
+       width="100.70833"
+       height="119.96136"
+       x="79.974258"
+       y="590.9209" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.14"
+       width="99.481018"
+       height="121.40375"
+       x="179.20157"
+       y="710.9209" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.22"
+       width="94.784309"
+       height="122.92346"
+       x="85.898277"
+       y="1122.6016" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.11"
+       width="98"
+       height="120"
+       x="180.68259"
+       y="1122.6016" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.23"
+       width="94.784309"
+       height="119.96143"
+       x="85.898277"
+       y="1245.525" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.6"
+       width="111.07535"
+       height="119.96143"
+       x="180.68259"
+       y="1663.1683" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.28"
+       width="93.303307"
+       height="125.88538"
+       x="87.37928"
+       y="1783.1298" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.4"
+       width="96.518982"
+       height="127.32776"
+       x="180.68259"
+       y="1903.1298" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.30"
+       width="87.379272"
+       height="121.44238"
+       x="91.822296"
+       y="2030.4575" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.2"
+       width="93.303314"
+       height="118.51904"
+       x="179.20157"
+       y="2151.8999" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.59"
+       width="99.481018"
+       height="127.32788"
+       x="642.75604"
+       y="2020.1292" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.35"
+       width="91.822273"
+       height="124.44307"
+       x="550.93378"
+       y="1895.686" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.57"
+       width="95.037964"
+       height="125.84692"
+       x="644.23706"
+       y="1774.2822" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.37"
+       width="91.822289"
+       height="115.55691"
+       x="552.41479"
+       y="1658.7253" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.53"
+       width="97.999939"
+       height="124.36584"
+       x="639.79407"
+       y="1224.8295" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.41"
+       width="99.227295"
+       height="116.99939"
+       x="540.56671"
+       y="1107.8301" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.51"
+       width="95.038025"
+       height="125.84674"
+       x="639.79401"
+       y="978.98273" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.43"
+       width="98"
+       height="124.36578"
+       x="540.56671"
+       y="863.46436" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.49"
+       width="97.746338"
+       height="125.88538"
+       x="638.56671"
+       y="737.57898" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.45"
+       width="97.746338"
+       height="119.96143"
+       x="540.56671"
+       y="617.61755" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.10"
+       width="98"
+       height="119.96143"
+       x="180.68259"
+       y="1245.525" />
+    <rect
+       style="opacity:0;fill:#ff0000"
+       id="8.24"
+       width="90.341293"
+       height="116.99931"
+       x="90.341293"
+       y="1365.4865" />
   </g>
 </svg>

@@ -47,6 +47,8 @@
       <!-- formulario tabla de resultados de busqueda -->
       <personalGrid
         v-model="registrosSeleccionados"
+        @getRecords="getRecords"
+        :filterRecord="filterRecord"
         />
     </div>
 </template>

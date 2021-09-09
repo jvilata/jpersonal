@@ -37,6 +37,7 @@ const actions = {
         this.dispatch('mensajeLog/addMensaje', 'deleteCambios' + error, { root: true })
       })
   },
+  // esta funcion ya no se llamara, se hace todo desde addToVacaciones
   generarReservasVacaciones( { commit }, solicitud) {
     return axiosInstance.get(`bd_jpersonal.asp?action=reservas/aprobarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
   },
@@ -44,7 +45,13 @@ const actions = {
     return axiosInstance.get(`bd_jpersonal.asp?action=reservas/rechazarVac&auth=${login.state.user.auth}`, { params: solicitud }, { withCredentials: true })
   },
   addToVacaciones( { commit }, payload) {    
-    return axiosInstance.post(`bd_jpersonal.asp?action=vacaciones/id&auth=${login.state.user.auth}`, payload, { withCredentials: true })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    var formData = new FormData()
+    formData.append('idSol', payload.idSol)
+    formData.append('observaciones', payload.observaciones)
+    formData.append('fDesdeSust', payload.fDesdeSust)
+    formData.append('fHastaSust', payload.fHastaSust)
+    formData.append('sustituto', payload.sustituto)
+    return axiosInstance.post(`bd_jpersonal.asp?action=soldias/create/vacaciones&auth=${login.state.user.auth}`, formData, { withCredentials: true })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
   },
 
   aprobarCambiosEmpleado( { commit }, params) {  

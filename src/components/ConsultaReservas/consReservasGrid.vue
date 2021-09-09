@@ -16,6 +16,7 @@
       <template v-slot:header="props">
         <!-- CABECERA DE LA TABLA -->
         <q-tr :props="props">
+          <q-th></q-th>
           <q-th
             v-for="col in props.cols"
             :key="col.name"
@@ -30,6 +31,21 @@
 
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
+          <q-td>
+            <!-- columna de acciones: editar, borrar, etc -->
+            <div style="max-width: 70px">
+            <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
+            <q-btn flat v-if="rowId===`m_${props.row.id}`"
+              @click.stop="borrarReserva(props.row, props.row.id)"
+              round
+              dense
+              size="sm"
+              color="red"
+              icon="delete">
+              <q-tooltip>Borrar Reserva</q-tooltip>
+            </q-btn>
+            </div>
+          </q-td>
           <q-td
             v-for="col in props.cols"
             :key="col.name"
@@ -71,7 +87,7 @@ import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 
 export default {
-  props: ['value'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
+  props: ['value', 'filterRecord'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
   data () {
     return {
       expanded: false,
@@ -100,6 +116,20 @@ export default {
     ampliarImagen (record) {
       this.regper = record
       this.expanded = true
+    },
+    borrarReserva (reserva, id) {
+      this.$q.dialog({
+        title: 'Confirmar',
+        message: `¿ Desea anular su reserva de mesa ${reserva.id} del ${reserva.fechareserva} ?`,
+        ok: true,
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$axios.get(`bd_reservaMesas.asp?action=anularMesa&auth=${this.user.auth}`, { params: { id: reserva.id } }) // pasar e.target.id y la mesaAnterior para quitar reserva
+          .then(response => {
+            this.$emit('getRecords', this.filterRecord)
+          })
+      })
     },
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'
