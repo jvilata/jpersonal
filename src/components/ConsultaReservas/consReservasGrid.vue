@@ -35,7 +35,7 @@
             <!-- columna de acciones: editar, borrar, etc -->
             <div style="max-width: 70px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="rowId===`m_${props.row.id}`"
+            <q-btn flat v-if="props.row.calculada==='0' && rowId===`m_${props.row.id}`"
               @click.stop="borrarReserva(props.row, props.row.id)"
               round
               dense
@@ -52,7 +52,7 @@
             :props="props"
           >
             <div :style="col.style">
-              <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
+              <div v-if="!['foto'].includes(col.name)">{{ col.value }}{{col.name==='fechareserva' && props.row.calculada==='1'?'*':''}}</div>
               <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
             </div>
           </q-td>
