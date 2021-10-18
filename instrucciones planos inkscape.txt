@@ -1,0 +1,9 @@
+
+- abrir rl PDF (importar con calidad 1)
+- escalar 250% proporcional (seleccionando marco exterior objeto)
+- exportar imagen png 
+- salir y abrir imagen png 
+- ajustar tamaño svg y viewbox a width="778" height="1977" e imagen a 778 y height proporcional
+- definir objeto rectangular, ajustar opacidad
+- guardar
+- editar con notepad++ y ajustar width y height de los rect
