@@ -557,7 +557,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { date } from 'quasar'
-import { axiosInstance, headerFormData } from 'boot/axios.js'
 
 export default {
     props: ['value', 'id', 'keyValue'], 
@@ -850,7 +849,7 @@ export default {
             }
             if(this.condiciones) {
                 this.$q.loading.show()
-                axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data, headerFormData)
+                this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
                 .then(result => {
                     this.$q.loading.hide()
                    this.dialogMes = true

@@ -203,7 +203,6 @@ import InlineSvg from 'vue-inline-svg'
 import planosFilter from 'components/Planos/planosFilter.vue'
 import { date } from 'quasar'
 import { urlFotos } from 'boot/axios.js'
-import { axiosInstance, headerFormData } from 'boot/axios.js'
 export default {
   props: ['value', 'id', 'keyValue'], // se pasan como parametro desde mainTabs. value = { registrosSeleccionados: [], filterRecord: {} }
   data () {
@@ -462,7 +461,7 @@ export default {
 
           //Si tenemos el formulario de teletrabajo generamos una solicitud. 
           if(this.formReserva.reservaPermanente === '1' && this.formReserva.diasSemanaArr.length < 5){
-            axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data, headerFormData)
+            this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
             .then(result => {
               this.$q.notify({
                       message: `Se ha generado una solicitud de teletrabajo.`
