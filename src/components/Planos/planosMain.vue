@@ -198,7 +198,7 @@
 
 <script>
 // npm install vue-inline-svg
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import InlineSvg from 'vue-inline-svg'
 import planosFilter from 'components/Planos/planosFilter.vue'
 import { date } from 'quasar'
@@ -289,6 +289,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('empleados', ['calcularResponsable']),
     activarOKReserva (f) {
       var res = (f.reservaPermanente==='1') && (f.diasSemanaArr.length<5) && (f.aceptaTeletrabajoArr.length<4 || f.domicilioTeletrabajo==='' || f.teletrabajoObservaciones==='')
       return res
@@ -309,6 +310,13 @@ export default {
         const needle = val.toLowerCase()
         this.listaPaisesFilter = this.listaPaises.filter(v => v.descripcion.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    getDiasTeletrabajo(diasSemanaArr){
+      var diasSemana = "2,3,4,5,6"; 
+      for (var i = 0; i < diasSemanaArr.length; i++){
+        diasSemana = diasSemana.replace(diasSemanaArr[i], ''); // Eliminamos los días elegidos
+      }
+      return diasSemana;
     },
     handleStateHover (e) {
       if (e.target.tagName === 'rect' && (this.mesaActiva === null || e.target.id !== this.mesaActiva.target.id) &&
@@ -408,16 +416,59 @@ export default {
     },
     guardaReservaPermanente () {
       this.$refs.dialogReserva.hide()
+      var diasTeletrabajo = this.getDiasTeletrabajo(this.formReserva.diasSemanaArr);
       this.formReserva.diasSemana = (this.formReserva.diasSemanaArr !== null ? this.formReserva.diasSemanaArr.join() : null) // paso de array a concatenacion de strings (join)
       this.formReserva.aceptaTeletrabajo = (this.formReserva.aceptaTeletrabajoArr !== null ? this.formReserva.aceptaTeletrabajoArr.join() : null) // paso de array a concatenacion de strings (join)
       // if (this.formReserva.reservaPermanente === '0') delete this.formReserva.id // hago nuevas reservas
       this.formReserva.datosExtra = '{ "aceptaTeletrabajo": "' + this.formReserva.aceptaTeletrabajo + '", "domicilioTeletrabajo": "' + this.formReserva.domicilioTeletrabajo + '", "paisTeletrabajo": "' +
         this.formReserva.paisTeletrabajo + '", "teletrabajoObservaciones": "' + this.formReserva.teletrabajoObservaciones + '" }'
       this.formReserva.datosExtra = btoa(this.formReserva.datosExtra)
+      
+      var datosCambio = {
+        teletrabajoFechaDesde:this.formReserva.fechaDesde,
+				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DD'),
+				paisTeletrabajo:this.formReserva.paisTeletrabajo,
+				aceptaTeletrabajo:this.formReserva.aceptaTeletrabajo,
+				domicilioTeletrabajo: this.formReserva.domicilioTeletrabajo,
+				teletrabajoObservaciones:this.formReserva.teletrabajoObservaciones,
+        diasTeletrabajo: diasTeletrabajo
+      };
+      var data = {
+        consentimientos : '', 
+        datosSolicitud: JSON.stringify(datosCambio), 
+        denegada: false, 
+        diasEfectivos: 0,
+        ejercicioAplicacion: 0,
+        empleado: this.user.pers.id,
+        estadoSolicitud: 1,
+        estadoSolicitudDesc: '',
+        fechaAplicacionCambio: null,
+        fechaDesde: null,
+        fechaHasta: null,
+        fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
+        idAutorizadorOf: this.responsable,
+        nuevaVersion: true,
+        observaciones: this.formReserva.teletrabajoObservaciones,
+        sfechaDesde: null,
+        sfechaHasta: null,
+        tipoDiaLibre: 0,
+        tipoSolicitud: 'TELETRABAJO'
+      }
       return this.$axios.get(`bd_reservaMesas.asp?action=reservarMesa&auth=${this.user.auth}`, { params: this.formReserva }) // pasar e.target.id y la mesaAnterior para quitar reserva
         .then(response => {
           this.mesaActiva = null
           this.getRecords({ sala: this.filterRecord.sala, fechaDesde: this.filterRecord.fechaDesde, fechaHasta: this.filterRecord.fechaHasta })
+
+          //Si tenemos el formulario de teletrabajo generamos una solicitud. 
+          if(this.formReserva.reservaPermanente === '1' && this.formReserva.diasSemanaArr.length < 5){
+            this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
+            .then(result => {
+              this.$q.notify({
+                      message: `Se ha generado una solicitud de teletrabajo.`
+              })
+            })
+            .catch(error =>{})
+          }
         })
         .catch(error => {
           this.$q.dialog({ title: 'Error', message: error })
@@ -510,6 +561,18 @@ export default {
         })
     }
   },
+
+  mounted(){
+    console.log('calculamos responsable')
+    this.calcularResponsable({ id: this.user.pers.id, tipoSol: 2 })
+      .then(response => {
+          this.responsable = JSON.parse(response.data.msg).idResp[0]
+          })
+      .catch(error => {
+          console.log('calcularResponsable', error);
+      })
+  },
+
   computed: {
     ...mapState('login', ['user']), // importo state.user desde store-login
     ...mapState('tablasAux', ['listaSalas', 'listaSINO']),
