@@ -312,6 +312,13 @@ export default {
         this.listaPaisesFilter = this.listaPaises.filter(v => v.descripcion.toLowerCase().indexOf(needle) > -1)
       })
     },
+    getDiasTeletrabajo(diasSemanaArr){
+      var diasSemana = "2,3,4,5,6"; 
+      for (var i = 0; i < diasSemanaArr.length; i++){
+        diasSemana = diasSemana.replace(diasSemanaArr[i], ''); // Eliminamos los días elegidos
+      }
+      return diasSemana;
+    },
     handleStateHover (e) {
       if (e.target.tagName === 'rect' && (this.mesaActiva === null || e.target.id !== this.mesaActiva.target.id) &&
         this.listaIDsReservados.findIndex(valor => valor.idmesa === e.target.id) < 0 && this.mesaSeleccionada !== e.target.id) {
@@ -410,19 +417,22 @@ export default {
     },
     guardaReservaPermanente () {
       this.$refs.dialogReserva.hide()
+      var diasTeletrabajo = this.getDiasTeletrabajo(this.formReserva.diasSemanaArr);
       this.formReserva.diasSemana = (this.formReserva.diasSemanaArr !== null ? this.formReserva.diasSemanaArr.join() : null) // paso de array a concatenacion de strings (join)
       this.formReserva.aceptaTeletrabajo = (this.formReserva.aceptaTeletrabajoArr !== null ? this.formReserva.aceptaTeletrabajoArr.join() : null) // paso de array a concatenacion de strings (join)
       // if (this.formReserva.reservaPermanente === '0') delete this.formReserva.id // hago nuevas reservas
       this.formReserva.datosExtra = '{ "aceptaTeletrabajo": "' + this.formReserva.aceptaTeletrabajo + '", "domicilioTeletrabajo": "' + this.formReserva.domicilioTeletrabajo + '", "paisTeletrabajo": "' +
         this.formReserva.paisTeletrabajo + '", "teletrabajoObservaciones": "' + this.formReserva.teletrabajoObservaciones + '" }'
       this.formReserva.datosExtra = btoa(this.formReserva.datosExtra)
+      
       var datosCambio = {
         teletrabajoFechaDesde:this.formReserva.fechaDesde,
 				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DD'),
 				paisTeletrabajo:this.formReserva.paisTeletrabajo,
 				aceptaTeletrabajo:this.formReserva.aceptaTeletrabajo,
 				domicilioTeletrabajo: this.formReserva.domicilioTeletrabajo,
-				teletrabajoObservaciones:this.formReserva.teletrabajoObservaciones
+				teletrabajoObservaciones:this.formReserva.teletrabajoObservaciones,
+        diasTeletrabajo: diasTeletrabajo
       };
       var data = {
         consentimientos : '', 
