@@ -425,8 +425,8 @@ export default {
       this.formReserva.datosExtra = btoa(this.formReserva.datosExtra)
       
       var datosCambio = {
-        teletrabajoFechaDesde:date.formatDate(this.formReserva.fechaDesde, 'YYYY-MM-DDTHH:mm:ss'),
-				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DDTHH:mm:ss'),
+        teletrabajoFechaDesde:date.formatDate(this.formReserva.fechaDesde, 'YYYY-MM-DDT00:00:00'),
+				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DDT00:00:00'),
 				paisTeletrabajo:this.formReserva.paisTeletrabajo,
 				aceptaTeletrabajo:this.formReserva.aceptaTeletrabajo,
 				domicilioTeletrabajo: this.formReserva.domicilioTeletrabajo,
