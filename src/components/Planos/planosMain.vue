@@ -282,7 +282,7 @@ export default {
         diasSemana: '',
         aceptaTeletrabajoArr: [],
         aceptaTeletrabajo: '',
-        paisTeletrabajo: 'ESPAÑA',
+        paisTeletrabajo: 'ES',
         domicilioTeletrabajo: '',
         teletrabajoObservaciones: ''
       }
@@ -403,7 +403,7 @@ export default {
                   this.formReserva.diasSemanaArr = ['2', '3', '4', '5', '6'],
                   this.formReserva.aceptaTeletrabajoArr = [],
                   this.formReserva.aceptaTeletrabajo = '',
-                  this.formReserva.paisTeletrabajo = 'ESPAÑA',
+                  this.formReserva.paisTeletrabajo = 'ES',
                   this.formReserva.domicilioTeletrabajo = '',
                   this.formReserva.teletrabajoObservaciones = ''
                 }
@@ -425,8 +425,8 @@ export default {
       this.formReserva.datosExtra = btoa(this.formReserva.datosExtra)
       
       var datosCambio = {
-        teletrabajoFechaDesde:this.formReserva.fechaDesde,
-				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DD'),
+        teletrabajoFechaDesde:date.formatDate(this.formReserva.fechaDesde, 'YYYY-MM-DDTHH:mm:ss'),
+				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DDTHH:mm:ss'),
 				paisTeletrabajo:this.formReserva.paisTeletrabajo,
 				aceptaTeletrabajo:this.formReserva.aceptaTeletrabajo,
 				domicilioTeletrabajo: this.formReserva.domicilioTeletrabajo,
@@ -521,7 +521,7 @@ export default {
       this.vbleStyle = 3000
     },
     parseaDatosExtraJSON(v) {
-      var obj = { aceptaTeletrabajo: '', paisTeletrabajo: 'ESPAÑA', domicilioTeletrabajo: '', teletrabajoObservaciones: '' }
+      var obj = { teletrabajoFechaDesde: '', teletrabajoFechaHasata: '', aceptaTeletrabajo: '', paisTeletrabajo: 'ES', domicilioTeletrabajo: '', teletrabajoObservaciones: '' }
       try {
         obj = JSON.parse(atob(v))
       }
