@@ -96,6 +96,16 @@
                       :rules="[val => !!val || 'Campo obligatorio']"
                       class="col-xs-12" />
               </div>
+              <div>
+                  <div class="col-xs-4">Días Teletrabajo</div>
+                  <q-option-group
+                  v-model="diasTele"
+                  :options="diasSemana"
+                  type="checkbox"
+                  color="primary"
+                  inline
+                  />
+              </div>
               <div class="row q-pa-sm" >
                   <div class="col-xs-12">
                   <q-input v-model="recordToSubmit.teletrabajoObservaciones" label="Motivo Teletrabajo" clearable autogrow @keyup.enter.stop />
@@ -164,7 +174,7 @@
               </div>
               <div class="row q-pb-md justify-center" >
                   <div class="col-xs-10 q-mt-sm" style="max-width: 150px">
-                      <q-btn type="submit" :disabled="!val1 || !val2 || !val3 || !val4 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
+                      <q-btn type="submit" :disabled="!val1 || !val2 || !val3 || !val4 || diasTele.length == 0 ? !disabled : disabled" color="primary" label="Solicitar Teletrabajo" style="max-height: 50px"/>
                   </div>
               </div>
           </div>
@@ -191,7 +201,8 @@ export default {
                 paisTeletrabajo: '',
                 aceptaTeletrabajo: false,
                 domicilioTeletrabajo: '',
-                teletrabajoObservaciones: ''
+                teletrabajoObservaciones: '',
+                diasTeletrabajo: ''
             },
             val1: false,
             val2: false,
@@ -202,7 +213,30 @@ export default {
             disabled: false,
             listaPaisesFilter: [],
             responsable: 0,
-            dialogMes: false
+            dialogMes: false,
+            diasTele : [],
+            diasSemana: [{
+              label: 'L',
+              value: '2'
+            },{
+              label: 'M',
+              value: '3'
+            },{
+              label: 'X',
+              value: '4'
+            },{
+              label: 'J',
+              value: '5'
+            },{
+              label: 'V',
+              value: '6'
+            },{
+              label: 'S',
+              value: '7'
+            }, {
+              label: 'D',
+              value: '1'
+            }],
         }
     }, 
     computed:{
@@ -274,6 +308,7 @@ export default {
 
     solicitarTeletrabajo(){
       if(this.val1 && this.val2 && this.val3 && this.val4) {this.recordToSubmit.aceptaTeletrabajo = true}
+      this.recordToSubmit.diasTeletrabajo = this.diasTele.join();
         var data = {
             consentimientos: '',
             datosSolicitud: JSON.stringify(this.recordToSubmit),
