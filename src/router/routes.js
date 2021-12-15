@@ -140,6 +140,12 @@ const routes = [
             name: 'fichajesMain', 
             component: () => import('components/Fichajes/fichajesMain.vue'), 
             props: true 
+          },
+          {
+            path: 'cargaTele', 
+            name: 'cargaTele', 
+            component: () => import('components/cargaTele/cargaTele.vue'), 
+            props: true 
           }
       ]
       },

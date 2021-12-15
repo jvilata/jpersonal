@@ -199,6 +199,15 @@ export default {
             opcion: 3,
             label: 'Dashboard'
           }
+        },
+        {
+          title: 'Carga Tele',
+          icon: 'dashboard',
+          link: {
+            name: 'cargaTele',
+            opcion: 3,
+            label: 'Carga Tele'
+          }
         }
       ]
     }
