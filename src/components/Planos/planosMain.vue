@@ -535,6 +535,10 @@ export default {
       }
       return this.$axios.get(`bd_reservaMesas.asp?action=findReservaMesas&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
+          if(typeof response.data !== 'object'){
+            this.$q.dialog({ title: 'Aviso', message: 'No se pueden cargar tantos datos, por favor busca un periodo más corto' })
+            return;
+          }
           this.registrosSeleccionados = response.data
           this.registrosSeleccionados.sort(function (a, b) { // ordeno el array por etiquetavalor
             return (a.idpersonal + a.fechareserva.substring(6, 10) + a.fechareserva.substring(3, 5) + a.fechareserva.substring(0, 2)).localeCompare(b.idpersonal + b.fechareserva.substring(6, 10) + b.fechareserva.substring(3, 5) + b.fechareserva.substring(0, 2))

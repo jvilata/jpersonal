@@ -36,8 +36,8 @@
     <div class="row q-pb-sm">
       <span class="col-4 q-pr-sm text-grey-8" dense>Viernes</span>
         <q-input class="col" :value="horaEnt3" label="Desde" stack-label dense readonly/>
-        <q-input class="col" :value="horaEnt4" label="Desde" stack-label dense readonly/>
         <q-input class="col" :value="horaSal3" label="Hasta" stack-label dense readonly/>
+        <q-input class="col" :value="horaEnt4" label="Desde" stack-label dense readonly/>
         <q-input class="col" :value="horaSal4" label="Hasta" stack-label dense readonly/>
     </div>
     

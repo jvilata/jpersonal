@@ -22,8 +22,19 @@
     <div class="row q-pb-sm">
         <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="item.nomAutorizadorOf" label="Autorizador 1" stack-label dense readonly/>
     </div>
-    <div class="row q-pb-sm">
+    <div class="row q-pb-md">
         <q-input class="col-12 q-pr-sm q-mt-sm"  v-model="datosSolicitud.teletrabajoObservaciones" label="Observaciones" stack-label dense readonly/>
+    </div>
+    <div class="q-pb-sm">
+      <div>Días Teletrabajo</div>
+       <q-option-group
+                v-model="diasTele"
+                :options="diasSemana"
+                type="checkbox"
+                color="primary"
+                inline
+                disable
+              />
     </div>
     <div class="row items-baseline">
       <div class="col-xs-1">
@@ -104,8 +115,32 @@ export default {
         teletrabajoFechaHasta: '',
         aceptaTeletrabajo: true,
         domicilioTeletrabajo: '',
-        teletrabajoObservaciones:''
-      }
+        teletrabajoObservaciones:'',
+        diasTeletrabajo: ''
+      },
+      diasTele:[],
+      diasSemana: [{
+          label: 'L',
+          value: '2'
+        },{
+          label: 'M',
+          value: '3'
+        },{
+          label: 'X',
+          value: '4'
+        },{
+          label: 'J',
+          value: '5'
+        },{
+          label: 'V',
+          value: '6'
+        },{
+          label: 'S',
+          value: '7'
+        }, {
+          label: 'D',
+          value: '1'
+        }],
     }
   },
   methods: {
@@ -146,7 +181,8 @@ export default {
   mounted() {
     if(this.item.datosSolicitud) {
       var obj = JSON.parse(this.item.datosSolicitud)
-      Object.assign(this.datosSolicitud, obj)     
+      Object.assign(this.datosSolicitud, obj)    
+      this.diasTele = this.datosSolicitud.diasTeletrabajo.replaceAll('false', '').split(',')
   }
 }
 }
