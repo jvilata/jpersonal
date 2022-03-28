@@ -330,7 +330,7 @@ export default {
       const fsol = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DDTHH:mm:ss')
       this.dialogSalaR1 = false
       // this.$refs.dialogSalaR1.hide()
-      if (fsol > date.addToDate(new Date(), { days: 7 })) {
+      if (![16, 33, 36, 37].includes(this.user.pers.area) && (fsol > date.addToDate(new Date(), { days: 7 }))) {
         this.$q.dialog({ title: 'Aviso', message: 'No puede reservar pista a más de 7 días vista' })
         return
       }
