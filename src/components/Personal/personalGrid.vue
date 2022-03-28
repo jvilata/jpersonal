@@ -39,7 +39,7 @@
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
               <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
               <div v-if="col.name==='vigente'">
-                <q-checkbox v-model="props.row.vigente" />
+                <q-checkbox disable v-model="props.row.vigente" />
               </div>
             </div>
           </q-td>
@@ -87,6 +87,7 @@ export default {
         { name: 'id', label: 'IdEmpleado', align: 'left', field: 'id', sortable: true, style: 'width: 20px' },
         { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
         { name: 'areaNombre', align: 'left', label: 'Area', field: 'areaNombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'email', align: 'left', label: 'Email', field: 'email', sortable: true },
         { name: 'extension', align: 'left', label: 'Extension', field: 'extension', sortable: true },
         { name: 'paisLaboral', align: 'left', label: 'Pais Lab', field: 'paisLaboral', sortable: true, style: 'width: 30px' },
         { name: 'pais', align: 'left', label: 'Pais', field: 'pais', sortable: true, style: 'width: 20px' },

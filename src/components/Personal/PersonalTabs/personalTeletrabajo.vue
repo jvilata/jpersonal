@@ -14,6 +14,16 @@
               <q-input filled readonly :value="formatDate(recordToSubmit.teletrabajoFechaHasta)" />
             </div>
       </div>
+      <div>
+         <q-option-group
+                v-model="diasTele"
+                :options="diasSemana"
+                type="checkbox"
+                color="primary"
+                inline
+                disable
+              />
+      </div>
       <div class="col-xs-12 q-pa-sm" style="max-width: 380px">
         <q-input readonly v-model="recordToSubmit.teletrabajoObservaciones" label="Observaciones" autogrow @keyup.enter.stop />
       </div>
@@ -38,7 +48,30 @@ export default {
   data () {
     return {
       expanded: false,
-      recordToSubmit: {}
+      recordToSubmit: {},
+      diasTele:[],
+      diasSemana: [{
+          label: 'L',
+          value: '2'
+        },{
+          label: 'M',
+          value: '3'
+        },{
+          label: 'X',
+          value: '4'
+        },{
+          label: 'J',
+          value: '5'
+        },{
+          label: 'V',
+          value: '6'
+        },{
+          label: 'S',
+          value: '7'
+        }, {
+          label: 'D',
+          value: '1'
+        }],
     }
   },
   computed: {
@@ -67,6 +100,7 @@ export default {
               this.timer = void 0
             }, 250)
          this.recordToSubmit = Object.assign({}, response.data) 
+         this.diasTele = this.recordToSubmit.teletrabajoDias.split(',')
        })
   },
   beforeMount(){

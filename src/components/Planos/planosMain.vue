@@ -282,7 +282,7 @@ export default {
         diasSemana: '',
         aceptaTeletrabajoArr: [],
         aceptaTeletrabajo: '',
-        paisTeletrabajo: 'ESPAÑA',
+        paisTeletrabajo: 'ES',
         domicilioTeletrabajo: '',
         teletrabajoObservaciones: ''
       }
@@ -403,7 +403,7 @@ export default {
                   this.formReserva.diasSemanaArr = ['2', '3', '4', '5', '6'],
                   this.formReserva.aceptaTeletrabajoArr = [],
                   this.formReserva.aceptaTeletrabajo = '',
-                  this.formReserva.paisTeletrabajo = 'ESPAÑA',
+                  this.formReserva.paisTeletrabajo = 'ES',
                   this.formReserva.domicilioTeletrabajo = '',
                   this.formReserva.teletrabajoObservaciones = ''
                 }
@@ -425,8 +425,8 @@ export default {
       this.formReserva.datosExtra = btoa(this.formReserva.datosExtra)
       
       var datosCambio = {
-        teletrabajoFechaDesde:this.formReserva.fechaDesde,
-				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DD'),
+        teletrabajoFechaDesde:date.formatDate(this.formReserva.fechaDesde, 'YYYY-MM-DDT00:00:00'),
+				teletrabajoFechaHasta: date.formatDate(new Date(2090,11,31), 'YYYY-MM-DDT00:00:00'),
 				paisTeletrabajo:this.formReserva.paisTeletrabajo,
 				aceptaTeletrabajo:this.formReserva.aceptaTeletrabajo,
 				domicilioTeletrabajo: this.formReserva.domicilioTeletrabajo,
@@ -521,7 +521,7 @@ export default {
       this.vbleStyle = 3000
     },
     parseaDatosExtraJSON(v) {
-      var obj = { aceptaTeletrabajo: '', paisTeletrabajo: 'ESPAÑA', domicilioTeletrabajo: '', teletrabajoObservaciones: '' }
+      var obj = { teletrabajoFechaDesde: '', teletrabajoFechaHasata: '', aceptaTeletrabajo: '', paisTeletrabajo: 'ES', domicilioTeletrabajo: '', teletrabajoObservaciones: '' }
       try {
         obj = JSON.parse(atob(v))
       }
@@ -535,6 +535,10 @@ export default {
       }
       return this.$axios.get(`bd_reservaMesas.asp?action=findReservaMesas&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
+          if(typeof response.data !== 'object'){
+            this.$q.dialog({ title: 'Aviso', message: 'No se pueden cargar tantos datos, por favor busca un periodo más corto' })
+            return;
+          }
           this.registrosSeleccionados = response.data
           this.registrosSeleccionados.sort(function (a, b) { // ordeno el array por etiquetavalor
             return (a.idpersonal + a.fechareserva.substring(6, 10) + a.fechareserva.substring(3, 5) + a.fechareserva.substring(0, 2)).localeCompare(b.idpersonal + b.fechareserva.substring(6, 10) + b.fechareserva.substring(3, 5) + b.fechareserva.substring(0, 2))
