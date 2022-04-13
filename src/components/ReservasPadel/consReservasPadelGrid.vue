@@ -35,7 +35,7 @@
             <!-- columna de acciones: editar, borrar, etc -->
             <div style="max-width: 70px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="rowId===`m_${props.row.id}` && props.row.idpersonal == user.pers.idpersonal"
+            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idpersonal == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
               @click.stop="editarPartida(props.row, props.row.id)"
               round
               dense
@@ -44,7 +44,7 @@
               icon="edit">
               <q-tooltip>Editar Partida</q-tooltip>
             </q-btn>
-            <q-btn flat v-if="rowId===`m_${props.row.id}` && props.row.idpersonal == user.pers.idpersonal"
+            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idpersonal == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
               @click.stop="anularPartida(props.row, props.row.id)"
               round
               dense

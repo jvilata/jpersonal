@@ -71,9 +71,9 @@
           
         </q-list>
       </q-scroll-area>
-       <div clickable @click="emailUs()" class="text-caption absolute-bottom text-grey-8 q-pb-xl q-pl-md">
+       <!-- div clickable @click="emailUs()" class="text-caption absolute-bottom text-grey-8 q-pb-xl q-pl-md">
         appstore@edicomgroup.com
-      </div>
+      </div -->
 
       <q-img v-if="!miniState" class="absolute-top" src="~assets/logo-edicom.png" :style="screen==='fullScreen' ? 'margin-top:35px' :screen==='sqScreen' ? 'margin-top:20px' : ''"/>
       <q-img v-if="miniState" class="absolute-top" src="~assets/logo-ed1.png" :style="screen==='fullScreen' ? 'margin-top:35px' :screen==='sqScreen' ? 'margin-top:20px' : ''"/>
@@ -201,6 +201,15 @@ export default {
           }
         },
         {
+          title: 'Email Us',
+          icon: 'email',
+          link: {
+            name: 'emailus',
+            opcion: 1,
+            label: 'Email Us'
+          }
+        }
+        /* {
           title: 'Carga Tele',
           icon: 'dashboard',
           link: {
@@ -208,7 +217,7 @@ export default {
             opcion: 3,
             label: 'Carga Tele'
           }
-        }
+        } */
       ]
     }
   },
@@ -230,7 +239,11 @@ export default {
     ...mapActions('login', ['desconectarLogin', 'setScreen']),
     ...mapActions('permisos', ['getPermisosConcedidos']),
     openForm (link) {
-      this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
+      if (link.name === 'emailus') {
+        this.emailUs()
+      } else {
+        this.addTab([link.name, link.label, {}, link.opcion ? link.opcion : 1])
+      }
     },
     emailUs() {
       window.location.href='mailto:appstore@edicomgroup.com?subject=Informacion JPersonal App'
