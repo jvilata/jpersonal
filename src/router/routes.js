@@ -142,10 +142,10 @@ const routes = [
             props: true 
           },
           {
-            path: 'cargaTele', 
-            name: 'cargaTele', 
-            component: () => import('components/cargaTele/cargaTele.vue'), 
-            props: true 
+            path: 'clubSocialMain',
+            name: 'clubSocialMain',
+            component:() => import('components/ClubSocial/clubSocialMain.vue'),
+            props: true
           }
       ]
       },

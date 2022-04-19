@@ -199,8 +199,15 @@ export default {
             opcion: 3,
             label: 'Dashboard'
           }
-        },
-        {
+        },{
+          title: 'Club Social',
+          icon: 'sports_esports',
+          link:{
+            name: 'clubSocialMain',
+            opcion: 1, 
+            label: 'Club Social'
+          }
+        },{
           title: 'Email Us',
           icon: 'email',
           link: {
