@@ -21,30 +21,29 @@
       </q-item>
       <!-- formulario tabla de resultados de busqueda -->
       <div class="row">
-          <div class="col-xs-12 col-sm-4"> 
+          <div class="col-xs-12 col-sm-3"> 
             <q-card class="q-ma-md">
                 <q-card-section class="bg-primary text-white">
-                    <div class="text-h6">Aforo Actual</div>
+                    <div class="text-h6">CONTROL DE AFORO</div>
                 </q-card-section>
-                <q-card-section horizontal class="q-pa-sm">
-                  <div class="col-xs-12 col-sm-6">
+                <q-card-section class="q-pa-lg">
+                  <div>
                      <VueSvgGauge
                     :start-angle="-110"
                     :end-angle="110"
                     :value= "parseInt(aforo)"
                     :separator-step="5"
-                    :max="65"
+                    :max = "limite"
                     :gauge-color="[{ offset: 0, color: '#64bf8a' }, { offset: 100, color: '#347AB0' }]"
                     :scale-interval="1"
                     :inner-radius="60"
                     :separator-thickness="1"
                      base-color="#d0cdcd"
                     >
+                     <div style="display: flex; justify-content: center;margin-top: 75px; font-size: 20px;">
+                      <span style=" max-width: 100px">{{ aforo }} / {{limite}}</span>
+                      </div>
                   </VueSvgGauge>
-                  </div>
-                  <div class="col-xs-12 col-sm-6 q-ma-md" style="text-align:center">
-                    <div class="text-h5">Nº Personas actual</div>
-                    <div class="text-h4">{{aforo}}</div>
                   </div>
                 </q-card-section>
                 <q-separator />
@@ -77,6 +76,7 @@ export default {
     return {
       nomFormulario: 'Club Social',
       aforo: 0,
+      limite: 65
       // listaPersonasHorariosAcum: [],
       // listaPersonasFichajes: [],
       // listaFichajesDetalle: []
@@ -107,3 +107,22 @@ export default {
   }
 }
 </script>
+<style lang="stylus">
+  #app {
+    .inner-text {
+      &--1, &--3 {
+        display: flex
+        justify-content: center
+        margin-top: 85px
+        font-size: 20px
+        color: #de3a21
+        font-weight: bold
+        span { max-width: 100px }
+      }
+      &--3 {
+        margin-top: 70px
+      }
+
+    }
+  }
+</style>
