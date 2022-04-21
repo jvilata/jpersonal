@@ -21,7 +21,7 @@
       </q-item>
       <!-- formulario tabla de resultados de busqueda -->
       <div class="row">
-          <div class="col"> 
+          <div class="col-xs-12 col-sm-4"> 
             <q-card class="q-ma-md">
                 <q-card-section class="bg-primary text-white">
                     <div class="text-h6">Aforo Actual</div>
@@ -29,19 +29,20 @@
                 <q-card-section horizontal class="q-pa-sm">
                   <div class="col-xs-12 col-sm-6">
                      <VueSvgGauge
-                    :start-angle="-95"
-                    :end-angle="95"
-                    :value="parseInt(aforo)"
-                    :separator-step="80"
-                    :gauge-color="[{ offset: 0, color: '#0b8c5a'}, { offset: 80, color: '#f4c009'} , { offset: 100, color: '#de3a21'}]"
-                    :scale-interval="5"
-                    :inner-radius="80"
+                    :start-angle="-110"
+                    :end-angle="110"
+                    :value= "parseInt(aforo)"
+                    :separator-step="5"
+                    :max="65"
+                    :gauge-color="[{ offset: 0, color: '#64bf8a' }, { offset: 100, color: '#347AB0' }]"
+                    :scale-interval="1"
+                    :inner-radius="60"
                     :separator-thickness="1"
-                    base-color="#d0cdcd"
+                     base-color="#d0cdcd"
                     >
                   </VueSvgGauge>
                   </div>
-                  <div class="col-xs-12 col-sm-6 q-ma-xl" style="text-align:center">
+                  <div class="col-xs-12 col-sm-6 q-ma-md" style="text-align:center">
                     <div class="text-h5">Nº Personas actual</div>
                     <div class="text-h4">{{aforo}}</div>
                   </div>
@@ -51,14 +52,14 @@
                     <q-btn flat @click="getAforoActual">Refrescar</q-btn>
                 </q-card-actions>
               </q-card>
-            </div> 
-           <div class="col">
-            <!-- <clubSocialGrid
-                v-model="listaPersonasFichajes"
-                :listaFichajesDetalle="listaFichajesDetalle"
-                :listaPersonasHorariosAcum="listaPersonasHorariosAcum"
-                /> -->
-           </div>
+          </div> 
+          <div class="col-xs-12 col-sm-8">
+          <!-- <clubSocialGrid
+              v-model="listaPersonasFichajes"
+              :listaFichajesDetalle="listaFichajesDetalle"
+              :listaPersonasHorariosAcum="listaPersonasHorariosAcum"
+              /> -->
+          </div>
       </div>
     </div>
 </template>
