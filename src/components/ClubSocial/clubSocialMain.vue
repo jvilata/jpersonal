@@ -52,12 +52,12 @@
                 </q-card-actions>
               </q-card>
           </div> 
-          <div class="col-xs-12 col-sm-8">
-          <!-- <clubSocialGrid
+          <div class="col-xs-12 col-sm-9">
+           <!-- <clubSocialGrid
               v-model="listaPersonasFichajes"
               :listaFichajesDetalle="listaFichajesDetalle"
               :listaPersonasHorariosAcum="listaPersonasHorariosAcum"
-              /> -->
+              />  -->
           </div>
       </div>
     </div>
@@ -68,7 +68,7 @@
 import { mapState, mapActions } from 'vuex'
 import { axiosInstance, headerFormData } from 'boot/axios.js'
 import {VueSvgGauge} from 'vue-svg-gauge'
-//import {clubSocialGrid} from 'components/ClubSocial/ClubSocialGrid.vue'
+//import clubSocialGrid from 'components/ClubSocial/ClubSocialGrid.vue'
 
 export default {
   props: ['value', 'id', 'keyValue'], 
@@ -76,7 +76,7 @@ export default {
     return {
       nomFormulario: 'Club Social',
       aforo: 0,
-      limite: 65
+      limite: 75,
       // listaPersonasHorariosAcum: [],
       // listaPersonasFichajes: [],
       // listaFichajesDetalle: []
@@ -102,27 +102,8 @@ export default {
     this.getAforoActual();
   },
   components: {
-      VueSvgGauge,
-     // clubSocialGrid: clubSocialGrid
+    VueSvgGauge,
+//    clubSocialGrid: clubSocialGrid
   }
 }
 </script>
-<style lang="stylus">
-  #app {
-    .inner-text {
-      &--1, &--3 {
-        display: flex
-        justify-content: center
-        margin-top: 85px
-        font-size: 20px
-        color: #de3a21
-        font-weight: bold
-        span { max-width: 100px }
-      }
-      &--3 {
-        margin-top: 70px
-      }
-
-    }
-  }
-</style>
