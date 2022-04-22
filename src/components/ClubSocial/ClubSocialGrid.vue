@@ -1,31 +1,24 @@
 <template>
-  <div>
-    <q-item class="row q-ma-xs q-pa-xs">
-      <q-checkbox class="col-2" v-model="filterR.ordenar" @input="ordenarFichajes" label="Ordenar" />
-      <q-checkbox class="col-2" v-model="filterR.incumplem3" @input="filtrarFichajes" label="Incumple>3" />
-      <q-checkbox class="col-2" v-model="filterR.desfasem60" @input="filtrarFichajes" label="Desfase>60m" />
-      <q-input class="col-3" clearable label="Nombre" v-model="filterR.nombre" @input="filtrarFichajes" />
-    </q-item>
-  <q-item class="row q-ma-xs q-pa-xs">
+  <q-item class="row q-ma-md q-pa-xs">
     <!-- GRID. en row-key ponemos la columna del json que sea la id unica de la fila -->
     <q-table
-      class="personalGrid-header-table"
       virtual-scroll
+      :dense="$q.screen.lt.md"
       :pagination.sync="pagination"
       :rows-per-page-options="[0]"
       :virtual-scroll-sticky-size-start="48"
       row-key="id"
-      :data="listaFichajesFilter"
+      :data="value"
       :columns="columns"
-      table-style="max-height: 60vh; max-width: 96vw"
+      title="Acompañantes"
+      no-data-label="Próximamente podrás añadir acompañantes."
+      table-style="max-height: 55vh; max-width: 90vw"
     >
-
+      <!-- TOP DE LA TABLA-->
       <template v-slot:header="props">
         <!-- CABECERA DE LA TABLA -->
         <q-tr :props="props">
-          <q-th >
-            <div style="max-width: 20px"></div>
-          </q-th>
+          <q-th></q-th>
           <q-th
             v-for="col in props.cols"
             :key="col.name"
@@ -40,18 +33,39 @@
 
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.id}`" @mouseover="rowId=`m_${props.row.id}`">
-          <q-td>
+           <q-td>
             <!-- columna de acciones: editar, borrar, etc -->
-            <div style="max-width: 20px">
+            <div style="max-width: 70px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="rowId===`m_${props.row.id}`"
-              @click.stop="editRecord(props.row, props.row.id)"
+            <q-btn flat
+              @click.stop="doEditPartner(props.row)"
+              v-if="false"
               round
               dense
               size="sm"
               color="primary"
-              icon="list">
-              <q-tooltip>Detalle</q-tooltip>
+              icon="edit">
+              <q-tooltip>Editar Acompñanante</q-tooltip>
+            </q-btn>
+             <q-btn flat
+              @click.stop="doReSendConsentPartner(props.row)"
+              v-if="false"
+              round
+              dense
+              color="primary"
+              size="sm"
+              icon="outgoing_mail">
+              <q-tooltip>Reenviar Consentimiento</q-tooltip>
+            </q-btn>
+             <q-btn flat
+              @click.stop="doDeletePartner(props.row)"
+              v-if="false"
+              round
+              dense
+              color="red"
+              size="sm"
+              icon="delete">
+              <q-tooltip>Eliminar Acompñanante</q-tooltip>
             </q-btn>
             </div>
           </q-td>
@@ -61,72 +75,81 @@
             :props="props"
           >
             <div :style="col.style">
-              <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
+              <div v-if="!['consentimiento', 'visita'].includes(col.name)">{{ col.value }}</div>
+              <div v-if="col.name==='consentimiento'"><q-checkbox disable v-model="props.row.consentimiento" /></div>
+              <div v-if="col.name==='visita'"><q-checkbox v-model="props.row.visita" @input="doAddVisita(props.row)"/></div>
             </div>
           </q-td>
         </q-tr>
       </template>
 
       <template v-slot:bottom>
-        <div>
-          {{ value.length }} Filas
-        </div>
+          <q-space/>
+          <q-btn
+            @click.stop="doShowPartnerClean"
+            v-if="false"
+            round
+            dense
+            color="primary"
+            size="20px"
+            icon="add">
+            <q-tooltip>Añadir Acompñanante</q-tooltip> 
+          </q-btn>
+          <q-space/>
       </template>
-
+                  <!-- v-if="user.pers.consentimientoClubSocial" -->
+      <!-- <template v-slot:no-data>
+          <q-space/>
+          <q-btn
+            v-if="false"
+            @click.stop="doShowPartnerClean"
+            round
+            dense
+            color="primary"
+            size="20px"
+            icon="add">
+            <q-tooltip>Añadir Acompñanante</q-tooltip>
+          </q-btn>
+          <q-space/>
+      </template> -->
     </q-table>
-    <q-dialog  v-model="mostrarDetalle"  >
-      <q-card  class="q-pr-xs q-gutter-xs">
-        <q-card-section class="row items-center q-pb-none">
-          <div ><b>Turno1:</b> {{ substring(personaHorarios.horaEntrada1, 5)+' - '+  substring(personaHorarios.horaSalida1, 5)}} / <b>Turno2:</b> {{ substring(personaHorarios.horaEntrada2, 5)+' - '+  substring(personaHorarios.horaSalida2, 5)}}</div>
+    
+    <q-dialog v-model="showFormPartner" >
+      <q-card class="q-dialog-plugin">
+        <q-card-section class="bg-primary text-white">
+          <div class="text-h6">Datos de Acompñanante</div>
         </q-card-section>
-        <fichajesDetalleGrid
-          :value="listaFichajesDetalleFilter"
-        />
+        <q-form class="q-pa-sm q-gutter-y-xs">
+          <q-input outlined clearable label="Nombre" v-model="formData.nombre" />
+          <q-input outlined clearable label="Dni" v-model="formData.dni" />
+          <q-input outlined clearable label="E-mail" v-model="formData.email" />
+        </q-form>
         <q-card-actions align="right">
-          <q-btn  flat label="Close" color="primary" @click="mostrarDetalle=false"/><!-- lo captura accionesMain -->
+          <q-btn color="primary" label="OK" @click="doSubmitPartner" />
+          <q-btn color="primary" label="Cancel" @click="showFormPartner=false" />
         </q-card-actions>
       </q-card>
     </q-dialog>
+
   </q-item>
-  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { urlFotos } from 'boot/axios.js'
-import { date } from 'quasar'
-import fichajesDetalleGrid from 'components/Fichajes/fichajesDetalleGrid.vue' 
-
+import axios, { axiosInstance, headerFormData } from 'src/boot/axios'
+import { mapState} from 'vuex'
 export default {
-  props: ['value', 'listaFichajesDetalle','listaPersonasHorariosAcum'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
+  props: ['value'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
   data () {
     return {
-      expanded: false,
-      regper: {},
-      urlF: urlFotos,
-      mostrarDetalle: false,
-      listaFichajesFilter: [],
-      listaFichajesDetalleFilter: [],
-      personaHorarios: {},
-      filterR: {
-        ordenar: false,
-        incumplem3: false,
-        desfasem60: false,
-        nombre: ''
-      },
+      showFormPartner: false,
+      formData: {id: null},
       rowId: '',
       columns: [
-        // { name: 'foto', align: 'left', label: 'foto', field: 'foto' },
-        { name: 'nombre', align: 'left', label: 'Nombre', field: 'empleado', sortable: true, style: 'width: 330px; whiteSpace: normal' },
-        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idPersonal', sortable: true, style: 'width: 20px' },
-        // { name: 'areaNombre', align: 'left', label: 'Area', field: 'nomarea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        // { name: 'extension', align: 'left', label: 'Extension', field: 'extension', sortable: true },
-        // { name: 'equipoETM', align: 'left', label: 'equipoETM', field: 'grupoetm', sortable: true },
-        { name: 'fecha', align: 'left', label: 'Fecha', field: 'fecha', sortable: true },
-        { name: 'cumple', align: 'left', label: 'Cumple', field: 'cumple', sortable: true },
-        { name: 'olvido', align: 'left', label: 'Olvido', field: 'olvido', sortable: true },
-        { name: 'desfase', align: 'left', label: 'Desfase (min)', field: 'desfase', sortable: true, format: val => this.$numeral(parseFloat(val * 60)).format('0,0') }
+        { name: 'nombre', label: 'Nombre', align: 'left',  field: 'nombre', sortable: true},
+        { name: 'email', label: 'E-Mail', align: 'left', field: 'email', sortable: true},
+        { name: 'dni', label: 'DNI', align: 'left',  field: 'dni', sortable: true},
+        { name: 'consentimiento', label: 'Consentimiento', align: 'left', field: 'consentimiento', sortable: true, format: val => val === 'Verdadero' },
+        { name: 'visita', label: 'Asiste', align: 'left', field: 'visita', sortable: true, format: val => val === 'Verdadero' }
       ],
       pagination: { rowsPerPage: 0 }
     }
@@ -136,82 +159,117 @@ export default {
     ...mapState('login', ['user'])
   },
   methods: {
-    substring (s, len) {
-      if (s !== undefined) return s.substring(0, len)
-      else return ''
+    doShowPartnerClean(){
+      this.formData = {id: null, nombre : null, dni: null, email: null, consentimiento: null, visita: null, idEmpleado: null, ts: null, usr: null}
+      this.showFormPartner = true;
     },
-    editRecord (row, id) {
-      this.mostrarDetalle = true
-      this.personaHorarios = this.listaPersonasHorariosAcum.find(horario => horario.idPersonal === row.idPersonal && (row.fecha === undefined || horario.fecha.substring(0,10) === row.fecha))
-      this.listaFichajesDetalleFilter = this.listaFichajesDetalle.filter(fichaje => fichaje.idPersonal === row.idPersonal && (row.fecha === undefined || fichaje.fecha.substring(0,10) === row.fecha.substring(6,10)+'-'+row.fecha.substring(3,5)+'-'+row.fecha.substring(0,2)))
-      this.listaFichajesDetalleFilter.sort((a, b) => a.fecha < b.fecha ? -1 : 1)
+    doEditPartner (data){
+      this.formData = data;
+      this.showFormPartner = true;
     },
-    ampliarImagen (record) {
-      this.regper = record
-      this.expanded = true
-    },
-    ordenarFichajes () {
-      this.filterR.ordenar = true
-      this.listaFichajesFilter.sort((a, b) => a.empleado + a.fecha.substring(6,10) + a.fecha.substring(3,5) + a.fecha.substring(0,2) < b.empleado + b.fecha.substring(6,10) + b.fecha.substring(3,5) + b.fecha.substring(0,2) ? -1 : 1)
-    },
-    filtrarFichajes (val) {
-      this.listaFichajesFilter = this.value
-      console.log(this.filterR.nombre)
-      if (this.filterR.nombre !== null && this.filterR.nombre !== '') this.listaFichajesFilter = this.listaFichajesFilter.filter(row => row.empleado.toLowerCase().includes(this.filterR.nombre.toLowerCase()))
-      if (!this.filterR.ordenar) this.ordenarFichajes()
-      if (!this.filterR.incumplem3 && !this.filterR.desfasem60) return // no hay nada que hacer
+    doDeletePartner(data){
+      if(data.id == null)
+        return this.$q.dialog({title: 'Error', message : 'No existe un id válido'})
+      
+      this.$q.dialog({
+        title: 'Eliminar Acompañante',
+        message: '¿Estás seguro de que desea eliminar al acompañante? Se borrarán todos sus datos',
+        cancel:{color: 'primary', flat: true}, 
+        ok:{label: 'Eliminar', flat: true, color: 'negative'},
+        persistent: true
+      }).onOk(() =>{
+        axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=social/center/partners/form/${data.id}&auth=${this.user.auth}`, {}, headerFormData)
+        .then((response) => {
+          var obj = response.data;
+          // si tenemos un error lo mostramos
+          if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
-      var listTemp = this.listaFichajesFilter
-      this.listaFichajesFilter = []
-      var empAnt = ''
-      var idAnt = 0
-      var desfaseAcum = 0
-      var numIncumple = 0
-      var numOlvidos = 0
-      listTemp.forEach(row => {
-        if (empAnt !== row.empleado) {
-          if (empAnt !== '') {
-            if ((!this.filterR.incumplem3 || this.filterR.incumplem3 && numIncumple >=3) && (!this.filterR.desfasem60 || this.filterR.desfasem60 && Math.abs(desfaseAcum) >= 1) ) {
-              this.listaFichajesFilter.push({
-                id: Math.random() * 100000, // key
-                idPersonal: idAnt,
-                empleado: empAnt,
-                cumple: -numIncumple,
-                olvido: numOlvidos,
-                desfase: desfaseAcum
-              })
-            }
-          }
-          empAnt = row.empleado
-          idAnt = row.idPersonal,
-          desfaseAcum = 0
-          numIncumple = 0
-          numOlvidos = 0
-        }
-        desfaseAcum += row.desfase
-        if (!row.cumple) numIncumple++
-        if (row.olvido ) numOlvidos++
-      })
-      if ((!this.filterR.incumplem3 || this.filterR.incumplem3 && numIncumple >=3) && (!this.filterR.desfasem60 || this.filterR.desfasem60 && Math.abs(desfaseAcum) >= 1)) {
-        this.listaFichajesFilter.push({
-          id: Math.random() * 100000, // key
-          idPersonal: idAnt,
-          empleado: empAnt,
-          cumple: numIncumple,
-          olvido: numOlvidos,
-          desfase: desfaseAcum
+          this.$q.dialog({title: 'Exito', message : obj.msg});
+          this.$emit('getPartnersSocialCenterList', {});
         })
-      }
+        .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error })
+        })
+      });
     },
-    mostrarDatosPieTabla () {
-      return this.value.length + ' Filas'
-    }
-  },
-  mounted () {
-    this.listaFichajesFilter = this.value    
+
+    doReSendConsentPartner(data){
+      console.log(data);
+      // axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/send/consent/${data.id}&auth=${this.user.auth}`, {}, headerFormData)
+      //   .then((response) => {
+      //     console.log(response);
+      //     var obj = response.data;
+      //     // si tenemos un error lo mostramos
+      //     if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+
+      //     this.$q.dialog({title: 'Exito', message : obj.msg});
+      //   })
+      //   .catch(error => {
+      //     this.$q.dialog({ title: 'Error', message: error })
+      // })
+    },
+
+    doAddVisita(data){
+      axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/visit/${data.id}&auth=${this.user.auth}`, {visita: data.visita}, headerFormData)
+      .then((response) => {
+        var obj = response.data;
+        // si tenemos un error lo mostramos
+        if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+
+        this.$q.dialog({title: 'Exito', message : obj.msg});
+        this.$emit('getPartnersSocialCenterList', {});
+      })
+      .catch(error => {
+        this.$q.dialog({ title: 'Error', message: error })
+        this.$emit('getPartnersSocialCenterList', {});
+      })
+    },
+
+    // Se llama desde el dialogo
+    doSubmitPartner (){
+      // Es un partner nuevo 
+      if(this.formData.id == null){
+        return this.doAddPartner();
+      }
+
+      // 
+      this.$axios.post(`bd_jpersonal.asp?action=social/center/partners/form/${this.formData.id}&auth=${this.user.auth}`, this.formData, headerFormData)
+      .then((response) => {
+        var obj = response.data;
+        // si tenemos un error lo mostramos
+        if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+
+        this.$q.dialog({title: 'Exito', message : obj.msg});
+        this.showFormPartner = false;
+        this.$emit('getPartnersSocialCenterList', {});
+      })
+      .catch(error => {
+        this.$q.dialog({ title: 'Error', message: error })
+      })
+    },
+
+    // Creamos un nuevo partner
+    doAddPartner(){
+      axiosInstance.post(`bd_jpersonal.asp?http_method=PUT&action=social/center/partners/form&auth=${this.user.auth}`, this.formData, headerFormData)
+      .then((response) => {
+        var obj = response.data;
+        // si tenemos un error lo mostramos
+        if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+
+        this.$q.dialog({title: 'Exito', message : obj.msg});
+        this.showFormPartner = false;
+        this.$emit('getPartnersSocialCenterList', {});
+      })
+      .catch(error => {
+        this.$q.dialog({ title: 'Error', message: error })
+      })
+    },
+
   },
   components: {
-    fichajesDetalleGrid: fichajesDetalleGrid
+  },
+  mounted ()  {
+    // this.filterRecord = this.filter
   }
 }
 </script>

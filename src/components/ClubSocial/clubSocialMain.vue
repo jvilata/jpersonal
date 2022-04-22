@@ -53,11 +53,20 @@
               </q-card>
           </div> 
           <div class="col-xs-12 col-sm-9">
-           <!-- <clubSocialGrid
-              v-model="listaPersonasFichajes"
-              :listaFichajesDetalle="listaFichajesDetalle"
-              :listaPersonasHorariosAcum="listaPersonasHorariosAcum"
-              />  -->
+          <div class="q-ma-md q-pa-xs">
+            <q-btn
+            v-if="!user.pers.consentimientoClubSocial"
+            class="q-pa-xs"
+            @click.stop="doRegister"
+            dense
+            label= "Aceptar Condiciones"
+            color="primary"
+            icon="history_edu">
+          </q-btn>
+          </div>
+           <clubSocialGrid
+              v-model="partnerSocialCenterList"
+              /> 
           </div>
       </div>
     </div>
@@ -68,7 +77,7 @@
 import { mapState, mapActions } from 'vuex'
 import { axiosInstance, headerFormData } from 'boot/axios.js'
 import {VueSvgGauge} from 'vue-svg-gauge'
-//import clubSocialGrid from 'components/ClubSocial/ClubSocialGrid.vue'
+import clubSocialGrid from 'components/ClubSocial/ClubSocialGrid.vue'
 
 export default {
   props: ['value', 'id', 'keyValue'], 
@@ -77,9 +86,7 @@ export default {
       nomFormulario: 'Club Social',
       aforo: 0,
       limite: 75,
-      // listaPersonasHorariosAcum: [],
-      // listaPersonasFichajes: [],
-      // listaFichajesDetalle: []
+      partnerSocialCenterList: []
     }
   },
   computed: {
@@ -96,14 +103,39 @@ export default {
         .catch(error => {
           this.$q.dialog({ title: 'Error', message: error })
         })
+    },
+
+    getPartnersSocialCenterList(){
+      return this.$axios.get(`bd_jpersonal.asp?action=social/center/partners/lst&auth=${this.user.auth}`,{})
+      .then(response => {
+        this.partnerSocialCenterList = response.data
+      })
+      .catch(error => {
+          this.$q.dialog({ title: 'Error', message: error })
+      })
+    },
+
+    doRegister(){
+      axiosInstance.post(`bd_jpersonal.asp?action=social/center/employee/register&auth=${this.user.auth}`, {}, headerFormData)
+      .then((response) => {
+        var obj = response.data;
+        // si tenemos un error lo mostramos
+        if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+
+        this.$q.dialog({title: 'Exito', message : obj.msg + ". Una vez firmado el consentimiento, cierra sesión y vuelve a conectarte. Muchas gracias"});
+      })
+      .catch(error => {
+        this.$q.dialog({ title: 'Error', message: error })
+      })
     }
   },
   mounted () {
     this.getAforoActual();
+    this.getPartnersSocialCenterList();
   },
   components: {
     VueSvgGauge,
-//    clubSocialGrid: clubSocialGrid
+    clubSocialGrid: clubSocialGrid
   }
 }
 </script>
