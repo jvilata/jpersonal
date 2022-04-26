@@ -11,7 +11,7 @@
       :data="value"
       :columns="columns"
       title="Acompañantes"
-      no-data-label="Próximamente podrás añadir acompañantes."
+      no-data-label="No tienes acompañantes, por favor añade uno."
       table-style="max-height: 55vh; max-width: 90vw"
     >
       <!-- TOP DE LA TABLA-->
@@ -36,10 +36,9 @@
            <q-td>
             <!-- columna de acciones: editar, borrar, etc -->
             <div style="max-width: 70px">
-            <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
             <q-btn flat
               @click.stop="doEditPartner(props.row)"
-              v-if="false"
+              v-if="user.pers.consentimientoClubSocial"
               round
               dense
               size="sm"
@@ -49,7 +48,7 @@
             </q-btn>
              <q-btn flat
               @click.stop="doReSendConsentPartner(props.row)"
-              v-if="false"
+              v-if="user.pers.consentimientoClubSocial"
               round
               dense
               color="primary"
@@ -59,7 +58,7 @@
             </q-btn>
              <q-btn flat
               @click.stop="doDeletePartner(props.row)"
-              v-if="false"
+              v-if="user.pers.consentimientoClubSocial"
               round
               dense
               color="red"
@@ -87,7 +86,7 @@
           <q-space/>
           <q-btn
             @click.stop="doShowPartnerClean"
-            v-if="false"
+            v-if="user.pers.consentimientoClubSocial"
             round
             dense
             color="primary"
@@ -97,11 +96,10 @@
           </q-btn>
           <q-space/>
       </template>
-                  <!-- v-if="user.pers.consentimientoClubSocial" -->
-      <!-- <template v-slot:no-data>
+      <template v-slot:no-data>
           <q-space/>
           <q-btn
-            v-if="false"
+            v-if="user.pers.consentimientoClubSocial"
             @click.stop="doShowPartnerClean"
             round
             dense
@@ -111,7 +109,7 @@
             <q-tooltip>Añadir Acompñanante</q-tooltip>
           </q-btn>
           <q-space/>
-      </template> -->
+      </template>
     </q-table>
     
     <q-dialog v-model="showFormPartner" >
@@ -135,14 +133,16 @@
 </template>
 
 <script>
-import axios, { axiosInstance, headerFormData } from 'src/boot/axios'
+import { axiosInstance, headerFormData } from 'boot/axios.js'
 import { mapState} from 'vuex'
+import querystring from 'querystring'
+
 export default {
   props: ['value'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
   data () {
     return {
       showFormPartner: false,
-      formData: {id: null},
+      formData: {id: null, nombre: null, dni: null, email: null},
       rowId: '',
       columns: [
         { name: 'nombre', label: 'Nombre', align: 'left',  field: 'nombre', sortable: true},
@@ -170,7 +170,7 @@ export default {
     doDeletePartner(data){
       if(data.id == null)
         return this.$q.dialog({title: 'Error', message : 'No existe un id válido'})
-      
+            
       this.$q.dialog({
         title: 'Eliminar Acompañante',
         message: '¿Estás seguro de que desea eliminar al acompañante? Se borrarán todos sus datos',
@@ -178,98 +178,114 @@ export default {
         ok:{label: 'Eliminar', flat: true, color: 'negative'},
         persistent: true
       }).onOk(() =>{
-        axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=social/center/partners/form/${data.id}&auth=${this.user.auth}`, {}, headerFormData)
+        this.$q.loading.show();
+        axiosInstance.get(`bd_jpersonal.asp?http_method=DELETE&action=social/center/partners/form/${data.id}&auth=${this.user.auth}`, {})
         .then((response) => {
+          this.$q.loading.hide();
           var obj = response.data;
           // si tenemos un error lo mostramos
           if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
           this.$q.dialog({title: 'Exito', message : obj.msg});
-          this.$emit('getPartnersSocialCenterList', {});
+          this.$emit('refresh');
         })
         .catch(error => {
+          this.$q.loading.hide();
           this.$q.dialog({ title: 'Error', message: error })
         })
       });
     },
 
     doReSendConsentPartner(data){
-      console.log(data);
-      // axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/send/consent/${data.id}&auth=${this.user.auth}`, {}, headerFormData)
-      //   .then((response) => {
-      //     console.log(response);
-      //     var obj = response.data;
-      //     // si tenemos un error lo mostramos
-      //     if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
+      this.$q.loading.show();
+      axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/send/consent/${data.id}&auth=${this.user.auth}`, {}, headerFormData)
+        .then((response) => {
+          this.$q.loading.hide();
+          var obj = response.data;
+          // si tenemos un error lo mostramos
+          if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
-      //     this.$q.dialog({title: 'Exito', message : obj.msg});
-      //   })
-      //   .catch(error => {
-      //     this.$q.dialog({ title: 'Error', message: error })
-      // })
+          this.$q.dialog({title: 'Exito', message : obj.msg});
+        })
+        .catch(error => {
+          this.$q.loading.hide();
+          this.$q.dialog({ title: 'Error', message: error })
+      })
     },
 
     doAddVisita(data){
-      axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/visit/${data.id}&auth=${this.user.auth}`, {visita: data.visita}, headerFormData)
+      this.$q.loading.show();
+      axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/visit/${data.id}&auth=${this.user.auth}`, querystring.stringify({visita: data.visita}), headerFormData)
       .then((response) => {
+        this.$q.loading.hide();
+        this.$emit('refresh');
         var obj = response.data;
         // si tenemos un error lo mostramos
         if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
         this.$q.dialog({title: 'Exito', message : obj.msg});
-        this.$emit('getPartnersSocialCenterList', {});
+        
       })
       .catch(error => {
+        this.$q.loading.hide();
         this.$q.dialog({ title: 'Error', message: error })
-        this.$emit('getPartnersSocialCenterList', {});
+        this.$emit('refresh');
       })
     },
 
     // Se llama desde el dialogo
     doSubmitPartner (){
+      this.$q.loading.show();
       // Es un partner nuevo 
       if(this.formData.id == null){
-        return this.doAddPartner();
+        return this.doCreatePartner();
       }
 
       // 
-      this.$axios.post(`bd_jpersonal.asp?action=social/center/partners/form/${this.formData.id}&auth=${this.user.auth}`, this.formData, headerFormData)
+      this.$axios.post(`bd_jpersonal.asp?action=social/center/partners/form/${this.formData.id}&auth=${this.user.auth}`, querystring.stringify(this.formData), headerFormData)
       .then((response) => {
+         this.$q.loading.hide();
         var obj = response.data;
         // si tenemos un error lo mostramos
         if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
         this.$q.dialog({title: 'Exito', message : obj.msg});
         this.showFormPartner = false;
-        this.$emit('getPartnersSocialCenterList', {});
+        this.$emit('refresh');
       })
       .catch(error => {
+         this.$q.loading.hide();
         this.$q.dialog({ title: 'Error', message: error })
       })
     },
 
     // Creamos un nuevo partner
-    doAddPartner(){
-      axiosInstance.post(`bd_jpersonal.asp?http_method=PUT&action=social/center/partners/form&auth=${this.user.auth}`, this.formData, headerFormData)
+    doCreatePartner(){
+      var data = {
+        nombre : this.formData.nombre,
+        dni: this.formData.dni,
+        email: this.formData.email,
+      };
+
+      axiosInstance.post(`bd_jpersonal.asp?action=social/center/partners/form&auth=${this.user.auth}`, querystring.stringify(data), headerFormData)
       .then((response) => {
+        this.$q.loading.hide();
         var obj = response.data;
         // si tenemos un error lo mostramos
         if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
 
         this.$q.dialog({title: 'Exito', message : obj.msg});
         this.showFormPartner = false;
-        this.$emit('getPartnersSocialCenterList', {});
+        this.$emit('refresh');
       })
       .catch(error => {
+        this.$q.loading.hide();
         this.$q.dialog({ title: 'Error', message: error })
       })
     },
 
   },
-  components: {
-  },
   mounted ()  {
-    // this.filterRecord = this.filter
   }
 }
 </script>

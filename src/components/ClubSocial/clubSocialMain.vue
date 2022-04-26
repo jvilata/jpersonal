@@ -66,6 +66,7 @@
           </div>
            <clubSocialGrid
               v-model="partnerSocialCenterList"
+              @refresh="getPartnersSocialCenterList()"
               /> 
           </div>
       </div>
@@ -116,8 +117,10 @@ export default {
     },
 
     doRegister(){
+      this.$q.loading.show();
       axiosInstance.post(`bd_jpersonal.asp?action=social/center/employee/register&auth=${this.user.auth}`, {}, headerFormData)
       .then((response) => {
+        this.$q.loading.hide();
         var obj = response.data;
         // si tenemos un error lo mostramos
         if(!obj.success) return this.$q.dialog({title: 'Error', message : obj.msg});
@@ -125,6 +128,7 @@ export default {
         this.$q.dialog({title: 'Exito', message : obj.msg + ". Una vez firmado el consentimiento, cierra sesión y vuelve a conectarte. Muchas gracias"});
       })
       .catch(error => {
+        this.$q.loading.hide();
         this.$q.dialog({ title: 'Error', message: error })
       })
     }
