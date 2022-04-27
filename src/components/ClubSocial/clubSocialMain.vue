@@ -53,21 +53,25 @@
               </q-card>
           </div> 
           <div class="col-xs-12 col-sm-9">
-          <div class="q-ma-md q-pa-xs">
-            <q-btn
-            v-if="!user.pers.consentimientoClubSocial"
-            class="q-pa-xs"
-            @click.stop="doRegister"
-            dense
-            label= "Aceptar Condiciones"
-            color="primary"
-            icon="history_edu">
-          </q-btn>
-          </div>
-           <clubSocialGrid
-              v-model="partnerSocialCenterList"
-              @refresh="getPartnersSocialCenterList()"
-              /> 
+            <div class="row q-ma-md q-pa-xs">
+              <q-btn
+              v-if="!user.pers.consentimientoClubSocial"
+              class="q-pa-xs q-mb-xs q-mr-xs"
+              @click.stop="doRegister"
+              dense
+              label= "Aceptar Condiciones"
+              color="primary"
+              icon="history_edu">
+              </q-btn>
+              <q-banner dense rounded  v-if="!user.pers.consentimientoClubSocial" class="q-mb-xs" style="background-color: #e0e0e0; border-radius: 16px;">
+                <q-avatar style="font-size: 2.5em" icon="notifications" color="orange" text-color="white" />
+                Debes aceptar primero las condiciones para acceder al club y gestionar los acompañantes.
+              </q-banner>
+            </div>
+            <clubSocialGrid
+                v-model="partnerSocialCenterList"
+                @refresh="getPartnersSocialCenterList()"
+            /> 
           </div>
       </div>
     </div>
