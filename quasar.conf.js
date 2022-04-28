@@ -108,8 +108,8 @@ module.exports = function(/* ctx */) {
       workboxPluginMode: "GenerateSW", // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Personal`,
-        short_name: `Personal`,
+        name: `JPersonal`,
+        short_name: `JPersonal`,
         description: `Edicom Personal movil`,
         display: "standalone",
         orientation: "portrait",
@@ -148,7 +148,7 @@ module.exports = function(/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       id: "com.edicom.personal",
-      version: "1.1.0"
+      version: "1.1.3"
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
