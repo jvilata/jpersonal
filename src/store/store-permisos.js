@@ -67,15 +67,16 @@ const actions = {
   },
 
   addPermisoPendiente({ commit }, payload) {
-    return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    // return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, headerFormData)
   },
 
   updatePermisoPendiente({ commit }, payload) {
-    return axiosInstance.post(`bd_jpersonal.asp?http_method=PUT&action=soldias/${payload.id}&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    return axiosInstance.post(`bd_jpersonal.asp?http_method=PUT&action=soldias/${payload.id}&auth=${login.state.user.auth}`, payload, headerFormData)
   },
 
   deletePermisoPendiente({ commit }, payload){
-    return axiosInstance.post(`bd_jpersonal.asp?action=soldias/form/del/${payload.id}?&auth=${login.state.user.auth}`, payload, { withCredentials: true })
+    return axiosInstance.post(`bd_jpersonal.asp?action=soldias/form/del/${payload.id}?&auth=${login.state.user.auth}`, payload, headerFormData)
   },
 
   getJustificantes({ commit }, payload) {

@@ -198,6 +198,7 @@
 
 <script>
 // npm install vue-inline-svg
+import { headerFormData } from 'boot/axios.js'
 import { mapState, mapActions } from 'vuex'
 import InlineSvg from 'vue-inline-svg'
 import planosFilter from 'components/Planos/planosFilter.vue'
@@ -461,7 +462,7 @@ export default {
 
           //Si tenemos el formulario de teletrabajo generamos una solicitud. 
           if(this.formReserva.reservaPermanente === '1' && this.formReserva.diasSemanaArr.length < 5){
-            this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
+            this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data, headerFormData)
             .then(result => {
               this.$q.notify({
                       message: `Se ha generado una solicitud de teletrabajo.`

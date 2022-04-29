@@ -53,7 +53,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex' 
-
+import { headerFormData } from 'boot/axios.js'
 export default {
   props: ['value', 'id', 'keyValue'], 
   data() {
@@ -96,7 +96,7 @@ export default {
         delegacion: result.filial.idfilial
         }
         this.$q.loading.show()
-        this.$axios.post(`bd_jpersonal.asp?action=tareasLaboral/list&auth=${this.user.auth}`, data)
+        this.$axios.post(`bd_jpersonal.asp?action=tareasLaboral/list&auth=${this.user.auth}`, data, headerFormData)
           .then(result => {
             this.$q.loading.hide()
             this.dialogMes = true

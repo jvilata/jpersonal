@@ -228,7 +228,10 @@ export default {
       var arr = []
       this.menuItems.forEach(element => {
           if (element.link.opcion === 1) arr.push(element) // no es nada, solo opcion 1
-          if (element.link.opcion === 2 && (this.user.esTMoPM===true || this.user.esUsuarioResponsable===true || this.user.esUsuarioPersonal===true)) arr.push(element) // a los demás pueden ver opcion 2
+          if (element.link.opcion === 2 && (this.user.esTMoPM===true || this.user.esUsuarioResponsable===true || this.user.esUsuarioPersonal===true)) {
+            // console.log(element)
+            arr.push(element) // a los demás pueden ver opcion 2
+          }
           if (element.link.opcion === 3 && this.user.esUsuarioResponsable === true) arr.push(element) // si además es un responsable puede verlo todo
       })
       return arr
