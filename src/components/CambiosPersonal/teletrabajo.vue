@@ -187,6 +187,7 @@
 </template>
 
 <script>
+import { headerFormData } from 'boot/axios.js'
 import { date, openURL } from 'quasar'
 import { mapState, mapActions } from 'vuex'
 import wgDate from 'components/General/wgDate.vue'
@@ -330,7 +331,7 @@ export default {
             tipoSolicitud: 'TELETRABAJO'
         }
         this.$q.loading.show()
-        this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data)
+        this.$axios.post(`bd_jpersonal.asp?action=soldias&auth=${this.user.auth}`, data, headerFormData)
         .then(result => {
           this.$q.loading.hide()
           this.dialogMes = true
