@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="row q-pa-xl justify-center" style="padding-top: 100px">
+  <q-page padding class="row justify-center" style="padding-top: 100px">
     <!-- definimos una pagina de LOGIN que tiene un logo arriba y un formulario de empresa, usu y pass abajo -->
     <div :class="`gutter-sm ${user.platform}`">
       <div class="row justify-center q-pa-lg">
@@ -27,15 +27,58 @@
           </form>
       </q-card>
     </div>
+    <!-- <v-bottom-navigation v-if="showAppInstallBanner && isMobile" style="width: 100%;">
+     <q-banner class="bg-primary text-white">
+            Obtén nuestra aplicación
+            <template v-slot:action>
+                <q-btn
+                  flat
+                  @click="installApp"
+                  label="Instalar"
+                  class="q-px-sm"
+                  dense />
+            </template>
+        </q-banner>
+    </v-bottom-navigation> -->
+    <div v-if="showAppInstallBanner && isMobile" style="width: 100%;bottom: 0;position: fixed;">
+        <q-banner class="bg-primary text-white">
+            Obtén nuestra aplicación
+            <template v-slot:action>
+                <q-btn
+                  flat
+                  @click="installApp"
+                  label="Instalar"
+                  class="q-px-sm"
+                  dense />
+            </template>
+        </q-banner>
+    </div>
+    <q-dialog v-model="showDialogInstallIOs" full-width>
+      <q-card class="q-pa-md" style="border-radius: 17px">
+          <div class="text-h6">Intstalar aplicación</div>
+          <div>Sigue los siguientes pasos para instalar la aplicación en tu móvil</div>
+          <div>
+            <ol>
+              <li>Haz click en <img width="17" height="17" style = "margin-bottom: -2px;" src="~assets/icon_share.png"></li>
+              <li>Selecciona la opción añadir a la pantalla de inicio</li>
+            </ol>
+          </div>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
+let deferredPrompt
 import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
       disableLogin: false,
+      showAppInstallBanner: false,
+      isMobile: false,
+      isAndroid: false,
+      showDialogInstallIOs: false,
       user: {
         codEmpresa: '01',
         email: '',
@@ -68,12 +111,30 @@ export default {
     },
     onDeviceReady() {
       this.user.platform = device.platform
+    },
+    installApp() {
+      this.showAppInstallBanner = false;
+      
+      if(this.isAndroid){
+        deferredPrompt.prompt()
+      }else{
+        this.showDialogInstallIOs = true
+      }
     }
   },
-  mounted () {
-    document.addEventListener('deviceready', this.onDeviceReady, false)
 
-    // this.loadTablasAux()
+  mounted () {
+    // Comprobamos si es un movil.
+    this.isMobile = /iPhone|iPad|Pod|Android/i.test(navigator.userAgent) && window.cordova === undefined;
+    this.isAndroid = /Android/i.test(navigator.userAgent)
+  
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      this.showAppInstallBanner = true
+    });
+    document.addEventListener('deviceready', this.onDeviceReady, false)
+    
     this.user.email = this.$q.localStorage.getItem('email')
     this.user.password = (this.$q.localStorage.getItem('password')) // from base64 to string
   }
