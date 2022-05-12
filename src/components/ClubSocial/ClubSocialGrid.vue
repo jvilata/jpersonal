@@ -44,7 +44,7 @@
               size="sm"
               color="primary"
               icon="edit">
-              <q-tooltip>Editar Acompñanante</q-tooltip>
+              <q-tooltip>Editar Acompañanante</q-tooltip>
             </q-btn>
              <q-btn flat
               @click.stop="doReSendConsentPartner(props.row)"
@@ -64,7 +64,7 @@
               color="red"
               size="sm"
               icon="delete">
-              <q-tooltip>Eliminar Acompñanante</q-tooltip>
+              <q-tooltip>Eliminar Acompañanante</q-tooltip>
             </q-btn>
             </div>
           </q-td>
@@ -92,7 +92,7 @@
             color="primary"
             size="20px"
             icon="add">
-            <q-tooltip>Añadir Acompñanante</q-tooltip> 
+            <q-tooltip>Añadir Acompañanante</q-tooltip> 
           </q-btn>
           <q-space/>
       </template>
@@ -106,7 +106,7 @@
             color="primary"
             size="20px"
             icon="add">
-            <q-tooltip>Añadir Acompñanante</q-tooltip>
+            <q-tooltip>Añadir Acompañanante</q-tooltip>
           </q-btn>
           <q-space/>
       </template>
@@ -115,7 +115,7 @@
     <q-dialog v-model="showFormPartner" >
       <q-card class="q-dialog-plugin">
         <q-card-section class="bg-primary text-white">
-          <div class="text-h6">Datos de Acompñanante</div>
+          <div class="text-h6">Datos de Acompañanante</div>
         </q-card-section>
         <q-form class="q-pa-sm q-gutter-y-xs">
           <q-input outlined clearable label="Nombre" v-model="formData.nombre" />
