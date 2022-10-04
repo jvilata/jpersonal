@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   props: ['value', 'ltab'], // en 'value' tenemos la tabla de datos del grid
   data () {
@@ -56,19 +56,22 @@ export default {
       registrosPanelDatos: [],
       columns: [
         { name: 'tipo', required: true, label: 'tipo', align: 'right', field: 'tipo' },
-        { name: 'numclientes', required: true, label: 'NºClientes', align: 'right', field: 'numclientes', format: val => this.$numeral(parseFloat(val)).format('0,0') },
-        { name: 'nummensajes', required: true, label: 'NºMensajes', align: 'right', field: 'numeromensajes', format: val => this.$numeral(parseFloat(val)).format('0,0') },
-        { name: 'mensajesalmacenados', required: true, label: 'Almacenados', align: 'right', field: 'mensajesalmacenados', format: val => this.$numeral(parseFloat(val)).format('0,0') }
+        { name: 'numclientes', required: true, label: 'NºClientes', align: 'right', field: 'numClientes', format: val => this.$numeral(parseFloat(val)).format('0,0') },
+        { name: 'nummensajes', required: true, label: 'NºMensajes', align: 'right', field: 'numMensajes', format: val => this.$numeral(parseFloat(val)).format('0,0') },
+        { name: 'mensajesalmacenados', required: true, label: 'Almacenados', align: 'right', field: 'numMensajesAlmacenados', format: val => this.$numeral(parseFloat(val)).format('0,0') }
       ],
       pagination: { rowsPerPage: 0 }
     }
+  },
+  computed: {
+    ...mapState('login', ['user']) // importo state.user desde store-login
   },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
     getTiposClientes (objFilter) {
       // grid por tipos de activos inversion
       this.$q.loading.show()
-      this.$axios.get('bd_dashboard.asp?action=findPanelDatosCli', { params: objFilter })
+      this.$axios.get(`bd_jpersonal.asp?action=dash/servicios/estadisticas&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
           this.registrosSeleccionados = []
           this.registrosSeleccionados.push(...response.data) // para que refresque lo antes posible

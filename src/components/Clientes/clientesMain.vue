@@ -67,7 +67,7 @@ export default {
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
       var objFilter = Object.assign({}, filter)
       // objFilter.estadoActivo = (objFilter.estadoActivo !== null ? objFilter.estadoActivo.join() : null) // paso de array a concatenacion de strings (join)
-      return this.$axios.get('bd_clientes.asp?action=findClientes', { params: objFilter })
+      return this.$axios.get(`bd_jpersonal.asp?action=clientes/lst&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
           this.registrosSeleccionados = response.data
           this.expanded = false

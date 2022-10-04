@@ -35,8 +35,8 @@
             <!-- columna de acciones: editar, borrar, etc -->
             <div style="max-width: 70px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idpersonal == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
-              @click.stop="editarPartida(props.row, props.row.id)"
+            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idPersonalEmpleado == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
+              @click.stop="editarPartida(props.row)"
               round
               dense
               size="sm"
@@ -44,8 +44,8 @@
               icon="edit">
               <q-tooltip>Editar Partida</q-tooltip>
             </q-btn>
-            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idpersonal == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
-              @click.stop="anularPartida(props.row, props.row.id)"
+            <q-btn flat v-if="rowId===`m_${props.row.id}` && (props.row.idPersonalEmpleado == user.pers.idpersonal || [16, 33, 36, 37].includes(user.pers.area))"
+              @click.stop="anularPartida(props.row)"
               round
               dense
               size="sm"
@@ -54,7 +54,7 @@
               <q-tooltip>Anular Partida</q-tooltip>
             </q-btn>
             <q-btn flat v-if="rowId===`m_${props.row.id}` && parseaJSON(props.row.observaciones).jugadores.length<4"
-              @click.stop="apuntarJugador(props.row, props.row.id)"
+              @click.stop="apuntarJugador(props.row)"
               round
               dense
               size="sm"
@@ -63,7 +63,7 @@
               <q-tooltip>Apuntarme</q-tooltip>
             </q-btn>
             <q-btn flat v-if="rowId===`m_${props.row.id}`"
-              @click.stop="listarJugadores(props.row, props.row.id)"
+              @click.stop="listarJugadores(props.row)"
               round
               dense
               size="sm"
@@ -80,7 +80,7 @@
           >
             <div :style="col.style">
               <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.fotoEmpleado}`"/>
             </div>
           </q-td>
         </q-tr>
@@ -125,38 +125,39 @@
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
         <q-card-section>
-          <q-img :src="`${urlF}${regper.idpersonal}.jpg`" />
+          <q-img :src="`${urlF}${regper.fotoEmpleado}`" />
         </q-card-section>
       </q-card>
     </q-dialog>
 
-      <q-dialog v-model="dialogSalaR1" >
+      <!--Formulario para la creación y edición de partida -->
+      <q-dialog v-model="dialogPartidaForm" >
         <q-card class="q-dialog-plugin">
           <q-card-section class="bg-primary text-white">
             <div class="text-h6">Datos de partida</div>
           </q-card-section>
           <q-form class="q-gutter-y-xs">
-             <q-input outlined clearable label="Fecha Desde" stack-label :value="formateaFecha(fechaDesde)" @input="val => fechaDesde=val" >
+             <q-input outlined clearable label="Fecha Desde" stack-label :value="formateaFecha(formPartida.fechaReserva)" @input="val => formPartida.fechaReserva=val" >
               <template v-slot:append>
                   <q-icon name="event" class="cursos-pointer">
                     <q-popup-proxy ref="qFechaDesde1">
-                      <wgDate @input="$refs.qFechaDesde1.hide()" v-model="fechaDesde" />
+                      <wgDate @input="$refs.qFechaDesde1.hide()" v-model="formPartida.fechaReserva" />
                     </q-popup-proxy>
                   </q-icon>
               </template>
             </q-input>
-            <q-input 
+            <q-input  
               label="Hora inicio"
-              outlined 
+              outlined
               clearable
-              @input="v => fechaDesde = v"
-              :value="formatTime(fechaDesde)">
+              @input="v => formPartida.fechaReserva = v"
+              :value="formatTime(formPartida.fechaReserva)">
               <template v-slot:append>
                 <q-icon name="access_time" class="cursor-pointer">
                     <q-popup-proxy ref="qSal41" transition-show="scale" transition-hide="scale">
                     <q-time
                         @input="v => { $refs.qSal41.hide() }"
-                        v-model="fechaDesde"
+                        v-model="formPartida.fechaReserva"
                         :hour-options="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]"
                         :minute-options="[0, 30]"
                         mask="YYYY-MM-DDTHH:mm:ss"
@@ -170,18 +171,18 @@
               stack-label
               outlined
               clearable
-              v-model="filterRecord.duracion"
+              v-model="formPartida.duracion"
               :options="[60, 90]"
             />
-            <q-input outlined clearable label="Nivel" v-model="filterRecord.nivel" />
-            <q-input outlined clearable label="Jugador1" v-model="filterRecord.jug1" />
-            <q-input outlined clearable label="Jugador2" v-model="filterRecord.jug2" />
-            <q-input outlined clearable label="Jugador3" v-model="filterRecord.jug3" />
-            <q-input outlined clearable label="Jugador4" v-model="filterRecord.jug4" />
+            <q-input outlined clearable label="Nivel" v-model="formPartida.nivel" />
+            <q-input outlined clearable label="Jugador1" v-model="formPartida.jug1" />
+            <q-input outlined clearable label="Jugador2" v-model="formPartida.jug2" />
+            <q-input outlined clearable label="Jugador3" v-model="formPartida.jug3" />
+            <q-input outlined clearable label="Jugador4" v-model="formPartida.jug4" />
           </q-form>
           <q-card-actions align="right">
-            <q-btn color="primary" label="OK" @click="reservaPadelOk" />
-            <q-btn color="primary" label="Cancel" @click="dialogSalaR1=false" />
+            <q-btn color="primary" label="OK" @click="doSavePadelForm" />
+            <q-btn color="primary" label="Cancel" @click="dialogPartidaForm=false" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -190,39 +191,37 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { urlFotos } from 'boot/axios.js'
+import { mapState} from 'vuex'
+import { headerFormData, urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 import wgDate from 'components/General/wgDate.vue'
+import querystring from 'querystring'
 export default {
   props: ['value', 'filter'], // en 'value' tenemos los registrosSeleccionados cargados del personalMain (datos de la tabla)
   data () {
     return {
       expanded: false,
-      dialogSalaR1: false,
-      filterRecord: { nivel: 0, duracion: 60, jug1: '', jug2: '', jug3: '', jug4: ''},
-      fechaDesde: '',
+      dialogPartidaForm: false,
+      formPartida: { id: null, fechaReserva: '', nivel: 0, duracion: 60, jug1:'', jug2: '', jug3: '', jug4: ''},
       regper: {},
       urlF: urlFotos,
       rowId: '',
-      jsonp: '{ "nivel": 3, "jugadores": [{"jug": "jvilata"},{"jug": "adarder"},{"jug": "santi"}, {"jug": "raul"}] }',
       columns: [
-        { name: 'foto', align: 'left', label: 'foto', field: 'foto' },
-        { name: 'nombre', align: 'left', label: 'Nombre', field: 'nompersona', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
-        { name: 'areaNombre', align: 'left', label: 'Area', field: 'nomarea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'extension', align: 'left', label: 'Extension', field: 'extension', sortable: true },
-        { name: 'equipoETM', align: 'left', label: 'equipoETM', field: 'grupoetm', sortable: true },
+        { name: 'foto', align: 'left', label: 'Foto', field: 'fotoEmpleado' },
+        { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombreEmpleado', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idPersonalEmpleado', sortable: true, style: 'width: 20px' },
+        { name: 'areaNombre', align: 'left', label: 'Area', field: 'nombreArea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'extension', align: 'left', label: 'Extension', field: 'extensionEmpleado', sortable: true },
+        { name: 'equipoETM', align: 'left', label: 'equipoETM', field: 'etmEmpleado', sortable: true },
         { name: 'nivel', align: 'left', label: 'Nivel', field: 'observaciones', sortable: true, format: v => { const obj = this.parseaJSON(v); return obj.nivel } },
         { name: 'apuntados', align: 'left', label: 'Apuntados', field: 'observaciones', sortable: true, format: v => { const obj = this.parseaJSON(v); return obj.jugadores.length } },
-        { name: 'fechareserva', align: 'left', label: 'Fecha Reserva', field: 'fechareserva', sortable: true },
+        { name: 'fechareserva', align: 'left', label: 'Fecha Reserva', field: 'fechaReserva', sortable: true, format: v => {return date.formatDate(v,'DD/MM/YYYY H:mm:ss')} },
         { name: 'duracion', align: 'left', label: 'Duracion', field: 'duracion', sortable: true }
       ],
       pagination: { rowsPerPage: 0 }
     }
   },
   computed: {
-    ...mapState('tablasAux', ['listaSINO']),
     ...mapState('login', ['user'])
   },
   methods: {
@@ -247,77 +246,59 @@ export default {
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'
     },
+    cleanFormPartida (){
+      this.formPartida = { id: null, fechaReserva: '', nivel: 0, duracion: 60, jug1:'', jug2: '', jug3: '', jug4: ''}
+    },
+
     anularPartida(objFilter) {
-      const fres = date.extractDate(objFilter.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
-      objFilter.fechaDesde = date.formatDate(fres, 'YYYY-MM-DD HH:mm:ss')
-      objFilter.fechaHasta = objFilter.fechaDesde
       this.$q.dialog({
         title: 'Confirmar',
-        message: `¿ Desea anular su reserva de padel del ${objFilter.fechareserva} y duración ${objFilter.duracion}?`,
+        message: `¿ Desea anular su reserva de padel del ${objFilter.fechaReserva} y duración ${objFilter.duracion}?`,
         ok: true,
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$axios.get(`bd_reservaMesas.asp?action=anularMesa&auth=${this.user.auth}`, { params: objFilter }) // pasar e.target.id y la mesaAnterior para quitar reserva
+        this.$axios.get(`bd_jpersonal.asp?http_method=DELETE&action=reservas/padel/form/${objFilter.id}&auth=${this.user.auth}`, {}) // pasar e.target.id y la mesaAnterior para quitar reserva
           .then(response => {
-            this.$emit('getRecords', { sala: objFilter.sala, fechaDesde: objFilter.fechaDesde.substring(0,10) })
+            this.$emit('getRecords', {})
           })
       })
     },
+
     abrirPartida () {
-      delete this.filterRecord.id
-      this.filterRecord.idpersonal = this.user.pers.idpersonal
-      this.filterRecord.fechaDesde = date.formatDate(new Date(), 'YYYY-MM-DD') + 'T09:00:00'
-      this.fechaDesde = this.filterRecord.fechaDesde
-      // this.filterRecord.fechaHasta = this.filterRecord.fechaDesde
-      this.filterRecord.duracion = 60
-      this.filterRecord.nivel = 3
-      this.filterRecord.observaciones = '' // aqui guardaremos el JSON con datos adicionales: nivel, jugadores
-      this.filterRecord.idmesa = 'padel'
-      this.filterRecord.sala = 'padel'
-      this.filterRecord.jug1 = this.user.pers.nombre
-      this.dialogSalaR1 = true
-      // this.$refs.dialogSalaR1.show()
+      this.cleanFormPartida();
+      delete this.formPartida.id
+      this.formPartida.fechaReserva = date.formatDate(new Date(), 'YYYY-MM-DD') + 'T09:00:00'
+      this.formPartida.nivel = 3
+      this.formPartida.jug1 = this.user.pers.nombre
+      this.dialogPartidaForm = true
     },
+
     editarPartida (objFilter) {
-      Object.assign(this.filterRecord, objFilter)
-      const fres = date.extractDate(objFilter.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, dpenedera del backend
-      this.filterRecord.fechaDesde = date.formatDate(fres, 'YYYY-MM-DDTHH:mm:ss')
-      this.fechaDesde = this.filterRecord.fechaDesde
-      const obj = this.parseaJSON(this.filterRecord.observaciones)
-      this.filterRecord.nivel = obj.nivel
-      if (obj.jugadores.length > 0) this.filterRecord.jug1 = obj.jugadores[0].jug
-      else this.filterRecord.jug1 = ''
-      if (obj.jugadores.length > 1) this.filterRecord.jug2 = obj.jugadores[1].jug
-      else this.filterRecord.jug2 = ''
-      if (obj.jugadores.length > 2) this.filterRecord.jug3 = obj.jugadores[2].jug
-      else this.filterRecord.jug3 = ''
-      if (obj.jugadores.length > 3) this.filterRecord.jug4 = obj.jugadores[3].jug
-      else this.filterRecord.jug4 = ''
-      this.dialogSalaR1 = true
-      // this.$refs.dialogSalaR1.show()
+       this.cleanFormPartida();
+      Object.assign(this.formPartida, objFilter)
+      const obj = this.parseaJSON(objFilter.observaciones)
+      this.formPartida.nivel = obj.nivel
+      if (obj.jugadores.length > 0) this.formPartida.jug1 = obj.jugadores[0].jug
+      if (obj.jugadores.length > 1) this.formPartida.jug2 = obj.jugadores[1].jug
+      if (obj.jugadores.length > 2) this.formPartida.jug3 = obj.jugadores[2].jug
+      if (obj.jugadores.length > 3) this.formPartida.jug4 = obj.jugadores[3].jug
+      this.dialogPartidaForm = true
     },
+
     apuntarJugador (objFilter) {
-      Object.assign(this.filterRecord, objFilter)
-      const fres = date.extractDate(objFilter.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, dpenedera del backend
-      this.filterRecord.fechaDesde = date.formatDate(fres, 'YYYY-MM-DDTHH:mm:ss')
-      this.fechaDesde = this.filterRecord.fechaDesde
-      const obj = this.parseaJSON(this.filterRecord.observaciones)
-      this.filterRecord.nivel = obj.nivel
-      if (obj.jugadores.length > 0) this.filterRecord.jug1 = obj.jugadores[0].jug
-      else this.filterRecord.jug1 = this.user.pers.nombre
-      if (obj.jugadores.length > 1) this.filterRecord.jug2 = obj.jugadores[1].jug
-      else this.filterRecord.jug2 = (obj.jugadores.length === 1 ? this.user.pers.nombre : '' ) 
-      if (obj.jugadores.length > 2) this.filterRecord.jug3 = obj.jugadores[2].jug
-      else this.filterRecord.jug3 = (obj.jugadores.length === 2 ? this.user.pers.nombre : '' ) 
-      if (obj.jugadores.length > 3) this.filterRecord.jug4 = obj.jugadores[3].jug
-      else this.filterRecord.jug4 = (obj.jugadores.length === 3 ? this.user.pers.nombre : '' ) 
-      this.reservaPadelOk()
-      this.$q.dialog({ title: 'Aviso', message: 'Apuntado' })
+        this.$q.loading.show()
+        this.$axios.post(`bd_jpersonal.asp?action=reservas/padel/apuntar&auth=${this.user.auth}`, querystring.stringify({idPartida: objFilter.id}), headerFormData)
+        .then(result => {
+          this.$q.loading.hide()
+          this.$q.dialog({ title: result.data.success ? 'Apuntado' : 'Error', message: result.data.msg });
+          this.$emit('getRecords', {});
+        })
+        .catch(error => { console.log(error.message) })
     },
+
     listarJugadores (objFilter) {
-      Object.assign(this.filterRecord, objFilter)
-      const obj = this.parseaJSON(this.filterRecord.observaciones)
+      const obj = this.parseaJSON(objFilter.observaciones)
       var str1 = ''
       for (var i = 0; i < obj.jugadores.length; i++) {
         if (str1.length > 0) str1 += ' -- '
@@ -325,55 +306,41 @@ export default {
       }
       this.$q.dialog({ title: 'Jugadores', message: str1 })
     },
-    reservaPadelOk () {
-      this.filterRecord.fechaDesde = this.fechaDesde
-      const fsol = date.extractDate(this.filterRecord.fechaDesde + ':00','YYYY-MM-DDTHH:mm:ss')
-      this.dialogSalaR1 = false
-      // this.$refs.dialogSalaR1.hide()
-      if (![16, 33, 36, 37].includes(this.user.pers.area) && (fsol > date.addToDate(new Date(), { days: 14 }))) {
-        this.$q.dialog({ title: 'Aviso', message: 'No puede reservar pista a más de 14 días vista' })
-        return
-      }
-      var solapa = false
-      this.value.forEach(valor => {
-        const fres = date.extractDate(valor.fechareserva,'DD/MM/YYYY H:mm:ss') // OJO CON ESTO, si se cambia el backend igual esto cambia
-        if (valor.id !== this.filterRecord.id && valor.sala.substring(0,3) === 'pad' &&
-          date.formatDate(fres, 'YYYY-MM-DD').substring(0,10) === this.filterRecord.fechaDesde.substring(0, 10) &&
-          ((fres.getTime() == fsol.getTime()) || (fres < fsol && date.addToDate(fres, { minutes: parseInt(valor.duracion) }) > fsol) ||
-           (fsol < fres && date.addToDate(fsol, { minutes: parseInt(this.filterRecord.duracion) }) > fres))) {
-          // es sala de reun y es la misma fecha y (una reserva anterior se solapa con la solic o la solic se solapa con una posterior)
-          this.$q.dialog({ title: 'Aviso', message: 'Esta reserva se solapa con otra ya existente: ' + valor.fechareserva + ' (' + valor.duracion + '\')' })
-          this.$emit('getRecords', {})
-          solapa = true
-          return
+
+    doSavePadelForm(){
+        // montamos el model
+        let data = {
+          id: this.formPartida.id,
+          fechaReserva : this.formPartida.fechaReserva,
+          nivel : this.formPartida.nivel,
+          duracion : this.formPartida.duracion,
+          jugadores: this.formPartida.jug1 + ',' + this.formPartida.jug2 + ',' + this.formPartida.jug3 + ',' + this.formPartida.jug4
         }
-      })
-      if (!solapa) {
-        var objfilter = this.filterRecord
-        objfilter.fechaDesde = date.formatDate(fsol, 'YYYY-MM-DD HH:mm')
-        objfilter.fechaHasta = objfilter.fechaDesde
-        var str1 = ''
-        str1 = (objfilter.jug1 !== null && objfilter.jug1.length>0 ? '{ "jug": "' + objfilter.jug1 + '"}': '')
-        str1 = str1 + (objfilter.jug2 !== null && objfilter.jug2.length>0 ? (str1.length>0 ? ', ': '') + '{ "jug": "' + objfilter.jug2 + '"}': '')
-        str1 = str1 + (objfilter.jug3 !== null && objfilter.jug3.length>0 ? (str1.length>0 ? ', ': '') + '{ "jug": "' + objfilter.jug3 + '"}': '')
-        str1 = str1 + (objfilter.jug4 !== null && objfilter.jug4.length>0 ? (str1.length>0 ? ', ': '') + '{ "jug": "' + objfilter.jug4 + '"}': '')
-        objfilter.observaciones = '{ "nivel": "' + objfilter.nivel + '", "jugadores": ['+ str1 + '] }'
-        objfilter.observaciones = btoa(objfilter.observaciones) // para que no altere los acentos
-        return this.$axios.get(`bd_reservaMesas.asp?action=reservarMesa&auth=${this.user.auth}`, { params: objfilter }) // pasar e.target.id y la mesaAnterior para quitar reserva
-          .then(response => {
-            this.$emit('getRecords', {})
-          })
-          .catch(error => {
-            this.$q.dialog({ title: 'Error', message: error })
-          })
-      }
+
+        this.$q.loading.show()
+        return this.$axios.post(`bd_jpersonal.asp?action=reservas/padel/form&auth=${this.user.auth}`, data, headerFormData) // pasar e.target.id y la mesaAnterior para quitar reserva
+        .then(response => {
+          this.$q.loading.hide()
+          // Si no podemos crear reserva mostramos el error
+          if(!response.data.success){
+            this.$q.dialog({ title:'Error', message: response.data.msg });
+            return;
+          }
+          this.dialogPartidaForm = false
+          this.$emit('getRecords', {})
+        })
+        .catch(error => {
+          this.$q.loading.hide()
+          this.$q.dialog({ title: 'Error', message: error })
+        })
+
     }
   },
+
   components: {
     wgDate: wgDate
   },
   mounted ()  {
-    // this.filterRecord = this.filter
   }
 }
 </script>

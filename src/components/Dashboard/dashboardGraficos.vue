@@ -15,8 +15,8 @@
               hide-selected
               fill-input
               input-debounce="0"
-              option-value="idkpi"
-              option-label="descripcion"
+              option-value="id"
+              option-label="description"
               emit-value
               map-options
             />
@@ -34,7 +34,7 @@
 <script>
 // doc in: https://github.com/apexcharts/vue-apexcharts , https://apexcharts.com/
 import { numeralInstance } from 'boot/numeral.js'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   props: ['value', 'ltab'],
   data: function () {
@@ -75,16 +75,19 @@ export default {
       series: [] // { name:'nom serie', type: 'line', data: [] }
     }
   },
+  computed: {
+    ...mapState('login', ['user']) // importo state.user desde store-login
+  },
   methods: {
     ...mapActions('login', ['desconectarLogin']),
     filterKpisDefinicion (val, update, abort) {
       update(() => {
         const needle = val.toLowerCase()
-        this.listaKpisFilter = this.registrosKPIDefinicion.filter(v => v.descripcion.toLowerCase().indexOf(needle) > -1)
+        this.listaKpisFilter = this.registrosKPIDefinicion.filter(v => v.description.toLowerCase().indexOf(needle) > -1)
       })
     },
     getKPIDefinicion (objFilter) {
-      this.$axios.get('bd_kpis.asp?action=findKPIDefinicion', { params: objFilter })
+      this.$axios.get(`bd_jpersonal.asp?action=kpi/definicion/lst/combo&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
           this.registrosKPIDefinicion = response.data
         })
@@ -94,8 +97,8 @@ export default {
         })
     },
     getKPIValores (objFilter) {
-      this.kpiSeleccionado = this.registrosKPIDefinicion.find(x => x.idkpi === objFilter.idkpi)
-      this.$axios.get('bd_kpis.asp?action=findKPIValores', { params: objFilter })
+      this.kpiSeleccionado = this.registrosKPIDefinicion.find(x => x.id === objFilter.idkpi)
+      this.$axios.get(`bd_jpersonal.asp?action=kpi/valores/${objFilter.idkpi}&auth=${this.user.auth}`, {})
         .then(response => {
           this.registrosKPIValores = response.data
           this.cargarDatosGrafico()
@@ -109,14 +112,14 @@ export default {
       this.tipoGrafico = 'line'
       this.series = []
       this.registrosKPIValores.sort(function (a, b) { // ordeno el array por etiquetavalor
-        return a.etiquetavalor.localeCompare(b.etiquetavalor)
+        return a.etiqueta.localeCompare(b.etiqueta)
       })
       var etiqAnt = ''
       var arr = []
       this.registrosKPIValores.forEach(row => {
-        if (row.etiquetavalor !== etiqAnt) {
-          arr.push(row.etiquetavalor) // la cambiar de etiqueta guardo la anterior
-          etiqAnt = row.etiquetavalor
+        if (row.etiqueta !== etiqAnt) {
+          arr.push(row.etiqueta) // la cambiar de etiqueta guardo la anterior
+          etiqAnt = row.etiqueta
         }
       })
       this.chartOptions = {
@@ -138,7 +141,7 @@ export default {
         return a.serie.localeCompare(b.serie)
       })
 
-      if (this.kpiSeleccionado.presentacion === '5') { // cuando es donut se carga distinto
+      if (this.kpiSeleccionado.type === '5') { // cuando es donut se carga distinto
         arr = []
         this.registrosKPIValores.forEach(row => {
           arr.push(row.serie)
@@ -155,8 +158,8 @@ export default {
           if (row.serie !== serieAnt) { // this.serie es un array de objetos {name:'serie', type:'line', data:[1,3,4,..]}
             obj = {
               name: row.serie,
-              type: (this.kpiSeleccionado.presentacion === '1' || this.kpiSeleccionado.presentacion === '6' || this.kpiSeleccionado.presentacion === '7' ? 'line'
-                : (this.kpiSeleccionado.presentacion === '2' || this.kpiSeleccionado.presentacion === '3' || this.kpiSeleccionado.presentacion === '4' ? 'column'
+              type: (this.kpiSeleccionado.type === '1' || this.kpiSeleccionado.type === '6' || this.kpiSeleccionado.type === '7' ? 'line'
+                : (this.kpiSeleccionado.type === '2' || this.kpiSeleccionado.type === '3' || this.kpiSeleccionado.type === '4' ? 'column'
                   : 'pie')),
               data: []
             }

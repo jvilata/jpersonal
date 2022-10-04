@@ -90,9 +90,9 @@ export default {
       rowId: '',
       columns: [
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'empresa', sortable: true, style: 'width: 190px; whiteSpace: normal' },
-        { name: 'pais', align: 'left', label: 'Pais', field: 'pais_gestor', sortable: true, style: 'width: 30px' },
-        { name: 'tipoCliente', label: 'Tipo Cliente', align: 'left', field: 'tipo registro', sortable: true, style: 'width: 20px' },
-        { name: 'id', label: 'Id', align: 'left', field: 'código', sortable: true, style: 'width: 20px' }
+        { name: 'pais', align: 'left', label: 'Pais', field: 'gestor', sortable: true, style: 'width: 30px' },
+        { name: 'tipoCliente', label: 'Tipo Cliente', align: 'left', field: 'tipo', sortable: true, style: 'width: 20px' },
+        { name: 'id', label: 'Id', align: 'left', field: 'id', sortable: true, style: 'width: 20px' }
       ],
       pagination: { rowsPerPage: 0 }
     }

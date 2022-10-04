@@ -35,8 +35,8 @@
             <!-- columna de acciones: editar, borrar, etc -->
             <div style="max-width: 70px">
             <!--edit icon . Decomentamos si necesitamos accion especifica de edicion -->
-            <q-btn flat v-if="props.row.calculada==='0' && rowId===`m_${props.row.id}`"
-              @click.stop="borrarReserva(props.row, props.row.id)"
+            <q-btn flat v-if="!props.row.calculada && rowId===`m_${props.row.id}`"
+              @click.stop="borrarReserva(props.row)"
               round
               dense
               size="sm"
@@ -52,8 +52,8 @@
             :props="props"
           >
             <div :style="col.style">
-              <div v-if="!['foto'].includes(col.name)">{{ col.value }}{{col.name==='fechareserva' && props.row.calculada==='1'?'*':''}}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
+              <div v-if="!['foto'].includes(col.name)">{{ col.value }}{{col.name==='fechareserva' && props.row.calculada ?'*':''}}</div>
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.fotoEmpleado}`"/>
             </div>
           </q-td>
         </q-tr>
@@ -74,7 +74,7 @@
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
         <q-card-section>
-          <q-img :src="`${urlF}${regper.idpersonal}.jpg`" />
+          <q-img :src="`${urlF}${regper.fotoEmpleado}`" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -95,15 +95,15 @@ export default {
       urlF: urlFotos,
       rowId: '',
       columns: [
-        { name: 'foto', align: 'left', label: 'foto', field: 'foto' },
-        { name: 'nombre', align: 'left', label: 'Nombre', field: 'nompersona', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idpersonal', sortable: true, style: 'width: 20px' },
-        { name: 'areaNombre', align: 'left', label: 'Area', field: 'nomarea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
-        { name: 'extension', align: 'left', label: 'Extension', field: 'extension', sortable: true },
-        { name: 'equipoETM', align: 'left', label: 'equipoETM', field: 'grupoetm', sortable: true },
-        { name: 'mesa', align: 'left', label: 'Mesa', field: 'idmesa', sortable: true },
+        { name: 'foto', align: 'left', label: 'Foto', field: 'fotoEmpleado' },
+        { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombreEmpleado', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'idpersonal', label: 'IdPersonal', align: 'left', field: 'idPersonalEmpleado', sortable: true, style: 'width: 20px' },
+        { name: 'areaNombre', align: 'left', label: 'Area', field: 'nombreArea', sortable: true, style: 'width: 130px; whiteSpace: normal' },
+        { name: 'extension', align: 'left', label: 'Extension', field: 'extensionEmpleado', sortable: true },
+        { name: 'equipoETM', align: 'left', label: 'Equipo ETM', field: 'etmEmpleado', sortable: true },
+        { name: 'mesa', align: 'left', label: 'Mesa', field: 'idMesa', sortable: true },
         { name: 'sala', align: 'left', label: 'Sala', field: 'sala', sortable: true },
-        { name: 'fechareserva', align: 'left', label: 'Fecha Reserva', field: 'fechareserva', sortable: true }
+        { name: 'fechareserva', align: 'left', label: 'Fecha Reserva', field: 'fechaReserva', sortable: true, format: v => {return date.formatDate(v,'DD/MM/YYYY H:mm:ss')} }
       ],
       pagination: { rowsPerPage: 0 }
     }
@@ -117,16 +117,20 @@ export default {
       this.regper = record
       this.expanded = true
     },
-    borrarReserva (reserva, id) {
+    borrarReserva (reserva) {
       this.$q.dialog({
         title: 'Confirmar',
-        message: `¿ Desea anular su reserva de mesa ${reserva.id} del ${reserva.fechareserva} ?`,
+        message: `¿ Desea anular su reserva de mesa ${reserva.id} del ${reserva.fechaReserva} ?`,
         ok: true,
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$axios.get(`bd_reservaMesas.asp?action=anularMesa&auth=${this.user.auth}`, { params: { id: reserva.id } }) // pasar e.target.id y la mesaAnterior para quitar reserva
+        this.$axios.get(`bd_jpersonal.asp?http_method=DELETE&action=reserva/mesas/form&auth=${this.user.auth}`, { params: { id: reserva.id } }) // pasar e.target.id y la mesaAnterior para quitar reserva
           .then(response => {
+            if(!response.data.success){
+              this.$q.dialog({ title:'Error', message: response.data.msg });
+              return;
+            }
             this.$emit('getRecords', this.filterRecord)
           })
       })

@@ -88,7 +88,7 @@ export default {
     getRecords (filter) {
       // hago la busqueda de registros segun condiciones del formulario Filter que ha lanzado el evento getRecords
       Object.assign(this.filterRecord, filter) // no haría falta pero así obliga a refrescar el componente para que visulice el filtro
-      return this.$axios.get(`bd_reservaMesas.asp?action=findReservaMesas&auth=${this.user.auth}`, { params: this.filterRecord })
+      return this.$axios.get(`bd_jpersonal.asp?action=reservas/padel/lst&auth=${this.user.auth}`, { params: this.filterRecord })
         .then(response => {
           this.registrosSeleccionados = response.data
           this.expanded = false

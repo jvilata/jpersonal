@@ -16,7 +16,7 @@
               fill-input
               input-debounce="0"
               option-value="id"
-              option-label="descripcion"
+              option-label="description"
               emit-value
               map-options
             />
@@ -103,11 +103,11 @@ export default {
     filterSQLs (val, update, abort) {
       update(() => {
         const needle = val.toLowerCase()
-        this.listaSQLsFilter = this.registrosSQLs.filter(v => v.descripcion.toLowerCase().indexOf(needle) > -1)
+        this.listaSQLsFilter = this.registrosSQLs.filter(v => v.description.toLowerCase().indexOf(needle) > -1)
       })
     },
     getSQLs (objFilter) {
-      this.$axios.get('bd_consultassql.asp?action=findConsultasSQL', { params: objFilter })
+      this.$axios.get(`bd_jpersonal.asp?action=consultas/sql/combo/movil&auth=${this.user.auth}`, { params: objFilter })
         .then(response => {
           this.registrosSQLs = response.data
         })
@@ -119,7 +119,7 @@ export default {
     ejecutarSQL (objFilter) {
       this.$q.loading.show()
       this.SQLSeleccionada = this.registrosSQLs.find(x => x.id === objFilter.id)
-      this.$axios.post(`bd_consultassql.asp?action=ejecutarSQL&auth=${this.user.auth}`, querystring.stringify({ SQL: this.SQLSeleccionada.sql, string_con: this.SQLSeleccionada.string_con }), headerFormData)
+      this.$axios.post(`bd_jpersonal.asp?action=sql/ejecutar&auth=${this.user.auth}`, querystring.stringify({ id: this.SQLSeleccionada.id}), headerFormData)
         .then(response => {
           let result = JSON.parse(response.data.resultado)
           this.columns = []
@@ -135,7 +135,7 @@ export default {
               })
             })
             this.registrosSeleccionados = result
-            var i = 0
+            let i = 0;
             this.registrosSeleccionados.forEach(element => element.idxxXX = i++)
             this.$q.loading.hide()
           } else {
@@ -150,7 +150,7 @@ export default {
     }
   },
   mounted () {
-    if (this.ltab === 'dashboardSQL') this.getSQLs({ id: '475, 630' })
+    if (this.ltab === 'dashboardSQL') this.getSQLs({ ids: '475,630' })
   }
 }
 </script>

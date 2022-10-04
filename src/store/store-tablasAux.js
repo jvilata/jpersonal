@@ -10,6 +10,7 @@ import querystring from 'querystring'
 // state: accesibles en lectura desde componentes a traves de ...mapState('tablasAux', ['listaSINO', 'listaUsers', 'listaTipoAcc'])
 const state = {
   listaSINO: [{ id: '1', desc: 'SI' }, { id: '0', desc: 'NO' }],
+  listaBoolean: [{ id: true, desc: 'SI' }, { id: false, desc: 'NO' }],
   listaEmpresas: [{ codElemento: '01', valor1: 'EDICOM CAPITAL SL' }],
   listaTiposCliente: [{ id: 1, nombre: 'CLIENTE' }, { id: 2, nombre: 'CLIENTE POTENCIAL' }, { id: 11, nombre: 'EXCLIENTE' }, { id: 4, nombre: 'OTROS' }, { id: 8, nombre: 'COLABORADOR' }, { id: 13, nombre: 'CLIENTE PASARELA' }, { id: 16, nombre: 'CLIENTE DIST' }, { id: 17, nombre: 'CLIENTE USU SER' }, { id: 18, nombre: 'COMPETENCIA' }],
   listaTiposDiasLibres: [],
