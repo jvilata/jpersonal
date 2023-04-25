@@ -41,7 +41,7 @@ export default {
     },
     getIcon() {
       let obj = {}
-      if (this.permiso.tipoDiaLibre == 9 || this.permiso.tipoDiaLibre == 19) {
+      if (this.permiso.tipoDiaLibre == 9 || this.permiso.tipoDiaLibre == 19 || this.permiso.tipoDiaLibre == 8) {
         if (this.permiso.justificantesValidados > 0) {
           obj.icon = "check"
           obj.color = "positive"

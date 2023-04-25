@@ -16,7 +16,7 @@ const mutations = {
   loadPermisosConcedidos(state, lista) {
     if(!lista.length) state.permisosConcedidos = []
     else state.permisosConcedidos = lista.sort((a, b) => { 
-      if (a.tipoDiaLibre!==9 && a.tipoDiaLibre!==19) return 1 // al final
+      if (a.tipoDiaLibre!==9 && a.tipoDiaLibre!==19 && a.tipoDiaLibre !== 8) return 1 // al final
       else { // es un permiso
          if (a.justificantesNoValidados + a.justificantesValidados > 0) return 1 //al final
          else return -1 // al principio
@@ -27,7 +27,7 @@ const mutations = {
     if(!lista.length) state.justPorPresentar = 0
     else {
       function justificantesCont (acum, permiso) {
-        if ((permiso.tipoDiaLibre === 9 || permiso.tipoDiaLibre === 19)) {
+        if ((permiso.tipoDiaLibre === 9 || permiso.tipoDiaLibre === 19 || permiso.tipoDiaLibre === 8)) {
           if ((permiso.justificantesNoValidados === 0 && permiso.justificantesValidados === 0)) {
             acum++
           }
