@@ -324,7 +324,7 @@ export default {
             fechaSolicitud: date.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ss'),
             idAutorizadorOf: this.responsable,
             nuevaVersion: true,
-            observaciones: '',
+            observaciones: this.recordToSubmit.teletrabajoObservaciones,
             sfechaDesde: null,
             sfechaHasta: null,
             tipoDiaLibre: 0,
