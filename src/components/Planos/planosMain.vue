@@ -442,6 +442,7 @@ export default {
       let data = {
         id : null,
         fechaDesde : this.filterRecord.fechaDesde,
+        fechaHasta: this.filterRecord.fechaHasta,
         duracion : this.filterRecord.duracion,
         observaciones : this.filterRecord.observaciones,
         sala : this.filterRecord.sala,
