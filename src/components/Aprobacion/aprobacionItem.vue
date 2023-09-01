@@ -9,7 +9,7 @@
           <template v-slot:header>
             <q-item-section avatar>
               <q-avatar round size="30px">
-                <q-img :src="`${urlF}${item.empleadoFoto}`" />
+                <q-img :src="`${urlF}${item.empleadoFoto}&auth=${authFoto}&attach=true`" />
               </q-avatar>
             </q-item-section>
         
@@ -86,6 +86,7 @@ export default {
       expanded: false,
       aprobacion: {},
       urlF: urlFotos,
+      authFoto :'',
       regper: {},
       // provisional: false
     }
@@ -108,6 +109,7 @@ export default {
      }
   },
   mounted() {
+    this.authFoto = this.user.auth;
     // if (this.item.tipoDiaLibre === 1 && this.user.pers.idautArea2 > 0) this.provisional = true
     // else this.provisional = false
   },

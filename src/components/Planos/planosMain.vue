@@ -48,7 +48,7 @@
             <div class="text-h8">Email: {{reserva.emailEmpleado}}</div>
             <div class="text-h8">Área: {{reserva.nombreArea}} - Grupo: {{ reserva.etmEmpleado }}</div>
             </div>
-            <q-img class="col" style="max-width:60px" :src="`${urlF}${reserva.fotoEmpleado}`"/>
+            <q-img class="col" style="max-width:60px" :src="`${urlF}${reserva.fotoEmpleado}&auth=${authFoto}&attach=true`"/>
           </q-card-section>
         </q-card>
       </q-tooltip>
@@ -213,6 +213,7 @@ export default {
       listaPaisesFilter: [],
       refresh: 0,
       urlF: urlFotos,
+      authFoto : '',
       vbleStyle: 100,
       mesaActiva: null,
       listaIDsReservados: [],
@@ -528,7 +529,7 @@ export default {
   },
 
   mounted(){
-
+    this.authFoto = this.user.auth;
    },
 
   computed: {

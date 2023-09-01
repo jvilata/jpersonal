@@ -37,7 +37,7 @@
           >
             <div :style="col.style">
               <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}&auth=${authFoto}&attach=true`"/>
             </div>
           </q-td>
         </q-tr>
@@ -58,7 +58,7 @@
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
         <q-card-section>
-          <q-img :src="`${urlF}${regper.idpersonal}.jpg`" />
+          <q-img :src="`${urlF}${regper.idpersonal}&auth=${authFoto}&attach=true`" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -77,6 +77,7 @@ export default {
       expanded: false,
       regper: {},
       urlF: urlFotos,
+      authFoto: '',
       rowId: '',
       columns: [
         { name: 'nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true, style: 'width: 130px; whiteSpace: normal' },
@@ -93,6 +94,9 @@ export default {
   computed: {
     ...mapState('tablasAux', ['listaSINO']),
     ...mapState('login', ['user'])
+  },
+  mounted(){
+    this.authFoto = this.user.auth;
   },
   methods: {
     ampliarImagen (record) {

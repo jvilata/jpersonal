@@ -62,7 +62,6 @@
           >
             <div :style="col.style">
               <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
             </div>
           </q-td>
         </q-tr>
@@ -94,7 +93,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 import fichajesDetalleGrid from 'components/Fichajes/fichajesDetalleGrid.vue' 
 
@@ -104,7 +102,6 @@ export default {
     return {
       expanded: false,
       regper: {},
-      urlF: urlFotos,
       mostrarDetalle: false,
       listaFichajesFilter: [],
       listaFichajesDetalleFilter: [],

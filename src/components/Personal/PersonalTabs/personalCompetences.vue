@@ -25,7 +25,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { urlFotos } from 'boot/axios.js'
 import { date } from 'quasar'
 
 export default {
@@ -34,7 +33,6 @@ export default {
     return {
       expanded: false,
       regper: {},
-      urlF: urlFotos,
       rowId: '',
       columns: [
         {

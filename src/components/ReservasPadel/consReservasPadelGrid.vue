@@ -80,7 +80,7 @@
           >
             <div :style="col.style">
               <div v-if="!['foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.fotoEmpleado}`"/>
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.fotoEmpleado}&auth=${authFoto}&attach=true`"/>
             </div>
           </q-td>
         </q-tr>
@@ -125,7 +125,7 @@
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
         <q-card-section>
-          <q-img :src="`${urlF}${regper.fotoEmpleado}`" />
+          <q-img :src="`${urlF}${regper.fotoEmpleado}&auth=${authFoto}&attach=true`" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -205,6 +205,7 @@ export default {
       formPartida: { id: null, fechaReserva: '', nivel: 0, duracion: 60, jug1:'', jug2: '', jug3: '', jug4: ''},
       regper: {},
       urlF: urlFotos,
+      authFoto : '', 
       rowId: '',
       columns: [
         { name: 'foto', align: 'left', label: 'Foto', field: 'fotoEmpleado' },
@@ -341,6 +342,7 @@ export default {
     wgDate: wgDate
   },
   mounted ()  {
+    this.authFoto = this.user.auth;
   }
 }
 </script>

@@ -37,7 +37,7 @@
           >
             <div :style="col.style">
               <div v-if="!['vigente', 'foto'].includes(col.name)">{{ col.value }}</div>
-              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}.jpg`"/>
+              <q-img @click="ampliarImagen(props.row)" v-if="col.name==='foto'" :src="`${urlF}${props.row.idpersonal}&auth=${authFoto}&attach=true`"/> 
               <div v-if="col.name==='vigente'">
                 <q-checkbox disable v-model="props.row.vigente" />
               </div>
@@ -61,7 +61,7 @@
           <q-btn flat icon="close" color="primary" @click="expanded = false"/>
         </q-card-section>
         <q-card-section>
-          <q-img :src="`${urlF}${regper.idpersonal}.jpg`" />
+          <q-img :src="`${urlF}${regper.idpersonal}&auth=${authFoto}&attach=true`" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -80,6 +80,7 @@ export default {
       expanded: false,
       regper: {},
       urlF: urlFotos,
+      authFoto: '',
       rowId: '',
       columns: [
         { name: 'foto', align: 'left', label: 'foto', field: 'foto' },
@@ -112,6 +113,9 @@ export default {
     mostrarDatosPieTabla () {
       return this.value.length + ' Filas'
     }
+  },
+  mounted(){
+    this.authFoto= this.user.auth;
   }
 }
 </script>

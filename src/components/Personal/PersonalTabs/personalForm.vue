@@ -6,7 +6,7 @@
                 <q-input autofocus readonly outlined v-model="recordToSubmit.nombre" label="Nombre" class="col-xs-9 col-sm-6"/>
                 <div class="col-xs-3 col-sm-3" align="center">
                   <q-avatar rounded size="100px">
-                    <q-img  :src="`${urlF}${recordToSubmit.idPersonal}.jpg`" />
+                    <q-img  :src="`${urlF}${recordToSubmit.idPersonal}&auth=${authFoto}&attach=true`" />
                   </q-avatar>
                 </div>
             </div>
@@ -75,6 +75,7 @@ export default {
     return {
       done: false,
       urlF: urlFotos,
+      authFoto: '',
       recordToSubmit: {
         id: -1,
         nombre: '',
@@ -125,6 +126,7 @@ export default {
     }
   },
   mounted() {
+    this.authFoto = this.user.auth;
       //Llamaremos al BACKEND para pedir datos de este usuario
       this.loadDetalleEmpleado(this.user.pers.id)
        .then(response => {

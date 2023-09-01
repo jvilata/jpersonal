@@ -11,7 +11,7 @@ const headerFormData = {
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 }
-const urlFotos = 'https://gestion.edicom.es/intranet/telefonos/fotos/'
+const urlFotos = 'https://gestion.edicom.es/fichajes/bd_jpersonal_pre.asp?action=foto/emp/'
 
 const urlBase =  'https://gestion.edicom.es/fichajes/'
 
