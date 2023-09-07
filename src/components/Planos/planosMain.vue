@@ -432,6 +432,7 @@ export default {
     doOpenReunionForm (e){
       console.log('Hemos pasado por openReunion')
       this.filterRecord.fechaDesde = date.formatDate(this.filterRecord.fechaDesde, 'YYYY-MM-DD') + 'T09:00:00'
+      this.filterRecord.fechaHasta = date.formatDate(this.filterRecord.fechaHasta, 'YYYY-MM-DD') + 'T23:59:59'
       this.filterRecord.duracion = 60
       this.mesaActiva = e
       this.filterRecord.observaciones = ''
