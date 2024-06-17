@@ -135,28 +135,34 @@ export default {
       let url = 'https://gestion.edicom.es/fichajes/NormasDeRegimenInternoEDICOM_'
       switch (filialAbrev) {
         case 'ES':
-          url += 'ES.pdf'
+          url = 'https://edicomgroup.sharepoint.com/sites/EDICOM/procedi/Forms/AllItems.aspx?id=%2Fsites%2FEDICOM%2Fprocedi%2FRRHH%2FNormasDeRegimenInternoEDICOM%2Epdf&parent=%2Fsites%2FEDICOM%2Fprocedi%2FRRHH'
           break;
         case 'MX':
-          url += 'MX.pdf'
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/Normas%20Regimen%20Interno%20MX.pdf?csf=1&web=1&e=M3yFm8'
           break;
         case 'FR':
           url += 'FR.pdf'
           break;
         case 'AR':
-          url += 'AR.pdf'
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/Normativa%20de%20Vacaciones%20y%20Ausencias%20AR.pdf?csf=1&web=1&e=ZASrUn'
           break;
         case 'US':
-          url += 'US.pdf'
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/Normativa%20de%20Vacaciones%20y%20Ausencias%20US.pdf?csf=1&web=1&e=TPgfkZ'
           break;
         case 'BR':
-          url += 'BR.pdf'
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/Normativa%20de%20Vacaciones%20y%20Ausencias%20BR.pdf?csf=1&web=1&e=gSozSg'
           break;
         case 'CO':
-          url += 'CO.pdf'
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/Normativa%20de%20Vacaciones%20y%20Ausencias%20CO.pdf?csf=1&web=1&e=yNABWk'
+          break;
+        case 'MA':
+          url = 'https://edicomgroup.sharepoint.com/:b:/r/sites/EDICOM/procedi/RRHH/EDICOM_MARRUECOS%20Internal%20Labour%20Norms.pdf?csf=1&web=1&e=AM0vwT'
+          brak;
+        case 'A1':
+          url = 'https://documentacion.edicom.es/share/proxy/alfresco/api/node/content/workspace/SpacesStore/c6493d55-185b-446d-938c-de099a0589cd/Normativa%20de%20Vacaciones%20y%20Ausencias%20AR.pdf'
           break;
         default: 
-          url += 'ES.pdf'
+          url = 'https://edicomgroup.sharepoint.com/sites/EDICOM/procedi/Forms/AllItems.aspx?id=%2Fsites%2FEDICOM%2Fprocedi%2FRRHH%2FNormasDeRegimenInternoEDICOM%2Epdf&parent=%2Fsites%2FEDICOM%2Fprocedi%2FRRHH'
       }
       console.log('url', url)
         if (window.cordova === undefined) { // desktop
