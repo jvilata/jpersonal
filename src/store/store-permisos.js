@@ -68,7 +68,7 @@ const actions = {
 
   addPermisoPendiente({ commit }, payload) {
     // return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, { withCredentials: true })
-    return axiosInstance.post(`bd_jpersonal.asp?action=soldias&auth=${login.state.user.auth}`, payload, headerFormData)
+    return axiosInstance.post(`bd_jpersonal.asp?action=solicitud/permiso&auth=${login.state.user.auth}`, payload, headerFormData)
   },
 
   updatePermisoPendiente({ commit }, payload) {

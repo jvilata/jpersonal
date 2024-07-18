@@ -188,89 +188,34 @@ export default {
     solicitarPermiso() {
       //Creamos el registro de la solicitud
       let solicitud = {
-        ejercicioAplicacion: this.permisoToAdd.ejercicioAplicacion,
+        ejercicio: this.permisoToAdd.ejercicioAplicacion,
         empleado: this.permisoToAdd.empleado,
-        sfechaDesde: this.formatDate(this.permisoToAdd.fechaDesde, 'YYYY-MM-DD'),
-        sfechaHasta: this.formatDate(this.permisoToAdd.fechaHasta, 'YYYY-MM-DD'),
-        diasEfectivos: this.permisoToAdd.diasEfectivos,
-        tipoDiaLibre: this.permisoToAdd.tipoDiaLibre,
+        fechaDesde: this.formatDate(this.permisoToAdd.fechaDesde, 'YYYY-MM-DDT00:00:00'),
+        fechaHasta: this.formatDate(this.permisoToAdd.fechaHasta, 'YYYY-MM-DDT00:00:00'),
+        nDias: this.permisoToAdd.diasEfectivos,
+        tipoDia: this.permisoToAdd.tipoDiaLibre,
         observaciones: this.permisoToAdd.observaciones,
-        idAutorizadorOf: this.empleadoP.autorizador.idAutorizadorOf,
-        estadoSolicitud: 1,
-        tipoSolicitud: 'PERMISO',
-        nuevaVersion: true,
-        fechaSolicitud: this.formatDate(new Date(), 'YYYY-MM-DDTHH:mm:ssZ'),
-        datosSolicitud: JSON.stringify({
-          solIdEmpleado: this.permisoToAdd.empleado,
-          solejercicio: this.permisoToAdd.ejercicioAplicacion,
-          sfdesde: this.formatDate(this.permisoToAdd.fechaDesde, 'YYYY-MM-DD'),
-          sfhasta: this.formatDate(this.permisoToAdd.fechaHasta, 'YYYY-MM-DD'),
-          ndias: this.permisoToAdd.diasEfectivos,
-          tipoDia: this.permisoToAdd.tipoDiaLibre,
-          observaciones: this.permisoToAdd.observaciones,
-          tdiaslibres: this.empleadoP.diasPendientes.tdiaslibres,
-          tdiastotales: this.empleadoP.diasPendientes.tdiasvacaciones,
-          tdiaspendientes: this.empleadoP.diasPendientes.tdiaslibres,
-          tdiasVacaciones: this.empleadoP.diasConcedidos.tdiasVacaciones,
-          tdiasBaja: this.empleadoP.diasConcedidos.tdiasBaja,
-          tdiasEspeciales: this.empleadoP.diasConcedidos.tdiasEspeciales 
-          })
        }
 
-      //Comprobaciones
-      var binsertar = true
-
-      if  (solicitud.tipoDiaLibre === 1) { //Si son vacaciones
-        if ( (this.empleadoP.diasPendientes.tdiaslibres - this.empleadoP.diasPendientes.tdiaspendientes - solicitud.diasEfectivos != 0) &&
-             (this.empleadoP.diasPendientes.tdiaslibres - this.empleadoP.diasPendientes.tdiaspendientes - solicitud.diasEfectivos) < this.empleadoP.filialEmpleado.filial.solicitudMinima ) {
-          this.alerta('Atención',"No tiene suficientes días libres para hacer esta petición. Por favor corrija la entrada. Debe dejar saldo mínimo de "+this.empleadoP.filialEmpleado.filial.solicitudMinima+' días')
-          binsertar = false
+      this.$q.loading.show()
+      this.addPermisoPendiente(solicitud)
+      .then((response) => {
+        this.$q.loading.hide()
+        if (response.data.success) {
+          this.$q.notify({
+            color: 'primary',
+            message: 'Solicitud registrada correctamente'
+          })
+          this.$emit('close')
+          this.$emit('refresh')
+          this.$emit('ok')
         } else {
-          binsertar = this.solicitarSegunReglas2017(solicitud)
+          Notify.create('No se ha podido registrar su solicitud')
         }
-      }
-      if ( (solicitud.tipoDiaLibre >= 10) && (solicitud.tipoDiaLibre <= 15) || solicitud.tipoDiaLibre === 17) { //Permiso NO Retribuido
-        
-        if ( solicitud.diasEfectivos < 1 ) { //Solo permito dias completos
-          this.alerta('Atención',"Sólo se permiten permisos no retribuidos de día completo, considere cambiar por Vacaciones. Por favor corrija la entrada")
-          binsertar = false
-        } else if ( this.empleadoP.diasPendientes.tdiaslibres >= (solicitud.diasEfectivos + this.empleadoP.diasPendientes.tdiaspendientes) ) {
-          this.alerta('Aviso',"Mientras queden suficientes vacaciones la empresa recomienda no tomar permisos no retribuidos. Por favor corrija la entrada si lo considera conveniente");
-        }
-      }
-
-      //LLAMADA BACKEND
-      if (binsertar) {
-        this.$q.loading.show()
-        this.addPermisoPendiente(solicitud)
-        .then((response) => {
-          this.$q.loading.hide()
-          if (JSON.parse(response.data).success) {
-            this.$q.notify({
-              color: 'primary',
-              message: 'Solicitud registrada correctamente'
-            })
-            this.$emit('close')
-            this.$emit('refresh')
-            this.$emit('ok')
-            //Send email
-            let emp = this.listaEmpleados.find(record => record.id == solicitud.empleado)
-            let mail = {
-              to: this.empleadoP.autorizador.emailAutorizador,
-              from: 'edicom@edicom.es',
-              subject: `Nueva solicitud vacaciones/permiso/baja de ${emp.name}`,
-              text: `Del ${this.formatDate(solicitud.sfechaDesde, 'DD/MM/YYYY')} al ${this.formatDate(solicitud.sfechaHasta, 'DD/MM/YYYY')}. Observaciones: ${solicitud.observaciones ? solicitud.observaciones : ''}.\nRevísala cuando puedas para su aprobación.\nSaludos.`
-            } 
-            this.sendMail(mail)
-
-          } else {
-            Notify.create('No se ha podido registrar su solicitud')
-          }
-        })
-        .catch(error => {
-          this.addMensaje('solicitarPermiso' + error)
-        })
-      }
+      })
+      .catch(error => {
+        this.addMensaje('solicitarPermiso' + error)
+      })
 
     },
 
